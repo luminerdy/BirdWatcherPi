@@ -1,0 +1,48 @@
+# Generic example only. Keep your actual settings outside this repository.
+# Both feeder regions intentionally disabled: calibrate them before running.
+[camera]
+device = "auto"
+width = 1920
+height = 1080
+fps = 15
+warmup_frames = 30
+read_timeout = 5.0
+
+[motion]
+analysis_width = 640
+min_area = 0.01
+persistence = 3
+lighting_threshold = 0.85
+
+[[motion.regions]]
+name = "near_feeder"
+x = 0.0
+y = 0.0
+width = 1.0
+height = 1.0
+enabled = false
+
+[[motion.regions]]
+name = "far_feeder"
+x = 0.0
+y = 0.0
+width = 1.0
+height = 1.0
+enabled = false
+
+[capture]
+sample_fps = 5.0
+pre_seconds = 1.0
+post_seconds = 2.0
+quiet_seconds = 5.0
+max_event_seconds = 30.0
+cooldown_seconds = 3.0
+repeat_seconds = 5.0
+max_bursts = 6
+max_buffer_bytes = 33554432
+
+[storage]
+data_dir = "~/birdwatcher-data"
+max_bytes = 5368709120
+min_free_bytes = 2147483648
+retention_days = 14

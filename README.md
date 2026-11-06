@@ -2,7 +2,20 @@
 
 A local-first Python bird-feeder camera project for Raspberry Pi: capture close-up photographs when activity occurs, then attempt bird and species identification without delaying the next photograph.
 
-> **Project status: planning and design.** The specification and implementation plan are available; the Python application, models, commands, and service described below are not implemented yet. Performance and identification accuracy have not been validated.
+> **Project status: experimental capture MVP.** Camera diagnostics, snapshots, configurable motion-triggered bursts, local event storage, retention safeguards, and foreground health reporting are implemented. Species identification, automatic calibration, a durable analysis queue/index, and background-service installation are not implemented. Field capture reliability and species accuracy are not established.
+
+## Start here
+
+See [SETUP.md](docs/SETUP.md) for the tested environment, installation, camera checks, and a supervised capture session. See [OPERATIONS.md](docs/OPERATIONS.md) for storage, shutdown, recovery, and current limitations.
+
+```sh
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements-dev.txt
+.venv/bin/python -m pip install -e . --no-deps
+.venv/bin/birdwatcher doctor
+```
+
+The example configuration deliberately has no enabled feeder regions. Keep your calibrated settings and photographs outside this repository. Nothing installs or enables an unattended service.
 
 ## What the project will do
 
@@ -16,7 +29,7 @@ A local-first Python bird-feeder camera project for Raspberry Pi: capture close-
 - Recover from camera disconnects and report storage, camera, and analysis health.
 - Eventually support approved automatic startup through systemd.
 
-These are planned features, not claims of working software.
+This list describes the complete project goal. The status above and operating documentation distinguish the current capture milestone from future identification and deployment features.
 
 ## Target hardware
 
@@ -55,6 +68,7 @@ The model/runtime choice is deliberately open until compatibility, licensing, la
 
 - [Product and engineering specification](docs/SPECIFICATION.md) — scope, behavior, data handling, reliability, and acceptance criteria.
 - [Implementation plan](docs/IMPLEMENTATION_PLAN.md) — ordered work packages, dependencies, tests, and release gates.
+- [Capture validation report](docs/VALIDATION_REPORT.md) — sanitized live-test evidence and remaining acceptance gaps.
 
 The specification defines the intended result. The plan describes how to reach it. Neither document is evidence that the application has been built or benchmarked.
 
@@ -74,9 +88,9 @@ A reliable motion-triggered photo recorder is the first useful milestone. Specie
 
 ## Installation and usage
 
-There is no runnable application or installation command yet. Do not install unrelated packages based on this repository's planned CLI names.
+The current CLI provides `doctor`, `snapshot`, `run`, `status`, and `events`. Use an isolated virtual environment and the documented commands in [SETUP.md](docs/SETUP.md). Runtime and development version snapshots are supplied in `requirements.txt` and `requirements-dev.txt`.
 
-The future implementation will document an isolated, tested Python environment and provide camera diagnostics, snapshot/calibration, capture, event inspection, and correction tools. Exact dependency versions and model artifacts will be chosen from measured compatibility results rather than assumed in advance.
+Automatic calibration/focus control, correction/reanalysis, species models, and unattended deployment remain future work. The current camera adapter preserves existing focus/exposure controls and does not download models. Event folders currently use UTC dates; configurable local date partitioning remains pending.
 
 ## Privacy and repository hygiene
 
