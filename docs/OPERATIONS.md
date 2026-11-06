@@ -7,6 +7,7 @@
 - `run [--duration SECONDS]`: foreground motion-triggered capture using privately configured feeder regions.
 - `status`: last saved local health report. This is a snapshot, not a live IPC endpoint; a crashed process may leave a stale report.
 - `events --limit N`: inspect local event manifests without starting the camera.
+- `analyze --model FILE`: optional separate-process shadow analysis of completed events; records provisional bird candidates without changing or filtering photographs. See [SHADOW_ANALYSIS.md](SHADOW_ANALYSIS.md).
 
 Put global `--config FILE` before the subcommand. Read-only inspection does not create an absent data directory. There is no species classifier, correction/reanalysis command, web server, messaging integration, or startup service yet.
 

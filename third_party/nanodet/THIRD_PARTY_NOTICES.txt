@@ -1,0 +1,21 @@
+THIRD-PARTY ATTRIBUTIONS (project attribution, not an upstream NOTICE)
+
+OpenCV Zoo NanoDet decoder and demo-derived letterbox geometry:
+revision 48b10fa505aeb51fbd127fc60a5c660040e823b7
+https://github.com/opencv/opencv_zoo/tree/48b10fa505aeb51fbd127fc60a5c660040e823b7/models/object_detection_nanodet
+Contributor: Sri Siddarth Chakaravarthy; Google Summer of Code 2022; OpenCV.
+Apache License 2.0: see LICENSE.
+NanoDet upstream: Copyright 2020-2021 RangiLyu. All rights reserved.
+See NanoDet-upstream-LICENSE.
+The model-directory README explicitly licenses all directory files under Apache 2.0.
+No standalone upstream NOTICE appeared in the retrieved root/model directory listings.
+
+Modifications: src/birdwatcher/_vendor/nanodet.py adds this provenance header,
+Ruff formatting, and replaces filename-based cv2.dnn.readNet loading with
+cv2.dnn.readNetFromONNX on a read-only uint8 view of verified immutable model
+bytes; numerical decoder behavior is unchanged. bird_detector.py
+reimplements the demo's RGB letterbox geometry with clipping and ROI offsets.
+No weights or example photographs are distributed here. The optional pinned model
+is object_detection_nanodet_2022nov.onnx, 3800954 bytes, SHA256
+4b82da9944b88577175ee23a459dce2e26e6e4be573def65b1055dc2d9720186.
+The surrounding BirdWatcherPi application remains under its MIT license.

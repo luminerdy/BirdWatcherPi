@@ -2,7 +2,7 @@
 
 A local-first Python bird-feeder camera project for Raspberry Pi: capture close-up photographs when activity occurs, then attempt bird and species identification without delaying the next photograph.
 
-> **Project status: experimental capture MVP.** Camera diagnostics, snapshots, configurable motion-triggered bursts, local event storage, retention safeguards, and foreground health reporting are implemented. Species identification, automatic calibration, a durable analysis queue/index, and background-service installation are not implemented. Field capture reliability and species accuracy are not established.
+> **Project status: experimental capture + shadow analysis.** Motion-triggered photography is available, with optional separate-process bird-candidate analysis of saved events and a bounded durable analysis queue. Shadow analysis never filters/deletes captures and does not prove a bird is present or absent. Species identification, automatic calibration, a capture-internal AI worker, and background-service installation remain future work. Field detection accuracy is not established.
 
 ## Start here
 
@@ -62,13 +62,16 @@ USB camera — one persistent owner
 
 Capture must continue if identification is slow, disabled, or unavailable. A proposed lightweight presence scan may supplement motion detection when inference capacity permits.
 
-The model/runtime choice is deliberately open until compatibility, licensing, label coverage, memory use, and latency have been tested on the actual Pi. Scores will be recorded as model scores, not presented as guarantees.
+The initial shadow-mode detector is a pinned OpenCV Zoo NanoDet model, exercised locally through OpenCV DNN. It has produced both correct bird boxes and false positives; scores are not guarantees. This is not a calibrated filtering policy or a species-model selection. See the [model decision](docs/MODEL_DECISION.md) and [shadow-analysis guide](docs/SHADOW_ANALYSIS.md).
 
 ## Project documents
 
 - [Product and engineering specification](docs/SPECIFICATION.md) — scope, behavior, data handling, reliability, and acceptance criteria.
 - [Implementation plan](docs/IMPLEMENTATION_PLAN.md) — ordered work packages, dependencies, tests, and release gates.
 - [Capture validation report](docs/VALIDATION_REPORT.md) — sanitized live-test evidence and remaining acceptance gaps.
+- [Bird-presence model decision](docs/MODEL_DECISION.md) — pinned provenance, actual feasibility measurements, and uncertainty.
+- [Shadow analysis](docs/SHADOW_ANALYSIS.md) — optional local analysis without changing or filtering photographs.
+- [Shadow integration validation](docs/SHADOW_VALIDATION.md) — real execution, private candidate review, and validation boundaries.
 
 The specification defines the intended result. The plan describes how to reach it. Neither document is evidence that the application has been built or benchmarked.
 
@@ -76,10 +79,11 @@ The specification defines the intended result. The plan describes how to reach i
 
 - [ ] **Foundation:** package structure, configuration validation, CLI, and tests.
 - [ ] **Camera calibration:** persistent capture, focus review, and feeder regions.
-- [ ] **Capture MVP:** motion-triggered buffered photo bursts.
+- [x] **Capture MVP:** motion-triggered buffered photo bursts.
 - [ ] **Storage and recovery:** durable events, bounded queues, retention, and health.
 - [ ] **Field tuning:** measure missed arrivals and nuisance triggers.
-- [ ] **Model feasibility:** test local bird/species models and their licenses.
+- [x] **Bird-presence feasibility:** exercise a pinned local detector and verify its license; deployment accuracy remains unvalidated.
+- [ ] **Species feasibility:** select and test a species classifier.
 - [ ] **Analysis integration:** background identification, uncertainty, and corrections.
 - [ ] **Release verification:** failure testing, evaluation, and a 24-hour soak.
 - [ ] **Approved deployment:** automatic startup and operating/rollback instructions.
@@ -88,7 +92,7 @@ A reliable motion-triggered photo recorder is the first useful milestone. Specie
 
 ## Installation and usage
 
-The current CLI provides `doctor`, `snapshot`, `run`, `status`, and `events`. Use an isolated virtual environment and the documented commands in [SETUP.md](docs/SETUP.md). Runtime and development version snapshots are supplied in `requirements.txt` and `requirements-dev.txt`.
+The current CLI provides `doctor`, `snapshot`, `run`, `status`, `events`, and optional `analyze`. Use an isolated virtual environment and the documented commands in [SETUP.md](docs/SETUP.md). Runtime and development version snapshots are supplied in `requirements.txt` and `requirements-dev.txt`. Analysis requires a separately obtained, hash-verified model; no model download happens at capture startup.
 
 Automatic calibration/focus control, correction/reanalysis, species models, and unattended deployment remain future work. The current camera adapter preserves existing focus/exposure controls and does not download models. Event folders currently use UTC dates; configurable local date partitioning remains pending.
 
@@ -119,4 +123,4 @@ Multiple cameras, audio identification, a web dashboard, live streaming, individ
 
 ## License
 
-See [LICENSE](LICENSE) for the existing MIT license. Third-party libraries and model weights have their own licenses and require separate review before inclusion or deployment.
+Application code retains the [MIT license](LICENSE). The bundled NanoDet decoder is separately licensed under Apache-2.0, with its license and notices in `third_party/nanodet/`. Package metadata describes the combined distribution as `MIT AND Apache-2.0`; that does not replace the application's MIT license. Optional model weights have their own preserved license and are not bundled. Legal attribution notices are not deployment data and must remain intact.

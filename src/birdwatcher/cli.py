@@ -19,6 +19,31 @@ def parser():
     commands.add_parser("status", help="Read the last local health report")
     events = commands.add_parser("events", help="List locally saved events")
     events.add_argument("--limit", type=int, default=20)
+    analyze = commands.add_parser(
+        "analyze",
+        help="Shadow bird analysis of saved events; never filters photos",
+        description="Optional shadow analysis: record bird candidates without modifying captures",
+    )
+    analyze.add_argument(
+        "--model", type=Path, required=True, help="Private pinned NanoDet ONNX model"
+    )
+    analyze.add_argument(
+        "--analysis-dir", type=Path, help="Private results/queue directory outside capture data"
+    )
+    analyze.add_argument(
+        "--threshold", type=float, default=0.25, help="Provisional model score threshold"
+    )
+    analyze.add_argument("--frames-per-event", type=int, default=3)
+    analyze.add_argument("--limit", type=int, default=20, help="Maximum events per analysis pass")
+    analyze.add_argument(
+        "--watch-seconds",
+        type=float,
+        default=0,
+        help="Watch for a bounded time; zero runs one pass",
+    )
+    analyze.add_argument(
+        "--full-frame", action="store_true", help="Use full images instead of configured regions"
+    )
     return root
 
 
@@ -37,9 +62,20 @@ def main(argv=None):
             root.error("duration must be a finite positive number")
     if args.command == "events" and not 1 <= args.limit <= 1000:
         root.error("limit must be between 1 and 1000")
+    if args.command == "analyze":
+        if not math.isfinite(args.threshold) or not 0 < args.threshold <= 1:
+            root.error("threshold must be finite and in (0, 1]")
+        if not 1 <= args.frames_per_event <= 10:
+            root.error("frames-per-event must be between 1 and 10")
+        if not 1 <= args.limit <= 100:
+            root.error("limit must be between 1 and 100")
+        if not math.isfinite(args.watch_seconds) or not 0 <= args.watch_seconds <= 3600:
+            root.error("watch-seconds must be between 0 and 3600")
     os.umask(0o077)
     try:
         config = load_config(args.config)
+        if args.command == "analyze" and not args.full_frame:
+            validate_run(config)
         if args.command == "doctor":
             with Camera(config.camera) as camera:
                 camera.read()
@@ -85,6 +121,10 @@ def main(argv=None):
                     json.loads(health.read_text()) if health.is_file() else {"state": "not_started"}
                 )
                 print(json.dumps(result, indent=2))
+        elif args.command == "analyze":
+            result = run_shadow_analysis(args, config)
+            print(json.dumps(result, indent=2))
+            return 1 if result["totals"].get("failed", 0) else 0
         elif args.command == "run":
             validate_run(config)
             from .runner import run_capture
@@ -101,3 +141,56 @@ def main(argv=None):
         root.exit(2, f"Error: {error}\n")
     except OSError:
         root.exit(2, "Error: local I/O failed; check storage, permissions, and camera access\n")
+
+
+def run_shadow_analysis(args, config):
+    """Separate, optional analysis process: never acquires a camera or edits photos."""
+    import os
+    import time
+
+    from .analysis import AnalysisError, Analyzer
+    from .bird_detector import BirdDetector, DetectorError
+
+    regions = () if args.full_frame else tuple(r for r in config.motion.regions if r.enabled)
+    analysis_dir = args.analysis_dir or config.storage.data_dir.with_name(
+        config.storage.data_dir.name + "-analysis"
+    )
+    try:
+        os.nice(10)
+    except (AttributeError, OSError):
+        pass
+    try:
+        detector = BirdDetector(args.model, threshold=args.threshold)
+        started = time.monotonic()
+        deadline = started + args.watch_seconds
+        totals = {}
+        passes = 0
+        with Analyzer(
+            config.storage.data_dir,
+            analysis_dir,
+            detector,
+            regions=regions,
+            frames_per_event=args.frames_per_event,
+        ) as analyzer:
+            while True:
+                result = analyzer.run(limit=args.limit)
+                passes += 1
+                for key, value in result.items():
+                    if type(value) is int:
+                        totals[key] = totals.get(key, 0) + value
+                remaining = deadline - time.monotonic()
+                if not args.watch_seconds or remaining <= 0:
+                    break
+                time.sleep(min(2.0, remaining))
+        return {
+            "mode": "shadow",
+            "filtering_enabled": False,
+            "passes": passes,
+            "totals": totals,
+            "elapsed_seconds": round(time.monotonic() - started, 3),
+            "model": detector.model_info,
+        }
+    except (AnalysisError, DetectorError):
+        raise ValueError(
+            "Shadow analysis failed; check the model and private analysis data"
+        ) from None
