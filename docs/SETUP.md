@@ -1,6 +1,6 @@
 # Setup — early capture milestone
 
-This is an experimental, foreground-only capture application. Species identification, a durable AI queue/index, automatic focus calibration, and an installed background service are not provided by this milestone. Keep any private settings and photos outside the checkout.
+This is an experimental, foreground-only capture application with optional separate-process shadow bird analysis. Species identification, automatic focus calibration, and an installed background service are not provided. The shadow analyzer has its own durable work queue but never filters capture or changes the camera. Keep private settings and photos outside the checkout. See [SHADOW_ANALYSIS.md](SHADOW_ANALYSIS.md) for the optional model and analyzer setup.
 
 ## Environment
 

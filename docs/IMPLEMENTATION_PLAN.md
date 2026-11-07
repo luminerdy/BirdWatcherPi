@@ -1,8 +1,16 @@
 # BirdWatcherPi — Implementation Plan
 
-Status: Proposed plan v0.1. No application implementation, installation, camera-control changes, GitHub publication, or unattended monitoring is performed by this document.
+Status: Plan v0.2 with an implemented-scope progress summary. Updating this document does not install software, change camera controls, start recording, or merge a pull request.
 
-Source of truth: [SPECIFICATION.md](SPECIFICATION.md), draft v0.1. Where this plan proposes an implementation detail not fixed in that specification, it is provisional and must be validated. All tasks below remain unchecked; the existence of the specification and this plan does not satisfy a runtime acceptance gate.
+Source of truth: [SPECIFICATION.md](SPECIFICATION.md), draft v0.2. Where this plan proposes an implementation detail not fixed in that specification, it is provisional and must be validated. The detailed phase checklists below retain the full target scope; partial implementation is not a passed phase gate. Current priorities and completed building blocks are tracked in [TODO.md](TODO.md).
+
+## Current progress and next actions
+
+- Capture, bounded writing, event storage/recovery, diagnostics, configuration validation, and supervised live operation are implemented in the baseline delivered through PR #1.
+- Optional separate-process shadow analysis is implemented and independently reviewed on the PR #2 branch, with 139 passing local tests. PR #2 is not merged by this documentation update; there is no automatic filtering or permanent service.
+- Private region/focus review, finite capture sessions, and prototype sighting/coverage logs have been exercised. An integrated calibration UI, formal configuration-schema versioning, general visit-report CLI, species classifier, and full release validation remain pending.
+- Next: #3 daylight comparison dataset, #4 bird-confirmation validation, #5 local visit-time report, #6 representative photos/crops, #7 species feasibility, and #8 approved daylight automation/recovery.
+- **Operational constraint: daylight only.** Resolve the correct local date/timezone and daylight window, stop conservatively before sunset using an independent absolute deadline, and refuse launch after the cutoff. Reliability testing must accumulate daylight operating time across sessions with the camera off overnight; a sunset timer is not a darkness sensor.
 
 ## 1. Delivery strategy
 
@@ -203,7 +211,7 @@ Dependencies: P4 for field evidence; P6 for a complete release. Capture-only ver
 - [ ] Report top-1 accuracy, accepted-label precision, abstention, detector misses, per-species counts/results, and uncertainty. The provisional accepted-label precision gate is 90%; insufficient evidence or failure keeps species suggestions experimental.
 - [ ] Preserve out-of-set/unknown samples and test uncertainty behavior; reference labels must be credible and independent of the model being evaluated.
 - [ ] Exercise camera unplug/replug, restart during write, disk reserve exhaustion, pin protection, writer/queue saturation, inference crash, clock jumps, and timezone transitions. Recovery target: within 60 seconds after camera availability returns.
-- [ ] Run a recorded 24-hour soak with capture and selected analysis active; monitor memory, queue depth, dropped frames, CPU, temperature, logs, disk, and event integrity.
+- [ ] Accumulate at least 24 hours of recorded daylight-only soak testing across multiple sessions with capture and selected analysis active; stop the camera outside approved daylight windows. Monitor memory, queue depth, dropped frames, CPU, temperature, logs, disk, and event integrity.
 - [ ] Summarize every specification acceptance item as passed/failed/pending with evidence paths. No release gate is passed solely because its code exists.
 
 ### Exit evidence

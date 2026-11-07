@@ -30,7 +30,7 @@ def test_help_lists_capture_commands():
 def test_version_is_available_without_camera():
     result = cli("--version")
     assert result.returncode == 0, result.stderr
-    assert "0.1.0" in result.stdout
+    assert "0.2.0" in result.stdout
 
 
 def test_unconfigured_run_fails_before_opening_camera():
