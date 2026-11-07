@@ -1,6 +1,6 @@
 # BirdWatcherPi — Product and Engineering Specification
 
-Status: Draft v0.1 — proposed implementation, not an implemented or benchmarked system.
+Status: Draft v0.2 — full target specification with daylight-only operation clarified. This is not a claim that every requirement is implemented or validated; see [TODO.md](TODO.md) for the current delivered subset and remaining work.
 
 ## 1. Purpose
 
@@ -162,6 +162,7 @@ TOML configuration groups: camera, motion, regions, capture, detection, classifi
 
 ## 8. Reliability, privacy, and deployment
 
+- Daylight-only capture: establish the correct local date/timezone and approved daylight window, stop conservatively before sunset, and enforce an absolute deadline independently of relative capture duration. Refuse launch when the window cannot be established or the cutoff has passed. Do not record after dark, including during reliability testing. A sunset-based timer is not a darkness sensor; recurring schedules/service installation still need approval.
 - Run under a dedicated unprivileged service account or the existing non-root user, with camera and data-directory access only as necessary.
 - Install a systemd service with bounded restart-on-failure behavior. No service is enabled as part of writing this specification.
 - Camera capture and local identification must work offline once dependencies/models are installed; startup must not silently download packages or models.
@@ -194,7 +195,7 @@ All numerical values below are engineering targets or proposed release gates, no
 
 ### C. Operational reliability
 
-- Complete a 24-hour soak test without an unhandled crash or unbounded memory/backlog growth; record CPU, resident memory, temperature, dropped frames, and queue depth.
+- Complete at least 24 cumulative hours of daylight-only soak testing across multiple sessions, with the camera stopped outside approved daylight windows, without an unhandled crash or unbounded memory/backlog growth. Record CPU, resident memory, temperature, dropped frames, and queue depth.
 - Provisional budget: combined application resident memory below 2 GiB in normal operation. Measure rather than infer from board RAM.
 - Camera unplug/replug recovers within 60 seconds after the device becomes available, without duplicate event IDs or a busy retry loop.
 - Simulated low-disk, pinned-retention, restart-during-write, and inference-crash tests protect existing photographs and expose health failures.
@@ -235,7 +236,7 @@ Use pytest with synthetic/replayed frames, fake clocks, a fake camera, temporary
 2. Capture MVP: configuration, persistent stream, motion detection, prebuffered bursts, event files, storage limits, CLI, and automated tests.
 3. Field tuning: label daylight arrivals/nuisance events, measure capture reliability, choose working thresholds.
 4. AI experiment and integration: verify runtime/model licenses and compatibility, benchmark the Pi, add asynchronous detection/classification and explicit uncertainty.
-5. Operational release: systemd installation with approval, recovery tests, 24-hour soak, documented installation and identification results.
+5. Operational release: daylight-only systemd/scheduling installation with approval, recovery tests, cumulative daylight-only soak, documented installation and identification results.
 
 Decisions deliberately left open: exact perch distances, acceptable near/far focus trade-off, ROI geometry, model/weights/runtime selection, calibrated identification thresholds, tested Python environment, and storage values after observing daily usage. This draft proposes defaults; it does not authorize installing dependencies, changing camera controls, enabling a service, or publishing files/photos.
 

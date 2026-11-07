@@ -68,6 +68,7 @@ The initial shadow-mode detector is a pinned OpenCV Zoo NanoDet model, exercised
 
 - [Product and engineering specification](docs/SPECIFICATION.md) — scope, behavior, data handling, reliability, and acceptance criteria.
 - [Implementation plan](docs/IMPLEMENTATION_PLAN.md) — ordered work packages, dependencies, tests, and release gates.
+- [Current status and prioritized to-do list](docs/TODO.md) — completed building blocks, PR #2 approval gate, and tracked issues #3–#8.
 - [Capture validation report](docs/VALIDATION_REPORT.md) — sanitized live-test evidence and remaining acceptance gaps.
 - [Bird-presence model decision](docs/MODEL_DECISION.md) — pinned provenance, actual feasibility measurements, and uncertainty.
 - [Shadow analysis](docs/SHADOW_ANALYSIS.md) — optional local analysis without changing or filtering photographs.
@@ -77,16 +78,20 @@ The specification defines the intended result. The plan describes how to reach i
 
 ## Roadmap
 
-- [ ] **Foundation:** package structure, configuration validation, CLI, and tests.
-- [ ] **Camera calibration:** persistent capture, focus review, and feeder regions.
-- [x] **Capture MVP:** motion-triggered buffered photo bursts.
-- [ ] **Storage and recovery:** durable events, bounded queues, retention, and health.
-- [ ] **Field tuning:** measure missed arrivals and nuisance triggers.
-- [x] **Bird-presence feasibility:** exercise a pinned local detector and verify its license; deployment accuracy remains unvalidated.
-- [ ] **Species feasibility:** select and test a species classifier.
-- [ ] **Analysis integration:** background identification, uncertainty, and corrections.
-- [ ] **Release verification:** failure testing, evaluation, and a 24-hour soak.
-- [ ] **Approved deployment:** automatic startup and operating/rollback instructions.
+Implemented building blocks are not the same as a fully validated release:
+
+- [x] **Capture baseline:** Python package/CLI, validated regions, persistent capture, buffered photo bursts, bounded writing, storage safeguards, recovery tests, and health.
+- [x] **Private setup workflow:** region review and reversible feeding-plane focus experiments; an integrated calibration UI remains pending.
+- [x] **Shadow analysis on the PR #2 branch:** pinned local model, durable bounded analysis queue, uncertainty/provenance, and 139 passing local tests. PR #2 remains a separate approval/merge step.
+- [ ] **Approve/merge PR #2** without enabling photo filtering or permanent monitoring.
+- [ ] **P1 / #3:** collect reviewed morning/daylight comparison data.
+- [ ] **P1 / #4:** validate bird confirmation against seeds, feeder motion, and lighting controls.
+- [ ] **P1 / #5:** build local visit-time reports with recording-coverage context.
+- [ ] **P2 / #6:** rank representative photos and create non-destructive close-ups.
+- [ ] **P2 / #7:** select and validate a species classifier after detection/crop quality is established.
+- [ ] **P2 / #8:** add approved daylight-only scheduling, recovery/rollback checks, and longer cumulative daylight reliability tests.
+
+See [TODO.md](docs/TODO.md) for acceptance boundaries and remaining technical gaps. **Do not record after dark**, including during long reliability tests. No daily schedule or service is installed by this roadmap.
 
 A reliable motion-triggered photo recorder is the first useful milestone. Species identification is a later milestone, not a prerequisite for saving pictures.
 
