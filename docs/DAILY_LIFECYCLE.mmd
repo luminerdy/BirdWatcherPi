@@ -1,0 +1,43 @@
+sequenceDiagram
+    autonumber
+    participant Scheduler as Hermes scheduler
+    participant Guard as Daylight supervisor
+    participant Capture as Camera and capture process
+    participant Raw as Raw photo store
+    participant Local as Local review worker
+    participant Agent as Review agent and AI provider
+    participant Finalizer as Provenance finalizer
+    participant Owner as Telegram user
+
+    Scheduler->>Guard: Arm approved daily session
+    Guard->>Guard: Validate solar date, timezone, pause and storage
+    alt Prerequisites fail
+        Guard-->>Scheduler: Refuse camera start and preserve existing data
+    else Valid daylight window
+        Guard->>Guard: Wait for sunrise and recheck prerequisites
+        Guard->>Capture: Start one persistent stream
+        loop Activity within the permitted daylight window
+            Capture->>Raw: Full-resolution motion bursts and manifests
+        end
+        Guard->>Capture: Stop before sunset using an absolute deadline
+        Capture-->>Guard: Close events, drain writes and release ownership
+    end
+
+    Scheduler->>Local: After cutoff, verify capture is no longer active
+    Local->>Raw: Read retained images without changing originals
+    Local->>Local: Sample, run NanoDet, add no-candidate controls
+    alt Review packet completed
+        Local-->>Scheduler: Atomically publish packet and fingerprint
+        Scheduler->>Agent: Wake only for a new completed event
+        Agent->>Agent: Visually inspect selected sheets and originals
+        Agent->>Finalizer: Explicit decisions bound to packet hash
+        Finalizer->>Raw: Verify selected original bytes
+        Finalizer->>Finalizer: Preserve best photos and append idempotent observations
+        Finalizer-->>Agent: Prepared receipt and keeper paths
+        Agent->>Owner: Dated digest, best photos, scope and error notes
+    else Review failed
+        Local-->>Scheduler: Classified failure without a fake empty-feeder result
+        Scheduler-->>Owner: Failure notice rather than an invented bird count
+    end
+    Note over Scheduler,Owner: Repeated fingerprints or a matching prepared receipt stay quiet
+    Note over Raw,Finalizer: Raw history may expire under policy and keepers stay outside raw cleanup

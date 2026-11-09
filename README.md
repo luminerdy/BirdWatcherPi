@@ -41,31 +41,24 @@ The first setup task is **focus calibration**. Very close perches must be tested
 
 No extra hardware purchase, second camera, or cloud service is assumed for the initial release.
 
-## Proposed architecture
+## Architecture
 
-```text
-USB camera — one persistent owner
-    |
-    +--> downscaled frames --> feeder-region motion analysis
-    |
-    +--> bounded pre-trigger buffer
-                    |
-                    v
-             photo burst + event record
-                    |
-                    v
-             bounded, durable work queue
-                    |
-                    v
-          local bird detection and species suggestions
-```
+See [Architecture and how it works](docs/ARCHITECTURE.md) for the **Mermaid system diagram**, **daily lifecycle sequence**, component map, and operational outline. Editable sources: [system diagram](docs/ARCHITECTURE.mmd) and [daily lifecycle](docs/DAILY_LIFECYCLE.mmd).
 
-Capture must continue if identification is slow, disabled, or unavailable. A proposed lightweight presence scan may supplement motion detection when inference capacity permits.
+- **Daylight capture:** one USB camera stream, approved-region motion detection, a short pre-trigger buffer, and a bounded full-resolution writer.
+- **Rolling storage:** raw JPEGs, event manifests and health; configured managed-history cleanup is separate from the keeper archive.
+- **Evening review:** sampled local bird-candidate analysis plus no-candidate controls, followed by bounded AI-assisted visual confirmation.
+- **Keepers and delivery:** verified original copies, idempotent observations, and one private digest per new review packet.
+
+The core capture and optional shadow-analysis components are in this repository. The approved deployed workflow adds **private daylight/review/Hermes orchestration outside the checkout**; a fresh clone does not install those helpers, schedules or credentials. The architecture document makes that implementation boundary and the external AI/Telegram data boundary explicit.
+
+Capture must not wait for identification. A specialized species classifier and a lightweight stationary-bird presence scan remain future work.
 
 The initial shadow-mode detector is a pinned OpenCV Zoo NanoDet model, exercised locally through OpenCV DNN. It has produced both correct bird boxes and false positives; scores are not guarantees. This is not a calibrated filtering policy or a species-model selection. See the [model decision](docs/MODEL_DECISION.md) and [shadow-analysis guide](docs/SHADOW_ANALYSIS.md).
 
 ## Project documents
 
+- [Architecture and how it works](docs/ARCHITECTURE.md) — Mermaid system/lifecycle diagrams, deployed-vs-packaged scope, privacy boundaries, and operating outline.
 - [Product and engineering specification](docs/SPECIFICATION.md) — scope, behavior, data handling, reliability, and acceptance criteria.
 - [Implementation plan](docs/IMPLEMENTATION_PLAN.md) — ordered work packages, dependencies, tests, and release gates.
 - [Current status and prioritized to-do list](docs/TODO.md) — completed building blocks, PR #2 approval gate, and tracked issues #3–#8.

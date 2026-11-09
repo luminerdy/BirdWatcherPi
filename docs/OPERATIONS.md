@@ -9,7 +9,7 @@
 - `events --limit N`: inspect local event manifests without starting the camera.
 - `analyze --model FILE`: optional separate-process shadow analysis of completed events; records provisional bird candidates without changing or filtering photographs. See [SHADOW_ANALYSIS.md](SHADOW_ANALYSIS.md).
 
-Put global `--config FILE` before the subcommand. Read-only inspection does not create an absent data directory. There is no species classifier, correction/reanalysis command, web server, messaging integration, or startup service yet.
+Put global `--config FILE` before the subcommand. Read-only inspection does not create an absent data directory. The core CLI does not provide a species classifier, correction/reanalysis command, web server, messaging integration, or startup-service installer. The approved deployment uses separate private daylight/review/Hermes helpers for scheduling and Telegram digests; these are not installed by cloning this repository. See [ARCHITECTURE.md](ARCHITECTURE.md) for the Mermaid diagrams and implementation boundary.
 
 ## Stored data
 

@@ -1,0 +1,54 @@
+flowchart TB
+    subgraph pi["Raspberry Pi - local capture and orchestration"]
+        scheduler["Hermes scheduler on the Pi"]
+        subgraph daytime["Daylight capture"]
+            guard["Daylight supervisor<br/>pause, storage identity, absolute cutoff"]
+            camera["One persistent USB camera stream"]
+            motion["Feeder-region motion and prebuffer<br/>bounded full-resolution burst writer"]
+            raw[("Rolling raw JPEGs, event manifests<br/>and health snapshots on USB storage")]
+            guard -. "start and stop" .-> camera
+            camera --> motion --> raw
+        end
+
+        subgraph evening["Review saved photos after recording stops"]
+            gate["Evening gate<br/>recorder idle; one bounded worker per day"]
+            detector["Local NanoDet<br/>representative frames and control samples"]
+            packet[("Hashed review packet<br/>contact sheets, source map, errors")]
+            monitor["Stable fingerprint monitor<br/>unchanged packet stays quiet"]
+            agent["Hermes review agent<br/>tool use, visual decisions, digest"]
+            finalizer["Provenance finalizer<br/>verify bytes, archive, deduplicate log"]
+            keepers[("Keeper originals, observations<br/>and prepared review receipt")]
+            gate -. "start worker" .-> detector
+            detector --> packet --> monitor --> agent
+            agent -->|explicit visual decisions| finalizer
+            finalizer --> keepers
+            finalizer -. "prepared receipt" .-> agent
+        end
+        retention["Managed history retention<br/>eligible raw events only"]
+    end
+
+    solar["External solar ephemeris service<br/>general region and timezone"]
+    model["External vision-capable AI provider<br/>selected image context, not every frame"]
+    telegram["External Telegram service<br/>one private digest and best photos"]
+
+    scheduler -. "arm approved session" .-> guard
+    solar -. "sunrise and sunset" .-> guard
+    scheduler -. "readiness checks" .-> gate
+    scheduler -. "change-gated review" .-> monitor
+    raw -->|read only| detector
+    raw -->|selected originals, read only| finalizer
+    raw -. "configured age and quota policy" .-> retention
+    agent <-->|selected images and reasoning| model
+    agent -->|dated digest and verified photo attachments| telegram
+
+    classDef local fill:#12384a,stroke:#22d3ee,color:#e2e8f0;
+    classDef data fill:#2e2054,stroke:#a78bfa,color:#f1f5f9;
+    classDef safety fill:#492331,stroke:#fb7185,color:#f1f5f9;
+    classDef outside fill:#293548,stroke:#94a3b8,color:#f1f5f9;
+    class scheduler,camera,motion,gate,detector,monitor,agent,finalizer local;
+    class raw,packet,keepers data;
+    class guard,retention safety;
+    class solar,model,telegram outside;
+    style pi fill:#081426,stroke:#3b82f6,color:#e2e8f0;
+    style daytime fill:#102136,stroke:#475569,color:#e2e8f0;
+    style evening fill:#102136,stroke:#475569,color:#e2e8f0;
