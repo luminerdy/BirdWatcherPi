@@ -1,6 +1,6 @@
 # BirdWatcherPi — Implementation Plan
 
-Status: Plan v0.3, aligned with [SPECIFICATION.md](SPECIFICATION.md) v0.3 and the owner's keeper-focused goal. This plan distinguishes implemented source, private deployed automation, and unpassed release gates. Documentation updates do not change the recorder, install services, merge code, or publish private data.
+Status: Plan v0.4, aligned with [SPECIFICATION.md](SPECIFICATION.md) v0.4 and the owner's keeper-focused goal. This plan distinguishes implemented source, private deployed automation, and unpassed release gates. Documentation updates do not change the recorder, install services, merge code, or publish private data.
 
 ## 1. Product priority and implementation boundary
 
@@ -14,7 +14,7 @@ Architecture and editable Mermaid sources: [ARCHITECTURE.md](ARCHITECTURE.md).
 
 - [x] Persistent USB capture, validated regions, motion/prebuffered bursts, bounded writing, filesystem manifests/recovery/retention, diagnostics, and health are implemented.
 - [x] Private feeder framing/region approval and reversible focus comparison were exercised; an integrated calibration command is not implemented.
-- [x] Pinned local NanoDet and a separate bounded durable shadow-analysis queue are implemented and merged into main through PR #2. Latest documentation check: **139 repository tests passed locally**; this is not remote CI or a field-accuracy result.
+- [x] Pinned local NanoDet and a separate bounded durable shadow-analysis queue are implemented and merged into main through PR #2. The capture/shadow baseline passed **139 local tests**; the current combined repository suite additionally includes dedicated traceability regressions. These results are not remote CI or field-accuracy evidence.
 - [x] Approved private recurring daylight capture and evening review/digest jobs are installed and were enabled when inspected. A job's scheduled state does not prove a live recorder, successful next launch, or message delivery.
 - [x] Guarded USB migration was verified with matching file sets, sizes, and SHA-256 hashes, while preserving the internal backup. Wrong/absent-volume protection and a lower saved-photo rate were exercised; a short replay is not a full live-camera soak.
 - [x] Private collector, scheduler/monitor, and finalizer are implemented and independently reviewed. Latest documentation check: **182 private review tests passed locally** (41 collector, 30 scheduler, 111 finalizer).
@@ -124,6 +124,8 @@ Species-release validation remains separate from keeper-workflow usefulness. Nev
 The foreground run CLI does not enforce a solar window itself. Core local capture/model inference does not require cloud inference; valid ephemeris is required for automatic daylight starts, while selected-image AI review and Telegram require their external services.
 
 ## 4. Next work and acceptance traceability
+
+The authoritative requirement-level map is [TRACEABILITY.md](TRACEABILITY.md), generated from [traceability.json](traceability.json). Each stable specification ID maps to a feature, source/test references or declared private evidence, separate implementation/test/field statuses, and outstanding issues. The phase-level mapping below complements that registry; it does not substitute for individual requirement evidence. Validate changes with `python3 scripts/check_traceability.py --check` from the repository root.
 
 Priority is keeper quality and safe repeatable operation. Issues #4/#6 concern confirmation and representative photos; #8 still covers packaging/recovery/soak gaps despite privately deployed scheduling. #3 can supply comparison examples without promising complete coverage. #5 is an optional observation/coverage report, not an exhaustive visitor log; the private finalizer already provides provenance-backed photo observations. #7 remains future species work.
 

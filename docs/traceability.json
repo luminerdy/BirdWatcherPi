@@ -1,0 +1,3255 @@
+{
+  "schema_version": 1,
+  "specification": "docs/SPECIFICATION.md",
+  "spec_sha256": "de771b4f1022288a87b1602e5eca11136611a53dcfbb1f33a4aa16823e882bfb",
+  "private_evidence": [
+    {
+      "id": "PRIVATE-FOCUS",
+      "summary": "Privately reviewed focus and priority-region compromise",
+      "public_report": "docs/DEPLOYMENT_EVIDENCE.md#focus"
+    },
+    {
+      "id": "PRIVATE-STORAGE",
+      "summary": "Guarded USB migration, retained backup and separate recorder fix",
+      "public_report": "docs/DEPLOYMENT_EVIDENCE.md#storage"
+    },
+    {
+      "id": "PRIVATE-DAYLIGHT",
+      "summary": "Approved private solar/pause/storage supervision and historical bounded sessions",
+      "public_report": "docs/DEPLOYMENT_EVIDENCE.md#daylight"
+    },
+    {
+      "id": "PRIVATE-COLLECTOR",
+      "summary": "Private sampled packet collector: 41 local regression tests",
+      "public_report": "docs/DEPLOYMENT_EVIDENCE.md#review-tests"
+    },
+    {
+      "id": "PRIVATE-SCHEDULER",
+      "summary": "Private readiness/worker/fingerprint monitor: 30 local regression tests",
+      "public_report": "docs/DEPLOYMENT_EVIDENCE.md#review-tests"
+    },
+    {
+      "id": "PRIVATE-FINALIZER",
+      "summary": "Private provenance/keeper/observation finalizer: 111 local regression tests",
+      "public_report": "docs/DEPLOYMENT_EVIDENCE.md#review-tests"
+    },
+    {
+      "id": "PRIVATE-VISUAL",
+      "summary": "Approved bounded selected-image visual review instructions and partial sample review",
+      "public_report": "docs/DEPLOYMENT_EVIDENCE.md#visual-review"
+    },
+    {
+      "id": "PRIVATE-DELIVERY",
+      "summary": "Private preparation/Telegram integration; no new delivery verified here",
+      "public_report": "docs/DEPLOYMENT_EVIDENCE.md#delivery"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "BW-ACAP-001",
+      "spec_hash": "8cdf7edda62cd85c83d61c47b516ee75589c03e74f2db2e0025384e7c1954118",
+      "feature": "Owner-approved priority focus compromise",
+      "scope": "private",
+      "implementation_status": "policy",
+      "test_status": "not_applicable",
+      "field_status": "validated",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/DEPLOYMENT_EVIDENCE.md#focus"
+      ],
+      "private_evidence": [
+        "PRIVATE-FOCUS"
+      ],
+      "issues": [],
+      "gap": "Approval supports one priority region, not sharpness at every distance or published private views."
+    },
+    {
+      "id": "BW-ACAP-002",
+      "spec_hash": "567c00c4f4b2de395d9ad0d4fa0e9df730ccc3bd6cb963985c73e20f5ab3268a",
+      "feature": "Measured full-resolution negotiated camera output",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "validated",
+      "code": [
+        "src/birdwatcher/camera.py"
+      ],
+      "tests": [
+        "tests/test_camera.py::test_metadata_parser_does_not_include_device_identifiers"
+      ],
+      "evidence": [
+        "docs/VALIDATION_REPORT.md#hardware-evidence"
+      ],
+      "private_evidence": [],
+      "issues": [],
+      "gap": "Live dimensions/format are evidenced; metadata/parser tests do not exercise all real degraded-negotiation cases."
+    },
+    {
+      "id": "BW-ACAP-003",
+      "spec_hash": "f52300401e44201bcd210168efb70563ea54d73b753dc09e9e630fdee095e2b1",
+      "feature": "Arrival fixture includes available pretrigger frame",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "verified",
+      "field_status": "not_applicable",
+      "code": [
+        "src/birdwatcher/events.py",
+        "src/birdwatcher/runner.py"
+      ],
+      "tests": [
+        "tests/test_events.py::test_prebuffer_shared_regions_unique_frames_and_shutdown",
+        "tests/test_integration.py::test_replay_capture_writes_originals_and_health"
+      ],
+      "evidence": [
+        "docs/VALIDATION_REPORT.md#repeatable-checks"
+      ],
+      "private_evidence": [],
+      "issues": [],
+      "gap": "No known implementation gap within this bounded requirement; broader field gates remain separate."
+    },
+    {
+      "id": "BW-ACAP-004",
+      "spec_hash": "438613c6da602c2e8e484b1d0ab6e788153e6498dd4f0e89155c5d369606a8b3",
+      "feature": "Region-bound triggering and lighting fixture",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "verified",
+      "field_status": "not_applicable",
+      "code": [
+        "src/birdwatcher/motion.py"
+      ],
+      "tests": [
+        "tests/test_motion.py::test_motion_persistence_regions_lighting_and_reset"
+      ],
+      "evidence": [
+        "docs/VALIDATION_REPORT.md#repeatable-checks"
+      ],
+      "private_evidence": [],
+      "issues": [
+        4
+      ],
+      "gap": "Synthetic fixture coverage is not calibrated field recall, lighting robustness, or absence evidence."
+    },
+    {
+      "id": "BW-ACAP-005",
+      "spec_hash": "547fefca98d30c1c3a8cdef0c4bb8e722fb60e970dbefeecde6a0dd26088f9d7",
+      "feature": "Optional arrival-yield diagnostic benchmark",
+      "scope": "policy",
+      "implementation_status": "policy",
+      "test_status": "not_applicable",
+      "field_status": "unvalidated",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/TODO.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        3
+      ],
+      "gap": "Optional 18-of-20 observer-backed study not performed; not a keeper-workflow completion blocker."
+    },
+    {
+      "id": "BW-ACAP-006",
+      "spec_hash": "09bace19da4f59b3d4d6efc1aec3f63e64eac93df526fb5145cce63c4efb842e",
+      "feature": "Optional nuisance-rate tuning study",
+      "scope": "policy",
+      "implementation_status": "policy",
+      "test_status": "not_applicable",
+      "field_status": "unvalidated",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/DEPLOYMENT_EVIDENCE.md#limits"
+      ],
+      "private_evidence": [],
+      "issues": [
+        3,
+        4
+      ],
+      "gap": "No evidence passes the proposed five-nuisance-events/hour two-hour reviewed study; this is an optional diagnostic target."
+    },
+    {
+      "id": "BW-AMODEL-001",
+      "spec_hash": "52914bd77881050e49d26a499eb159c1d82cd4f4e08d09264d886c5d8689706b",
+      "feature": "Measured on-device licensed model feasibility",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/bird_detector.py",
+        "src/birdwatcher/analysis.py"
+      ],
+      "tests": [
+        "tests/test_bird_detector.py::test_model_integrity_before_engine"
+      ],
+      "evidence": [
+        "docs/MODEL_DECISION.md",
+        "docs/SHADOW_VALIDATION.md#actual-execution"
+      ],
+      "private_evidence": [],
+      "issues": [
+        4,
+        8
+      ],
+      "gap": "Actual local latency/memory and control inference exist; full concurrent capture impact and per-event budget across conditions are not proven."
+    },
+    {
+      "id": "BW-AMODEL-002",
+      "spec_hash": "05d45828cb885e8801b79226b1cde598b3efdeda77660fdcf3a99dced5a10fd5",
+      "feature": "Independent species evaluation sample sizes",
+      "scope": "future",
+      "implementation_status": "planned",
+      "test_status": "unverified",
+      "field_status": "unvalidated",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/TODO.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        7
+      ],
+      "gap": "No validated species model or independent 100-crop/per-species evaluation set is established."
+    },
+    {
+      "id": "BW-AMODEL-003",
+      "spec_hash": "6455817d5cd751b64431f292a34d6e5ba6db827c70f3eaad47d392be6385d90b",
+      "feature": "Held-out accuracy, abstention and miss reporting",
+      "scope": "future",
+      "implementation_status": "planned",
+      "test_status": "unverified",
+      "field_status": "unvalidated",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/SHADOW_VALIDATION.md#not-yet-validated-or-implemented"
+      ],
+      "private_evidence": [],
+      "issues": [
+        4,
+        7
+      ],
+      "gap": "A few model candidates/controls are not top-1/precision/recall evaluation; no untouched species evaluation report exists."
+    },
+    {
+      "id": "BW-AMODEL-004",
+      "spec_hash": "5018f47ddc21dd9c746d49d2b35cc7198f9547af213eeab78a22b09eaae9872a",
+      "feature": "Species precision gate with explicit abstention",
+      "scope": "future",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "unvalidated",
+      "code": [
+        "src/birdwatcher/analysis.py"
+      ],
+      "tests": [
+        "tests/test_analysis.py::test_unknown_result_is_explicit_sample_not_absence_claim"
+      ],
+      "evidence": [
+        "docs/SHADOW_VALIDATION.md#not-yet-validated-or-implemented"
+      ],
+      "private_evidence": [],
+      "issues": [
+        7
+      ],
+      "gap": "Shadow unknown is explicit; a species classifier and 90-percent accepted-label precision evaluation are absent."
+    },
+    {
+      "id": "BW-AMODEL-005",
+      "spec_hash": "ddd272f1fdd448a7d0dbd4bb93bced17cffd4098f6bd13b28680f0c43f963aa8",
+      "feature": "Analysis failures and ambiguous inputs",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "unvalidated",
+      "code": [
+        "src/birdwatcher/bird_detector.py",
+        "src/birdwatcher/analysis.py"
+      ],
+      "tests": [
+        "tests/test_bird_detector.py::test_rois_unknown_and_bad_image",
+        "tests/test_analysis.py::test_empty_event_is_failed_and_detector_error_is_contained"
+      ],
+      "evidence": [
+        "docs/SHADOW_VALIDATION.md#not-yet-validated-or-implemented"
+      ],
+      "private_evidence": [],
+      "issues": [
+        4,
+        7
+      ],
+      "gap": "Model/bad-image failures are tested; unsupported species, cross-frame species disagreement, and low-quality classification policies are not implemented."
+    },
+    {
+      "id": "BW-ANALYSIS-001",
+      "spec_hash": "375af292640f15cc61c803d0fdf98f203c10695f48837caba1847c3180374717",
+      "feature": "Post-capture evenly spaced frame detection",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/analysis.py",
+        "src/birdwatcher/bird_detector.py"
+      ],
+      "tests": [
+        "tests/test_analysis.py::test_analyzer_sampling_idempotence_and_original_safety"
+      ],
+      "evidence": [
+        "docs/MODEL_DECISION.md",
+        "docs/SHADOW_VALIDATION.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        6,
+        7
+      ],
+      "gap": "Worker samples evenly spaced completed-event frames rather than quality-ranked best frames. Bird boxes are produced, but crop species classification with contextual margins is not implemented."
+    },
+    {
+      "id": "BW-ANALYSIS-002",
+      "spec_hash": "405cf4ca75670b9b53d098d9a26a27f9ede55081aa0d709508786c7d8d1dd667",
+      "feature": "Per-frame list of bird candidate boxes",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/bird_detector.py",
+        "src/birdwatcher/analysis.py"
+      ],
+      "tests": [
+        "tests/test_bird_detector.py::test_official_decoder_and_cpu_mocknet",
+        "tests/test_bird_detector.py::test_geometry_color_no_mutation_and_only_birds"
+      ],
+      "evidence": [
+        "docs/MODEL_DECISION.md",
+        "docs/SHADOW_VALIDATION.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        7
+      ],
+      "gap": "Decoder can return multiple boxes and results store detection lists. Tests do not establish end-to-end multiple-bird identity handling; no per-bird species identification records or cross-frame identity association exist."
+    },
+    {
+      "id": "BW-ANALYSIS-003",
+      "spec_hash": "87ff8c91e86a8ae7e7f861bf1d2587f3e56ce8224c49b87f3f926ad018491ca2",
+      "feature": "Immutable originals and source-relative detection coordinates",
+      "scope": "mixed",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/storage.py",
+        "src/birdwatcher/analysis.py",
+        "src/birdwatcher/bird_detector.py"
+      ],
+      "tests": [
+        "tests/test_analysis.py::test_analyzer_sampling_idempotence_and_original_safety"
+      ],
+      "evidence": [
+        "docs/SHADOW_VALIDATION.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#visual-review"
+      ],
+      "private_evidence": [
+        "PRIVATE-VISUAL"
+      ],
+      "issues": [
+        6,
+        7
+      ],
+      "gap": "Original bytes, manifest/frame links and original-image box coordinates exist. Persistent contextual classification crops with explicit crop-to-source records are not a complete public feature; private review crops are a separate bounded workflow."
+    },
+    {
+      "id": "BW-ANALYSIS-004",
+      "spec_hash": "c9ae39cfa9991168cc8acd9d7e42b58d1f2f485a165d28c5cd772bfdd58f3e6e",
+      "feature": "Raw detector scores with explicit uncertainty",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/bird_detector.py",
+        "src/birdwatcher/analysis.py"
+      ],
+      "tests": [
+        "tests/test_analysis.py::test_unknown_result_is_explicit_sample_not_absence_claim"
+      ],
+      "evidence": [
+        "docs/MODEL_DECISION.md",
+        "docs/SHADOW_VALIDATION.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        7
+      ],
+      "gap": "Raw detector scores are stored and described as uncalibrated. No classifier exists, so separate detector/classifier score storage is not yet exercised."
+    },
+    {
+      "id": "BW-ANALYSIS-005",
+      "spec_hash": "fbe640468df949fdf7bacae960121659ab5d035304854c06a0137cbe9ed44d32",
+      "feature": "Detector provenance and inference receipt",
+      "scope": "future",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "unvalidated",
+      "code": [
+        "src/birdwatcher/analysis.py",
+        "src/birdwatcher/bird_detector.py"
+      ],
+      "tests": [
+        "tests/test_analysis.py::test_unknown_result_is_explicit_sample_not_absence_claim",
+        "tests/test_analysis.py::test_exhausted_interrupted_job_keeps_source_and_model_metadata"
+      ],
+      "evidence": [
+        "docs/MODEL_DECISION.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        7
+      ],
+      "gap": "Analysis records inference UTC, detector revision/hash/preprocess version and score. No top-three species suggestions, common/scientific names, classifier or species label-map version exist."
+    },
+    {
+      "id": "BW-ANALYSIS-006",
+      "spec_hash": "4e5e7d5a353d44cc39769a8b7465bf8ac3b075ec8be4d203a38534f047171cee",
+      "feature": "Provisional candidate threshold only",
+      "scope": "future",
+      "implementation_status": "planned",
+      "test_status": "unverified",
+      "field_status": "unvalidated",
+      "code": [
+        "src/birdwatcher/bird_detector.py"
+      ],
+      "tests": [
+        "tests/test_bird_detector.py::test_threshold_validation"
+      ],
+      "evidence": [
+        "docs/MODEL_DECISION.md",
+        "docs/SHADOW_VALIDATION.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        3,
+        4,
+        7
+      ],
+      "gap": "Detector threshold validation is not the species-label acceptance contract. No species score/margin, crop-quality/size or cross-frame agreement gate exists; thresholds lack labeled feeder calibration."
+    },
+    {
+      "id": "BW-ANALYSIS-007",
+      "spec_hash": "071939a2a6ca425228699a0a6e6baf75cfce05c6cfe2f8238ae444da1c768a57",
+      "feature": "Sampling without multi-frame confirmation",
+      "scope": "future",
+      "implementation_status": "planned",
+      "test_status": "unverified",
+      "field_status": "unvalidated",
+      "code": [
+        "src/birdwatcher/analysis.py"
+      ],
+      "tests": [
+        "tests/test_analysis.py::test_analyzer_sampling_idempotence_and_original_safety"
+      ],
+      "evidence": [
+        "docs/SHADOW_VALIDATION.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        4,
+        7
+      ],
+      "gap": "Multiple sampled frames are independent proposals, not agreement-based confirmation. No two-usable-frame species agreement or explicit single-frame confirmation policy is implemented."
+    },
+    {
+      "id": "BW-ANALYSIS-008",
+      "spec_hash": "b19a1c863e3c398d31b97f850475d0a93200b3cb68ab0c5d6b1f9e1edb413666",
+      "feature": "Candidate, unknown and failed shadow states",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/analysis.py",
+        "src/birdwatcher/bird_detector.py",
+        "src/birdwatcher/analysis_queue.py"
+      ],
+      "tests": [
+        "tests/test_analysis.py::test_unknown_result_is_explicit_sample_not_absence_claim",
+        "tests/test_analysis.py::test_partial_corruption_and_retention_errors",
+        "tests/test_analysis.py::test_empty_event_is_failed_and_detector_error_is_contained"
+      ],
+      "evidence": [
+        "docs/MODEL_DECISION.md",
+        "docs/SHADOW_VALIDATION.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        4,
+        7
+      ],
+      "gap": "Shadow states are bird_candidate, unknown and analysis_failed, not the target unknown_bird/no_bird_detected species-state vocabulary. Unknown explicitly means no returned sampled detection, never proof of absence."
+    },
+    {
+      "id": "BW-ANALYSIS-009",
+      "spec_hash": "53fcfec705b1abbc99f0c7891233e86e6508cc74a4d498abf995a20c28a4fe61",
+      "feature": "Read-only analysis with ordinary retention",
+      "scope": "mixed",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/analysis.py",
+        "src/birdwatcher/storage.py"
+      ],
+      "tests": [
+        "tests/test_analysis.py::test_analyzer_sampling_idempotence_and_original_safety"
+      ],
+      "evidence": [
+        "docs/SHADOW_VALIDATION.md",
+        "docs/OPERATIONS.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#storage"
+      ],
+      "private_evidence": [
+        "PRIVATE-STORAGE"
+      ],
+      "issues": [
+        4,
+        8
+      ],
+      "gap": "No known recognition-based suppression/deletion path: analyzer only reads originals and retention is independent of scores. Preservation was fingerprinted on a measured subset; age/quota pressure can expire unpinned raw photos before review, and this is not comprehensive field durability validation."
+    },
+    {
+      "id": "BW-ANALYSIS-010",
+      "spec_hash": "b27472cc951d3936444e71a6acae1abe67b9acfd715686fbd5dd094a1b03739a",
+      "feature": "No location or seasonal species reranking",
+      "scope": "policy",
+      "implementation_status": "policy",
+      "test_status": "not_applicable",
+      "field_status": "not_applicable",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/SPECIFICATION.md",
+        "docs/MODEL_DECISION.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        7
+      ],
+      "gap": "No current reranker or occurrence lookup exists. Any future reranking must document its source and preserve unexpected raw species suggestions; those safeguards are not yet executable tests."
+    },
+    {
+      "id": "BW-ANALYSIS-011",
+      "spec_hash": "92532b073e2cc77fe865e827270478cf3f2fd8329184d0ac35e9c32d3145e45a",
+      "feature": "Separate authoritative manual corrections",
+      "scope": "future",
+      "implementation_status": "planned",
+      "test_status": "unverified",
+      "field_status": "unvalidated",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/OPERATIONS.md",
+        "docs/IMPLEMENTATION_PLAN.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        7
+      ],
+      "gap": "Manual annotation storage, correction interface and reanalysis preservation are absent. Queue idempotence and changed-settings jobs do not prove authoritative-correction preservation."
+    },
+    {
+      "id": "BW-ARELIAB-001",
+      "spec_hash": "cd153209224a85cded4a553f4c85e829b4767d18d251153db4b3732aefabc7a8",
+      "feature": "24-hour cumulative daylight workload soak",
+      "scope": "mixed",
+      "implementation_status": "partial",
+      "test_status": "unverified",
+      "field_status": "unvalidated",
+      "code": [
+        "src/birdwatcher/camera.py",
+        "src/birdwatcher/events.py",
+        "src/birdwatcher/runner.py",
+        "src/birdwatcher/storage.py",
+        "src/birdwatcher/analysis.py"
+      ],
+      "tests": [],
+      "evidence": [
+        "docs/DEPLOYMENT_EVIDENCE.md#limits"
+      ],
+      "private_evidence": [
+        "PRIVATE-DAYLIGHT"
+      ],
+      "issues": [
+        8
+      ],
+      "gap": "Short sessions and component tests do not pass the cumulative daylight soak with required instrumentation."
+    },
+    {
+      "id": "BW-ARELIAB-002",
+      "spec_hash": "a2d49e9c937a884b78cbd7fbae32f786351e6468d32f7e6bd4c77717ffdba75f",
+      "feature": "Combined application memory budget",
+      "scope": "mixed",
+      "implementation_status": "partial",
+      "test_status": "unverified",
+      "field_status": "unvalidated",
+      "code": [
+        "src/birdwatcher/runner.py",
+        "src/birdwatcher/analysis.py"
+      ],
+      "tests": [],
+      "evidence": [
+        "docs/MODEL_DECISION.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#limits"
+      ],
+      "private_evidence": [
+        "PRIVATE-COLLECTOR"
+      ],
+      "issues": [
+        8
+      ],
+      "gap": "Detector memory was benchmarked; complete concurrent application workload below the proposed 2-GiB budget is not measured."
+    },
+    {
+      "id": "BW-ARELIAB-003",
+      "spec_hash": "e57fb17525d9bc9af7a0f78f26b173721f5ac8fb478dbdc4f78722d0a68cdf39",
+      "feature": "Physical unplug/replug within recovery target",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "unvalidated",
+      "code": [
+        "src/birdwatcher/camera.py",
+        "src/birdwatcher/runner.py"
+      ],
+      "tests": [
+        "tests/test_camera.py::test_capture_read_timeout_terminates_child"
+      ],
+      "evidence": [
+        "docs/DEPLOYMENT_EVIDENCE.md#limits"
+      ],
+      "private_evidence": [],
+      "issues": [
+        8
+      ],
+      "gap": "Timeout and reconnect logic/tests are not the physical 60-second unplug/replug acceptance experiment."
+    },
+    {
+      "id": "BW-ARELIAB-004",
+      "spec_hash": "86aafcecc994b2ea660c65d267c4c0ccea29a785d0e403f1515f59f24306bf0c",
+      "feature": "Failure fixtures preserve existing photographs",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "not_applicable",
+      "code": [
+        "src/birdwatcher/storage.py",
+        "src/birdwatcher/analysis.py"
+      ],
+      "tests": [
+        "tests/test_storage.py::test_full_disk_restart_still_reports_health_and_incomplete",
+        "tests/test_storage_recovery.py::test_pinned_recovered_orphan_and_live_event_remain_protected",
+        "tests/test_storage_recovery.py::test_real_jpeg_rename_crash_is_recoverable_at_exact_quota",
+        "tests/test_analysis.py::test_exhausted_interrupted_job_keeps_source_and_model_metadata"
+      ],
+      "evidence": [
+        "docs/VALIDATION_REPORT.md#repeatable-checks",
+        "docs/SHADOW_VALIDATION.md#packaging-and-license-checks"
+      ],
+      "private_evidence": [],
+      "issues": [
+        8
+      ],
+      "gap": "Representative disk/recovery/interruption cases pass; not every inference-crash or physical power-loss scenario is established."
+    },
+    {
+      "id": "BW-ARELIAB-005",
+      "spec_hash": "ebf86d324a027e392403ec7566b5780dbcfd25d162326ebe34c2df8eb8da53cd",
+      "feature": "Coordinated reboot and single-owner restart",
+      "scope": "mixed",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "unvalidated",
+      "code": [
+        "src/birdwatcher/camera.py"
+      ],
+      "tests": [
+        "tests/test_camera.py::test_camera_lock_rejects_second_owner"
+      ],
+      "evidence": [
+        "docs/DEPLOYMENT_EVIDENCE.md#daylight",
+        "docs/DEPLOYMENT_EVIDENCE.md#limits"
+      ],
+      "private_evidence": [
+        "PRIVATE-DAYLIGHT",
+        "PRIVATE-SCHEDULER"
+      ],
+      "issues": [
+        8
+      ],
+      "gap": "Ownership checks exist; no coordinated reboot/startup/rollback evidence passes this full field gate."
+    },
+    {
+      "id": "BW-ARELIAB-006",
+      "spec_hash": "38309aa44620a6074a8893b1d83748fe3073635be17be87f8075286a868caf09",
+      "feature": "Automated tracked-secret and photograph audit",
+      "scope": "future",
+      "implementation_status": "planned",
+      "test_status": "unverified",
+      "field_status": "not_applicable",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/TODO.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        8
+      ],
+      "gap": "One-off publication privacy scans and ignore rules are not an installed comprehensive tracked-secret/photo audit; the traceability checker only validates mappings/references."
+    },
+    {
+      "id": "BW-AREVIEW-001",
+      "spec_hash": "20d77c1cdd7548fc613413ee3478780ef2d6460a64959c04b4bda9b3b2986eeb",
+      "feature": "Idle capture lock and bounded review worker",
+      "scope": "private",
+      "implementation_status": "implemented",
+      "test_status": "verified",
+      "field_status": "partial",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/DEPLOYMENT_EVIDENCE.md#review-tests",
+        "docs/DEPLOYMENT_EVIDENCE.md#pilot"
+      ],
+      "private_evidence": [
+        "PRIVATE-COLLECTOR",
+        "PRIVATE-SCHEDULER"
+      ],
+      "issues": [
+        8
+      ],
+      "gap": "Private collector/scheduler regressions pass; public checkout cannot reproduce private helpers and all hardware interruption cases remain open."
+    },
+    {
+      "id": "BW-AREVIEW-002",
+      "spec_hash": "a488a155f597a4c8b7ac93df6124b7ff500736479278670b60b00ac7b5cfc1bd",
+      "feature": "Sampled candidate/control review and honest counts",
+      "scope": "private",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/DEPLOYMENT_EVIDENCE.md#pilot",
+        "docs/DEPLOYMENT_EVIDENCE.md#visual-review"
+      ],
+      "private_evidence": [
+        "PRIVATE-COLLECTOR",
+        "PRIVATE-VISUAL"
+      ],
+      "issues": [
+        4,
+        6
+      ],
+      "gap": "Packet sampling is exercised; complete visual compliance for every scheduled review is not verified by collector tests."
+    },
+    {
+      "id": "BW-AREVIEW-003",
+      "spec_hash": "ccf5fbe76b7254eea95e3f8fd3ec357f878f04e19a86083ff09fb74d93079ca8",
+      "feature": "Packet-bound verified keeper copying and safe validation",
+      "scope": "private",
+      "implementation_status": "implemented",
+      "test_status": "verified",
+      "field_status": "unvalidated",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/DEPLOYMENT_EVIDENCE.md#review-tests"
+      ],
+      "private_evidence": [
+        "PRIVATE-FINALIZER"
+      ],
+      "issues": [
+        8
+      ],
+      "gap": "111 private finalizer tests cover validation/copy safety; no new live-archive end-to-end finalization was executed by this task."
+    },
+    {
+      "id": "BW-AREVIEW-004",
+      "spec_hash": "9bb063f8820cfdde419f4d711ec06a448a111946844e5bd643c7b1d3c0559794",
+      "feature": "Idempotent photo observations and uncertainty",
+      "scope": "private",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "unvalidated",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/DEPLOYMENT_EVIDENCE.md#review-tests",
+        "docs/DEPLOYMENT_EVIDENCE.md#visual-review"
+      ],
+      "private_evidence": [
+        "PRIVATE-FINALIZER",
+        "PRIVATE-VISUAL"
+      ],
+      "issues": [
+        5,
+        8
+      ],
+      "gap": "Idempotent logging is privately tested; every natural-language digest error/uncertainty statement is not covered by those tests."
+    },
+    {
+      "id": "BW-AREVIEW-005",
+      "spec_hash": "0b8cff0fb39a7c63894246bac309ff7d5d8d47fb01b4beb10892d0b51cbbd7df",
+      "feature": "Prepared versus delivered digest and deduplication",
+      "scope": "private",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "unvalidated",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/DEPLOYMENT_EVIDENCE.md#delivery",
+        "docs/DEPLOYMENT_EVIDENCE.md#review-tests"
+      ],
+      "private_evidence": [
+        "PRIVATE-SCHEDULER",
+        "PRIVATE-FINALIZER",
+        "PRIVATE-DELIVERY"
+      ],
+      "issues": [
+        8
+      ],
+      "gap": "Preparation/fingerprint behavior is privately tested; provider acceptance and ambiguous-delivery recovery are not end-to-end verified here."
+    },
+    {
+      "id": "BW-CAL-001",
+      "spec_hash": "26febe1b074d515dd6d382d802a31aa2e692b49fce9eea4270facc8dbe8a05b1",
+      "feature": "Perch-position stationary calibration target",
+      "scope": "private",
+      "implementation_status": "partial",
+      "test_status": "unverified",
+      "field_status": "partial",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/DEPLOYMENT_EVIDENCE.md#focus",
+        "docs/IMPLEMENTATION_PLAN.md"
+      ],
+      "private_evidence": [
+        "PRIVATE-FOCUS"
+      ],
+      "issues": [
+        6
+      ],
+      "gap": "Private focus samples/framing were exercised, but the supplied evidence does not establish a detailed stationary target at every expected perch position. No integrated calibration tooling or public test applies."
+    },
+    {
+      "id": "BW-CAL-002",
+      "spec_hash": "d0ab486f7d9d9f833de71269657ad089852704507a0722ae6e042842d0913228",
+      "feature": "Autofocus and supported manual focus sweep",
+      "scope": "private",
+      "implementation_status": "partial",
+      "test_status": "unverified",
+      "field_status": "partial",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/DEPLOYMENT_EVIDENCE.md#focus",
+        "docs/SETUP.md"
+      ],
+      "private_evidence": [
+        "PRIVATE-FOCUS"
+      ],
+      "issues": [
+        6,
+        8
+      ],
+      "gap": "Private reversible focus comparison exists; a complete autofocus baseline plus sweep across discovered supported ranges is not demonstrated by public evidence. Package focus changes are unsupported."
+    },
+    {
+      "id": "BW-CAL-003",
+      "spec_hash": "d2544efea0293f2463eff16b1e4c8a90ef2cd0a9c0413c5133db440e35ffbb0f",
+      "feature": "Texture sharpness glare and exposure comparison",
+      "scope": "private",
+      "implementation_status": "partial",
+      "test_status": "unverified",
+      "field_status": "partial",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/DEPLOYMENT_EVIDENCE.md#focus",
+        "docs/IMPLEMENTATION_PLAN.md"
+      ],
+      "private_evidence": [
+        "PRIVATE-FOCUS"
+      ],
+      "issues": [
+        6
+      ],
+      "gap": "Private sample inspection does not establish feather-sized detail, exposure and reflection comparison at both spots. Priority-feeder approval is not a full two-distance optical acceptance result."
+    },
+    {
+      "id": "BW-CAL-004",
+      "spec_hash": "9c85ef9b2bbcd0dc1f95cbfca3f0ef3882d3dadf270f8487ee5ce8b7be4c7d1e",
+      "feature": "Private selected focus mode and priority ROI",
+      "scope": "private",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/config.py::Region",
+        "src/birdwatcher/config.py::_validate"
+      ],
+      "tests": [
+        "tests/test_config.py::test_toml_validates_types_bounds_paths_and_unknowns",
+        "tests/test_regressions.py::test_private_config_cannot_put_capture_data_in_another_git_checkout"
+      ],
+      "evidence": [
+        "docs/DEPLOYMENT_EVIDENCE.md#focus",
+        "docs/SETUP.md"
+      ],
+      "private_evidence": [
+        "PRIVATE-FOCUS"
+      ],
+      "issues": [
+        6,
+        8
+      ],
+      "gap": "Priority ROI approval and private configuration workflow exist; chosen focus-mode calibration is not applied/stored by an integrated calibration command. Public tests cover rectangle/data-path safeguards, not private review or calibration persistence."
+    },
+    {
+      "id": "BW-CAL-005",
+      "spec_hash": "b2485dc36c87dccb24999116819231c923248fe7ee6753574a7b5b96cbe5c88c",
+      "feature": "Optical-distance correction rather than digital fix",
+      "scope": "policy",
+      "implementation_status": "policy",
+      "test_status": "not_applicable",
+      "field_status": "partial",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/DEPLOYMENT_EVIDENCE.md#focus",
+        "docs/SETUP.md",
+        "docs/IMPLEMENTATION_PLAN.md"
+      ],
+      "private_evidence": [
+        "PRIVATE-FOCUS"
+      ],
+      "issues": [
+        6
+      ],
+      "gap": "No software/digital-zoom optical cure is claimed. Evidence does not establish near-perch repositioning and successful repeat calibration if needed; physical optical improvement remains conditional private work."
+    },
+    {
+      "id": "BW-CAL-006",
+      "spec_hash": "54baf30b616454ee849364353adabb0270233e2e6768b62d87a070e579c9f38d",
+      "feature": "User sample approval before unattended capture",
+      "scope": "private",
+      "implementation_status": "partial",
+      "test_status": "unverified",
+      "field_status": "partial",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/DEPLOYMENT_EVIDENCE.md#focus",
+        "docs/DEPLOYMENT_EVIDENCE.md#daylight",
+        "docs/IMPLEMENTATION_PLAN.md"
+      ],
+      "private_evidence": [
+        "PRIVATE-FOCUS",
+        "PRIVATE-SCHEDULER"
+      ],
+      "issues": [
+        6,
+        8
+      ],
+      "gap": "Private framing/priority-region approval exists and approved schedules are separate. No public approval interlock or complete sample-review chronology establishing every calibration clause before unattended operation is available; enabled jobs do not prove live success."
+    },
+    {
+      "id": "BW-CAM-001",
+      "spec_hash": "cde1135fcaf96835f95c5dd6e325c64f2629d04396744f6060b6a50869f024eb",
+      "feature": "1080p MJPEG 15 fps requested defaults",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/config.py::CameraConfig",
+        "src/birdwatcher/camera.py::Camera.__enter__",
+        "config/config.example.toml"
+      ],
+      "tests": [
+        "tests/test_config.py::test_defaults_require_calibration"
+      ],
+      "evidence": [
+        "docs/VALIDATION_REPORT.md#hardware-evidence",
+        "docs/SETUP.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        8
+      ],
+      "gap": "Requested defaults and short negotiated live smoke exist. Default test asserts width, not height/fps/FFmpeg arguments, and sustained throughput is not measured."
+    },
+    {
+      "id": "BW-CAM-002",
+      "spec_hash": "443c59d2b21e5336250f4f64012eee677e02f9984ba62ca19dec2f3bde4be5d9",
+      "feature": "Persistent unscaled camera stream",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/camera.py::Camera",
+        "src/birdwatcher/runner.py::run_capture"
+      ],
+      "tests": [
+        "tests/test_integration.py::test_replay_capture_writes_originals_and_health",
+        "tests/test_camera.py::test_jpeg_parser_preserves_next_frame"
+      ],
+      "evidence": [
+        "docs/VALIDATION_REPORT.md#hardware-evidence",
+        "docs/ARCHITECTURE.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        8
+      ],
+      "gap": "One camera context encloses the run loop and JPEGs are copied without event resolution changes. Replay tests do not assert real FFmpeg process open counts across multiple events; long live persistence remains a reliability gate."
+    },
+    {
+      "id": "BW-CAM-003",
+      "spec_hash": "f23c1fd29bc46246b928d63c5a6828a6b7506024adcc5051b464f681cdc261a7",
+      "feature": "Stable endpoint preference and capture capability",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/camera.py::discover_device"
+      ],
+      "tests": [
+        "tests/test_camera.py::test_auto_discovery_prefers_capture_endpoint"
+      ],
+      "evidence": [
+        "docs/SETUP.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        8
+      ],
+      "gap": "Auto discovery prefers by-id video-index0, but does not query V4L2 capture capabilities. Explicit configured paths and video0 fallback can select non-capture endpoints; rejection relies on stream failure, not setup capability validation."
+    },
+    {
+      "id": "BW-CAM-004",
+      "spec_hash": "d4f2cf5116c1f193f9089cc52851ad18471a8896dcab569a56e32a0d042a1d55",
+      "feature": "Negotiated metadata and explicit degraded mode",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/camera.py::Camera._read_settings",
+        "src/birdwatcher/runner.py::run_capture",
+        "src/birdwatcher/cli.py"
+      ],
+      "tests": [
+        "tests/test_camera.py::test_metadata_parser_does_not_include_device_identifiers",
+        "tests/test_integration.py::test_replay_capture_writes_originals_and_health"
+      ],
+      "evidence": [
+        "docs/VALIDATION_REPORT.md#hardware-evidence",
+        "docs/SETUP.md",
+        "docs/OPERATIONS.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        8
+      ],
+      "gap": "Actual decoded dimensions and optional negotiated fps/format are reported; original bytes are not upscaled. Requested settings are not recorded alongside actual values, missing format/fps is not a complete degraded diagnosis, and degraded comparison omits pixel-format mismatch. No direct degraded-mode assertion."
+    },
+    {
+      "id": "BW-CAM-005",
+      "spec_hash": "a77782bd09390e160d4f7da6fbeb4e65cf641c8b1adc44fb1948bcea3a5f92b0",
+      "feature": "Discoverable focus and exposure controls",
+      "scope": "future",
+      "implementation_status": "planned",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/config.py::_validate",
+        "src/birdwatcher/camera.py::Camera._read_settings"
+      ],
+      "tests": [
+        "tests/test_regressions.py::test_manual_focus_is_rejected_rather_than_silently_ignored"
+      ],
+      "evidence": [
+        "docs/SETUP.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#focus"
+      ],
+      "private_evidence": [
+        "PRIVATE-FOCUS"
+      ],
+      "issues": [
+        6,
+        8
+      ],
+      "gap": "Public focus changes are explicitly rejected and metadata says focus_controls_applied=false. No exposure configuration, range discovery or control application exists; regression verifies honest refusal, not the feature. Private experiments are not integrated configuration support."
+    },
+    {
+      "id": "BW-CAM-006",
+      "spec_hash": "842ee487cc323151ca7b87c0b69f5eec87174816c9cc6e98b01dacd9859fa4c7",
+      "feature": "Warmup, read failure and capped reconnect",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/camera.py::Camera.read",
+        "src/birdwatcher/camera.py::read_stream_frame",
+        "src/birdwatcher/runner.py::run_capture"
+      ],
+      "tests": [
+        "tests/test_camera.py::test_capture_read_timeout_terminates_child",
+        "tests/test_cli.py::test_run_without_any_camera_frames_returns_failure"
+      ],
+      "evidence": [
+        "docs/OPERATIONS.md",
+        "docs/VALIDATION_REPORT.md#hardware-evidence"
+      ],
+      "private_evidence": [],
+      "issues": [
+        8
+      ],
+      "gap": "Warmup discard, no-frame timeout and exponential retry capped at 30 seconds exist. Repeated stale-but-decodable frames are not detected; tests do not assert warmup counts/backoff cap or physical unplug/replug recovery."
+    },
+    {
+      "id": "BW-CAM-007",
+      "spec_hash": "89c40173ea51fa3e6a86d1f819a1556270a1bd5c23f99af17f43d2fd65617f66",
+      "feature": "Graceful release and ownership-safe test procedure",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/camera.py::Camera.__exit__",
+        "src/birdwatcher/camera.py::CameraLock",
+        "src/birdwatcher/runner.py::run_capture"
+      ],
+      "tests": [
+        "tests/test_camera.py::test_camera_lock_rejects_second_owner",
+        "tests/test_runner.py::test_writer_drains_actions_on_close",
+        "tests/test_integration.py::test_replay_capture_writes_originals_and_health"
+      ],
+      "evidence": [
+        "docs/SETUP.md",
+        "docs/OPERATIONS.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        8
+      ],
+      "gap": "Documentation says stop the capture process before doctor/snapshot and explains Ctrl-C/SIGTERM. Tests cover lock release and writer drain, not real Camera.__exit__ terminate/kill paths or coordination with every private service/scheduler; physical shutdown acceptance remains pending."
+    },
+    {
+      "id": "BW-CLI-001",
+      "spec_hash": "d902a58dd7b42767194c7a984e6d1154a42323276e96bc4243e9a8f077328e1d",
+      "feature": "Available foreground CLI and private automation boundary",
+      "scope": "mixed",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/cli.py::parser",
+        "src/birdwatcher/cli.py::main"
+      ],
+      "tests": [
+        "tests/test_cli.py::test_help_lists_capture_commands",
+        "tests/test_shadow_cli.py::test_analyze_help_explains_shadow_mode",
+        "tests/test_shadow_cli.py::test_analyze_one_pass_does_not_construct_camera"
+      ],
+      "evidence": [
+        "docs/SETUP.md",
+        "docs/OPERATIONS.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#daylight"
+      ],
+      "private_evidence": [
+        "PRIVATE-DAYLIGHT",
+        "PRIVATE-SCHEDULER"
+      ],
+      "issues": [
+        8
+      ],
+      "gap": "Six commands exist and package does not install private jobs; solar cutoff is not in run. Help/analysis tests do not prove end-to-end behavior for every command or operator adherence to approved daylight. Enabled schedules cannot establish liveness."
+    },
+    {
+      "id": "BW-CLI-002",
+      "spec_hash": "d84ee974907ad2fa5612f7f98418d67b8bf530dcbd0b9d005e15577116da92b6",
+      "feature": "Doctor camera diagnostics versus full system checks",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/cli.py::main",
+        "src/birdwatcher/camera.py::Camera._read_settings",
+        "src/birdwatcher/config.py::load_config"
+      ],
+      "tests": [
+        "tests/test_camera.py::test_metadata_parser_does_not_include_device_identifiers",
+        "tests/test_cli.py::test_invalid_config_has_no_traceback"
+      ],
+      "evidence": [
+        "docs/SETUP.md",
+        "docs/OPERATIONS.md",
+        "docs/VALIDATION_REPORT.md#hardware-evidence"
+      ],
+      "private_evidence": [],
+      "issues": [
+        7,
+        8
+      ],
+      "gap": "Doctor opens the camera, reads negotiated metadata and loads config. It does not enumerate control ranges, check model/runtime compatibility, or validate storage writability/free-space state. Helper tests and historical live invocation do not verify the full doctor contract."
+    },
+    {
+      "id": "BW-CLI-003",
+      "spec_hash": "0b3d1e14e903137e7c5782bfcff2633d043ba22b659ee385c872c67901ae1b9e",
+      "feature": "Exclusive private snapshot capture",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/cli.py::main",
+        "src/birdwatcher/camera.py::validate_output",
+        "src/birdwatcher/camera.py::CameraLock"
+      ],
+      "tests": [
+        "tests/test_camera.py::test_snapshot_requires_private_location",
+        "tests/test_camera.py::test_camera_lock_rejects_second_owner",
+        "tests/test_regressions.py::test_snapshot_refuses_any_git_checkout_even_when_package_installed_elsewhere"
+      ],
+      "evidence": [
+        "docs/SETUP.md",
+        "docs/OPERATIONS.md",
+        "docs/VALIDATION_REPORT.md#hardware-evidence"
+      ],
+      "private_evidence": [],
+      "issues": [
+        6,
+        8
+      ],
+      "gap": "Snapshot saves one new private JPEG using configured stream settings and ownership lock, with documented stop-first procedure. Chosen focus/exposure controls are unsupported; tests cover safety helpers rather than complete snapshot execution, overwrite race or real service-stop coordination."
+    },
+    {
+      "id": "BW-CLI-004",
+      "spec_hash": "fdd9062eff0dd952cd602ea53b32b7fa3e28ed364296f90c0da73d8e34c03560",
+      "feature": "Integrated sample and ROI calibration command",
+      "scope": "future",
+      "implementation_status": "planned",
+      "test_status": "unverified",
+      "field_status": "unvalidated",
+      "code": [
+        "src/birdwatcher/cli.py::parser"
+      ],
+      "tests": [],
+      "evidence": [
+        "docs/SETUP.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#focus",
+        "docs/IMPLEMENTATION_PLAN.md"
+      ],
+      "private_evidence": [
+        "PRIVATE-FOCUS"
+      ],
+      "issues": [
+        6,
+        8
+      ],
+      "gap": "No calibrate subcommand exists. Private samples/annotated priority-ROI approval are a separate setup workflow, not an implemented or tested public command."
+    },
+    {
+      "id": "BW-CLI-005",
+      "spec_hash": "df3c48e5e3f6a212869d9d967838e2ba06f1495002162fabd227a66b6a2aa6e5",
+      "feature": "Foreground motion capture without internal model queue",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/cli.py::main",
+        "src/birdwatcher/runner.py::run_capture"
+      ],
+      "tests": [
+        "tests/test_integration.py::test_replay_capture_writes_originals_and_health",
+        "tests/test_cli.py::test_unconfigured_run_fails_before_opening_camera",
+        "tests/test_cli.py::test_duration_must_be_positive",
+        "tests/test_cli.py::test_run_without_any_camera_frames_returns_failure"
+      ],
+      "evidence": [
+        "docs/SETUP.md",
+        "docs/OPERATIONS.md",
+        "docs/VALIDATION_REPORT.md#hardware-evidence"
+      ],
+      "private_evidence": [],
+      "issues": [
+        8
+      ],
+      "gap": "Foreground capture exists and internal queued inference is explicitly future. Replay and no-frame/config tests do not exercise a successful real-camera run through the CLI subprocess; historical hardware smoke is short and does not pass soak/reboot gates."
+    },
+    {
+      "id": "BW-CLI-006",
+      "spec_hash": "ad56ae9b38db9f78711071862098d5f7b106dbdf02283883546a9f097a3a0bfa",
+      "feature": "Stored status snapshot versus complete health contract",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/cli.py::main",
+        "src/birdwatcher/runner.py::run_capture",
+        "src/birdwatcher/runner.py::_write_health"
+      ],
+      "tests": [
+        "tests/test_integration.py::test_replay_capture_writes_originals_and_health"
+      ],
+      "evidence": [
+        "docs/OPERATIONS.md",
+        "docs/ARCHITECTURE.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        8
+      ],
+      "gap": "Status prints health.json or not_started. Health has counters/state/capture metadata, but lacks dedicated last-frame/event timestamps, writer queue depth, complete storage state and inference health; no stale-report age/liveness check. Integration asserts saved health, not status command coverage."
+    },
+    {
+      "id": "BW-CLI-007",
+      "spec_hash": "8b894bc04891d33d56f0cc58348f9fe7ebf0d7738b67af7e1a7daecb0c17cd27",
+      "feature": "Local event listing versus date/species/state filters",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/cli.py::parser",
+        "src/birdwatcher/cli.py::main"
+      ],
+      "tests": [
+        "tests/test_cli.py::test_events_without_data_do_not_create_root",
+        "tests/test_cli.py::test_events_are_sorted_by_capture_time_not_random_event_id"
+      ],
+      "evidence": [
+        "docs/OPERATIONS.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        5,
+        7,
+        8
+      ],
+      "gap": "Events supports --limit and capture-time sorting only. Date, species and analysis-state filters are absent; species classification is also future. Existing tests verify listing safety/order, not promised filters."
+    },
+    {
+      "id": "BW-CLI-008",
+      "spec_hash": "011a4de11a67831d24590bb59292d87243fe83719891a33d76b6f7340a53e5b1",
+      "feature": "Append-only identification correction command",
+      "scope": "future",
+      "implementation_status": "planned",
+      "test_status": "unverified",
+      "field_status": "unvalidated",
+      "code": [
+        "src/birdwatcher/cli.py::parser"
+      ],
+      "tests": [],
+      "evidence": [
+        "docs/OPERATIONS.md",
+        "docs/SHADOW_VALIDATION.md",
+        "docs/IMPLEMENTATION_PLAN.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        4,
+        7
+      ],
+      "gap": "No correct command or immutable model-result correction API exists in the public package. Private provenance-backed visual confirmation is not a substitute for the promised identification-correction interface."
+    },
+    {
+      "id": "BW-CLI-009",
+      "spec_hash": "d8d995d53a97b0f534fb499fc2b7a20a104ed5ccb570fdbfaebd91006168b0ad",
+      "feature": "Selected-event versioned reanalysis command",
+      "scope": "future",
+      "implementation_status": "planned",
+      "test_status": "partial",
+      "field_status": "unvalidated",
+      "code": [
+        "src/birdwatcher/cli.py::parser",
+        "src/birdwatcher/analysis.py"
+      ],
+      "tests": [
+        "tests/test_analysis.py::test_backlog_is_bounded_and_settings_change_reanalyzes",
+        "tests/test_analysis.py::test_restart_does_not_label_old_job_with_new_detector"
+      ],
+      "evidence": [
+        "docs/OPERATIONS.md",
+        "docs/SHADOW_ANALYSIS.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        7,
+        8
+      ],
+      "gap": "No reanalyze command, selected-event selector or user-selected model-version interface exists. Analyze can create new jobs for changed analysis settings and protects old provenance, but those tests cover only an adjacent capability, not this CLI contract."
+    },
+    {
+      "id": "BW-CONFIG-001",
+      "spec_hash": "0f7aaf4d61aa06a441803f831356018ebae28dc7e4e54989e99dc74122437f42",
+      "feature": "Strict partial TOML schema and calibration-required example",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/config.py",
+        "config/config.example.toml"
+      ],
+      "tests": [
+        "tests/test_config.py::test_toml_validates_types_bounds_paths_and_unknowns",
+        "tests/test_config.py::test_defaults_require_calibration",
+        "tests/test_config.py::test_validate_run_checks_direct_config_and_external_tmp_data",
+        "tests/test_regressions.py::test_private_config_cannot_put_capture_data_in_another_git_checkout"
+      ],
+      "evidence": [
+        "docs/SETUP.md",
+        "docs/IMPLEMENTATION_PLAN.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        7,
+        8
+      ],
+      "gap": "Only camera/motion/capture/storage groups exist; regions are nested under motion. Detection/classification/logging/location/runtime groups and explicit configuration schema version/migrations are absent. Bounds and safe external data-root checks exist, but writable paths are not fully preflighted before capture. Example has disabled generic ROI placeholders and capture requires no GitHub token."
+    },
+    {
+      "id": "BW-DATA-001",
+      "spec_hash": "2cd87f37afb83c78cd089f26ecdf27684b4796d55f29c3e80d7144e114f5cfe6",
+      "feature": "External data root and private guarded USB archive",
+      "scope": "mixed",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/config.py",
+        "src/birdwatcher/camera.py",
+        "src/birdwatcher/analysis.py",
+        "config/config.example.toml"
+      ],
+      "tests": [
+        "tests/test_config.py::test_defaults_require_calibration",
+        "tests/test_regressions.py::test_private_config_cannot_put_capture_data_in_another_git_checkout"
+      ],
+      "evidence": [
+        "docs/SETUP.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#storage"
+      ],
+      "private_evidence": [
+        "PRIVATE-STORAGE"
+      ],
+      "issues": [
+        8
+      ],
+      "gap": "Example root and Git isolation are public; deployed USB identity guards and separate backup are private evidence, not reproducible from checkout. Core run does not verify the deployed volume, and stale health/default paths cannot establish the active archive."
+    },
+    {
+      "id": "BW-DATA-002",
+      "spec_hash": "efce0050a8ebefe409cb6e5fba268528e3c262f5be8c168f52ab37e4ef662356",
+      "feature": "UUID event IDs, UTC receipts and monotonic intervals",
+      "scope": "mixed",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/events.py",
+        "src/birdwatcher/runner.py",
+        "src/birdwatcher/storage.py"
+      ],
+      "tests": [
+        "tests/test_events.py::test_timing_bounds_burst_cap_cooldown_and_segments",
+        "tests/test_events.py::test_prebuffer_shared_regions_unique_frames_and_shutdown"
+      ],
+      "evidence": [
+        "docs/OPERATIONS.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#daylight",
+        "docs/DEPLOYMENT_EVIDENCE.md#review-tests"
+      ],
+      "private_evidence": [
+        "PRIVATE-DAYLIGHT",
+        "PRIVATE-COLLECTOR"
+      ],
+      "issues": [
+        8
+      ],
+      "gap": "UUID IDs, UTC receipts and monotonic lifecycle exist; public original filenames are integer frame IDs, not explicitly UTC-bearing names. Display timezone/local-day filtering belong to private review, while capture partitions remain UTC. Local-date partitioning and full end-to-end timezone/collision tests are absent."
+    },
+    {
+      "id": "BW-DATA-003",
+      "spec_hash": "40226ad5a5814232a6e66f91c58d8da6f369461a8efd8d5a07e7addaf6bc5a94",
+      "feature": "Capture manifest plus separate shadow result schema",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/storage.py",
+        "src/birdwatcher/analysis.py",
+        "src/birdwatcher/bird_detector.py"
+      ],
+      "tests": [
+        "tests/test_storage.py::test_atomic_capture_manifest_and_restart_recovery",
+        "tests/test_analysis.py::test_exhausted_interrupted_job_keeps_source_and_model_metadata"
+      ],
+      "evidence": [
+        "docs/OPERATIONS.md",
+        "docs/SHADOW_ANALYSIS.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        6,
+        7,
+        8
+      ],
+      "gap": "Capture identity/regions/settings/receipt paths and shadow errors/detections/provenance are present in separate records. Unified quality metrics/ranking, species suggestions and authoritative corrections remain absent; do not infer a complete target schema or index."
+    },
+    {
+      "id": "BW-DATA-004",
+      "spec_hash": "2ccbbfaa62d8f18a9a4acf72ea82d3652cbd6f526aedfc0975e586d878f3e492",
+      "feature": "Atomic journaled writes and incomplete-event recovery",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "verified",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/storage.py"
+      ],
+      "tests": [
+        "tests/test_storage.py::test_atomic_capture_manifest_and_restart_recovery",
+        "tests/test_storage_recovery.py::test_real_jpeg_rename_crash_is_recoverable_at_exact_quota",
+        "tests/test_storage_recovery.py::test_real_recovery_manifest_crash_can_retry_without_new_orphans",
+        "tests/test_storage_recovery.py::test_directory_sync_failure_keeps_usage_accounting_truthful"
+      ],
+      "evidence": [
+        "docs/VALIDATION_REPORT.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#limits"
+      ],
+      "private_evidence": [],
+      "issues": [
+        8
+      ],
+      "gap": "No known gap in the exercised process-interruption/atomic-recovery contract. Real subprocess termination around JPEG/manifest renames is tested; physical power-loss/filesystem durability is not validated and must not be inferred."
+    },
+    {
+      "id": "BW-DATA-005",
+      "spec_hash": "376500756893b789ab019a17249edd590f89ea586c7a66f343b4db54cd19f320",
+      "feature": "Readable JSON manifests independent of shadow SQLite",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/storage.py",
+        "src/birdwatcher/analysis_queue.py",
+        "src/birdwatcher/cli.py"
+      ],
+      "tests": [
+        "tests/test_cli.py::test_events_without_data_do_not_create_root",
+        "tests/test_cli.py::test_events_are_sorted_by_capture_time_not_random_event_id",
+        "tests/test_storage.py::test_atomic_capture_manifest_and_restart_recovery"
+      ],
+      "evidence": [
+        "docs/OPERATIONS.md",
+        "docs/SHADOW_ANALYSIS.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        8
+      ],
+      "gap": "No known gap in standalone manifest readability and optional queue separation. A full event/species index plus migration/backup framework remains future work; the current queue schema version check is not such a framework."
+    },
+    {
+      "id": "BW-DATA-006",
+      "spec_hash": "48a0e7a75b8ff187c9fb2573a228c94a0855865f2c9220ef7f2fe1ac2c5a0ef2",
+      "feature": "Configurable age/quota/reserve retention",
+      "scope": "mixed",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/config.py",
+        "src/birdwatcher/storage.py",
+        "config/config.example.toml"
+      ],
+      "tests": [
+        "tests/test_storage.py::test_quota_retention_symlinks_pins_unmanaged_and_camera_metadata",
+        "tests/test_storage_recovery.py::test_recovery_credit_is_measured_and_never_relaxes_free_reserve"
+      ],
+      "evidence": [
+        "docs/OPERATIONS.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#storage"
+      ],
+      "private_evidence": [
+        "PRIVATE-STORAGE"
+      ],
+      "issues": [
+        8
+      ],
+      "gap": "Public defaults are 14 days / 5 GiB / 2-GiB reserve; private deployed raw policy is 14 days / 40 GiB / 2-GiB reserve. No guaranteed review availability or long-duration reserve-pressure validation; deployed recorder storage-pressure fix remains outside public source."
+    },
+    {
+      "id": "BW-DATA-007",
+      "spec_hash": "ff79bcfbe5412c5c4a66088a1faff5b3714b5ce61f2bc6838eaff72f6344ccf3",
+      "feature": "Hash-verified keeper archive outside raw retention",
+      "scope": "private",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/DEPLOYMENT_EVIDENCE.md#review-tests",
+        "docs/DEPLOYMENT_EVIDENCE.md#visual-review",
+        "docs/DEPLOYMENT_EVIDENCE.md#storage"
+      ],
+      "private_evidence": [
+        "PRIVATE-FINALIZER",
+        "PRIVATE-VISUAL",
+        "PRIVATE-STORAGE"
+      ],
+      "issues": [
+        6,
+        8
+      ],
+      "gap": "Reported private finalizer copies source-hash-verified originals outside raw retention, permits at most five keepers, and automatic review inspects/selects at most three with zero allowed. Private tests/reports are not executable from checkout; no public keeper implementation or calibrated keeper-quality/yield validation exists."
+    },
+    {
+      "id": "BW-DATA-008",
+      "spec_hash": "5c3bffb0d849d98ab336a8c5a88e25bb810d0f6216667282744413bd3b6311a9",
+      "feature": "Packet-bound review receipt and delivery deduplication",
+      "scope": "private",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/DEPLOYMENT_EVIDENCE.md#review-tests",
+        "docs/DEPLOYMENT_EVIDENCE.md#visual-review",
+        "docs/DEPLOYMENT_EVIDENCE.md#delivery"
+      ],
+      "private_evidence": [
+        "PRIVATE-COLLECTOR",
+        "PRIVATE-FINALIZER",
+        "PRIVATE-VISUAL",
+        "PRIVATE-DELIVERY"
+      ],
+      "issues": [
+        5,
+        8
+      ],
+      "gap": "Private review records fingerprints, explicit source decisions, scope/errors and provenance. A prepared receipt is not delivery proof; uncertain Telegram outcomes require reconciliation rather than blind replay. Public checkout cannot reproduce private delivery or prove exactly-once delivery across all failure windows."
+    },
+    {
+      "id": "BW-DATA-009",
+      "spec_hash": "3c0e842661be7d63c1843de45fbc7248f334e1010f3617691ae69456966dd8b9",
+      "feature": "Managed-only pruning, pins and total raw-root accounting",
+      "scope": "mixed",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/storage.py",
+        "src/birdwatcher/analysis_queue.py"
+      ],
+      "tests": [
+        "tests/test_storage.py::test_quota_retention_symlinks_pins_unmanaged_and_camera_metadata",
+        "tests/test_storage.py::test_rejects_unsafe_frame_identity_and_preserves_unmanaged_children",
+        "tests/test_storage_recovery.py::test_pinned_recovered_orphan_and_live_event_remain_protected",
+        "tests/test_storage_recovery.py::test_untrusted_intent_never_authorizes_unmanaged_deletion"
+      ],
+      "evidence": [
+        "docs/OPERATIONS.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#storage"
+      ],
+      "private_evidence": [
+        "PRIVATE-STORAGE"
+      ],
+      "issues": [
+        8
+      ],
+      "gap": "Pins/active events and unknown/symlink content are protected; _usage counts nonsymlink files under raw root including metadata/temporaries. External analysis SQLite has its own budget, not a unified crop/index-overhead storage monitor; no public pin/unpin CLI and deployed storage-pressure fix is not reconciled."
+    },
+    {
+      "id": "BW-DATA-010",
+      "spec_hash": "2d011af7c48d102e9f3d6a04b6ec5383040231a8c13670b3fe6b2ae60b7beeae",
+      "feature": "Reserve rejection and storage-full reporting",
+      "scope": "mixed",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/storage.py",
+        "src/birdwatcher/runner.py"
+      ],
+      "tests": [
+        "tests/test_storage.py::test_full_disk_restart_still_reports_health_and_incomplete",
+        "tests/test_runner.py::test_writer_reports_storage_errors_without_crashing_producer",
+        "tests/test_storage_recovery.py::test_impossible_frame_is_rejected_before_journal_or_jpeg"
+      ],
+      "evidence": [
+        "docs/OPERATIONS.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#storage"
+      ],
+      "private_evidence": [
+        "PRIVATE-STORAGE"
+      ],
+      "issues": [
+        8
+      ],
+      "gap": "EventStore rejects writes with storage_full and preserves pins; writer counts failures. Public run_capture does not merge EventStore.health storage_full into periodic health or implement the separately deployed pressure-suspension fix. Continued healthy reporting under every full-disk condition is not proved."
+    },
+    {
+      "id": "BW-DATA-011",
+      "spec_hash": "afeb7ca5330694b99aa5d817f9c9afaf7a653a39ca9d6fe8c3743fe179e829b5",
+      "feature": "Private artifact Git exclusions and bounded-log policy",
+      "scope": "mixed",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        ".gitignore",
+        "src/birdwatcher/config.py",
+        "src/birdwatcher/camera.py",
+        "src/birdwatcher/analysis.py"
+      ],
+      "tests": [
+        "tests/test_camera.py::test_snapshot_requires_private_location",
+        "tests/test_regressions.py::test_snapshot_refuses_any_git_checkout_even_when_package_installed_elsewhere",
+        "tests/test_regressions.py::test_private_config_cannot_put_capture_data_in_another_git_checkout"
+      ],
+      "evidence": [
+        "docs/SETUP.md",
+        "docs/OPERATIONS.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#limits"
+      ],
+      "private_evidence": [],
+      "issues": [
+        8
+      ],
+      "gap": "Git exclusions and private output guards exist, but ignores are not a comprehensive secret/photo scanner and can be bypassed by forced tracking. No public bounded rotating-log subsystem or rotation regression tests; private operational log policy is not public implementation proof."
+    },
+    {
+      "id": "BW-EVENT-001",
+      "spec_hash": "e9661550e00705914a861bc1f042a297d418a039307e37d5436c00edf8d2b12b",
+      "feature": "Implicit event lifecycle with reconnect interruption",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/events.py::EventMachine",
+        "src/birdwatcher/motion.py::MotionDetector",
+        "src/birdwatcher/runner.py::run_capture"
+      ],
+      "tests": [
+        "tests/test_events.py::test_timing_bounds_burst_cap_cooldown_and_segments",
+        "tests/test_events.py::test_prebuffer_shared_regions_unique_frames_and_shutdown",
+        "tests/test_integration.py::test_replay_capture_writes_originals_and_health"
+      ],
+      "evidence": [
+        "docs/OPERATIONS.md",
+        "docs/ARCHITECTURE.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        8
+      ],
+      "gap": "Warmup lives in camera/detector, active/idle/cooldown are implicit event fields and reconnect state is runner health. There is no unified explicit WARMUP/IDLE/ACTIVE/COOLDOWN/ERROR state enum/reporting; reconnect interruption and transition coverage are incomplete."
+    },
+    {
+      "id": "BW-EVENT-002",
+      "spec_hash": "dbdab4d9fdfb7fa1a01f9ff5e43690b9c79e3b40585c17bd2540849af9be4e57",
+      "feature": "Time/count/byte bounded pre-trigger JPEG buffer",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/events.py::EventMachine.update",
+        "src/birdwatcher/config.py::CaptureConfig"
+      ],
+      "tests": [
+        "tests/test_events.py::test_timing_bounds_burst_cap_cooldown_and_segments",
+        "tests/test_events.py::test_prebuffer_shared_regions_unique_frames_and_shutdown"
+      ],
+      "evidence": [
+        "docs/OPERATIONS.md",
+        "docs/ARCHITECTURE.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        8
+      ],
+      "gap": "Default one-second 5 fps prebuffer is bounded by time, count and bytes. Tests exercise shorter configured windows/count and byte pressure, not a complete default one-second capacity boundary. Config permits other sampling rates; sustained field memory bounds are not measured."
+    },
+    {
+      "id": "BW-EVENT-003",
+      "spec_hash": "2b12a15fadd714420a2a77e37991eff137fba90d083ed95feb10d966a9f93f2a",
+      "feature": "Original-byte bounded bursts and missed-save accounting",
+      "scope": "mixed",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/events.py::EventMachine",
+        "src/birdwatcher/runner.py::run_capture",
+        "src/birdwatcher/runner.py::ActionWriter",
+        "src/birdwatcher/storage.py"
+      ],
+      "tests": [
+        "tests/test_events.py::test_prebuffer_shared_regions_unique_frames_and_shutdown",
+        "tests/test_events.py::test_timing_bounds_burst_cap_cooldown_and_segments",
+        "tests/test_integration.py::test_replay_capture_writes_originals_and_health",
+        "tests/test_runner.py::test_writer_marks_dropped_event_incomplete",
+        "tests/test_storage.py::test_atomic_capture_manifest_and_restart_recovery"
+      ],
+      "evidence": [
+        "docs/OPERATIONS.md",
+        "docs/IMPLEMENTATION_PLAN.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#storage",
+        "docs/VALIDATION_REPORT.md#hardware-evidence"
+      ],
+      "private_evidence": [
+        "PRIVATE-STORAGE"
+      ],
+      "issues": [
+        8
+      ],
+      "gap": "Configurable sampling and identity-based dedup preserve actual receipt timestamps; dropped saves are counted, not filled with duplicates. Private deployment saves 3 fps versus acquisition request 15 fps. No sustained exact-rate/complete missed-sensor-frame accounting is proven; public tests use synthetic/replay timing and private recorder storage fix still needs source reconciliation."
+    },
+    {
+      "id": "BW-EVENT-004",
+      "spec_hash": "3fa426a1ca2cbe7da4c436528cb07bf773df30bca937250aaf77b5f5a9fd8717",
+      "feature": "Single event with union of triggering regions",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/events.py::EventMachine.update",
+        "src/birdwatcher/storage.py::EventStore.apply"
+      ],
+      "tests": [
+        "tests/test_events.py::test_prebuffer_shared_regions_unique_frames_and_shutdown",
+        "tests/test_events.py::test_timing_bounds_burst_cap_cooldown_and_segments",
+        "tests/test_storage.py::test_atomic_capture_manifest_and_restart_recovery"
+      ],
+      "evidence": [
+        "docs/ARCHITECTURE.md",
+        "docs/OPERATIONS.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        4,
+        8
+      ],
+      "gap": "Motion from simultaneous/sequential regions shares one event and region union is stored. Presence-trigger input is not implemented, so the complete motion/presence clause is partial; real multi-region field triggering is not established."
+    },
+    {
+      "id": "BW-EVENT-005",
+      "spec_hash": "4e131861fc9b66b26cc2ddca776da776e2c0132b59ce72602382d09f0b737079",
+      "feature": "Quiet/max duration and repeated burst defaults",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/events.py::EventMachine.update",
+        "src/birdwatcher/config.py::CaptureConfig",
+        "config/config.example.toml"
+      ],
+      "tests": [
+        "tests/test_events.py::test_timing_bounds_burst_cap_cooldown_and_segments",
+        "tests/test_events.py::test_prebuffer_shared_regions_unique_frames_and_shutdown"
+      ],
+      "evidence": [
+        "docs/OPERATIONS.md",
+        "docs/ARCHITECTURE.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        8
+      ],
+      "gap": "Defaults implement 5-second quiet, 30-second maximum and at-least-5-second repeat spacing. Existing timing test uses modified quiet/maximum and max_bursts=1; it does not assert repeated-burst spacing or all unmodified defaults. Long live event behavior remains unvalidated."
+    },
+    {
+      "id": "BW-EVENT-006",
+      "spec_hash": "d9d5d73b10ba971574aabf6b520bb2110e55e9bc60bb738bfa3fec32a94a53f2",
+      "feature": "Three-second cooldown and renewed events",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/events.py::EventMachine.update",
+        "src/birdwatcher/config.py::CaptureConfig"
+      ],
+      "tests": [
+        "tests/test_events.py::test_timing_bounds_burst_cap_cooldown_and_segments"
+      ],
+      "evidence": [
+        "docs/OPERATIONS.md",
+        "docs/ARCHITECTURE.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        8
+      ],
+      "gap": "Cooldown is implemented with a 3-second default; timing test proves cooldown/new-event behavior with a 1-second override, not exact default timing on deployment hardware."
+    },
+    {
+      "id": "BW-EVENT-007",
+      "spec_hash": "a202abb0e706abd4f4134b26acba3e770fabe8425c65a3e7fa3bdd4dc4570221",
+      "feature": "Bounded visual keeper review without editing originals",
+      "scope": "mixed",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/storage.py",
+        "src/birdwatcher/cli.py::run_shadow_analysis",
+        "src/birdwatcher/analysis.py"
+      ],
+      "tests": [
+        "tests/test_analysis.py::test_analyzer_sampling_idempotence_and_original_safety",
+        "tests/test_bird_detector.py::test_geometry_color_no_mutation_and_only_birds"
+      ],
+      "evidence": [
+        "docs/ARCHITECTURE.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#visual-review",
+        "docs/DEPLOYMENT_EVIDENCE.md#review-tests"
+      ],
+      "private_evidence": [
+        "PRIVATE-VISUAL",
+        "PRIVATE-FINALIZER"
+      ],
+      "issues": [
+        6
+      ],
+      "gap": "Private bounded visual workflow and original-preserving finalization exist; public tests establish source safety only, not sharpness/exposure/pose/variety selection quality. Automatic quality ranking is explicitly future; representative keeper-quality field acceptance remains incomplete."
+    },
+    {
+      "id": "BW-EVENT-008",
+      "spec_hash": "55abc0f8f0395348411b476cf6361e87e90d43d7b0ed2cd3db2ae6601214ed07",
+      "feature": "Maximum bursts with rate-limit observability",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/events.py::EventMachine.update",
+        "src/birdwatcher/config.py::CaptureConfig"
+      ],
+      "tests": [
+        "tests/test_events.py::test_timing_bounds_burst_cap_cooldown_and_segments"
+      ],
+      "evidence": [
+        "docs/OPERATIONS.md",
+        "docs/IMPLEMENTATION_PLAN.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        8
+      ],
+      "gap": "Configured max_bursts bounds repeated saves and is exercised synthetically. Exhausted-burst/rate-limit decisions are silently skipped, not individually logged, and field-rate-limit observability is not established."
+    },
+    {
+      "id": "BW-EVENT-009",
+      "spec_hash": "68bc5bd32273ec4de9fc64c97213729a14604b540a6527163aae4e96a685bf4b",
+      "feature": "Linked continuous-presence segments not bird counts",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/events.py::EventMachine.update",
+        "src/birdwatcher/storage.py::EventStore.apply"
+      ],
+      "tests": [
+        "tests/test_events.py::test_timing_bounds_burst_cap_cooldown_and_segments"
+      ],
+      "evidence": [
+        "docs/OPERATIONS.md",
+        "docs/ARCHITECTURE.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        4,
+        8
+      ],
+      "gap": "Max-duration restart includes continuation:<previous_event_id> and manifests retain the reason. Test asserts end/start and max_duration, but not the continuation ID or persisted linkage. Physical long-presence testing remains pending; event counts are not individual-bird counts."
+    },
+    {
+      "id": "BW-GOAL-001",
+      "spec_hash": "0eb20d27572a77ff4197c8970fe95bf4b2bc7c83452b34fd50f295c534cfb927",
+      "feature": "Keeper-focused collection, not a census",
+      "scope": "mixed",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/camera.py",
+        "src/birdwatcher/events.py",
+        "src/birdwatcher/runner.py",
+        "src/birdwatcher/storage.py"
+      ],
+      "tests": [
+        "tests/test_integration.py::test_replay_capture_writes_originals_and_health"
+      ],
+      "evidence": [
+        "docs/DEPLOYMENT_EVIDENCE.md#visual-review"
+      ],
+      "private_evidence": [
+        "PRIVATE-VISUAL",
+        "PRIVATE-FINALIZER"
+      ],
+      "issues": [
+        6,
+        8
+      ],
+      "gap": "Motion photography and private selection exist; good-photo yield and complete end-to-end recurring delivery are not field-validated."
+    },
+    {
+      "id": "BW-GOAL-002",
+      "spec_hash": "b86ba1efe27456ad9a26b21d265056dce2d3f3762fa465d4e122cc041bc80b60",
+      "feature": "Local core with explicit external-service boundaries",
+      "scope": "mixed",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/camera.py",
+        "src/birdwatcher/bird_detector.py"
+      ],
+      "tests": [
+        "tests/test_bird_detector.py::test_model_integrity_before_engine"
+      ],
+      "evidence": [
+        "docs/ARCHITECTURE.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#delivery"
+      ],
+      "private_evidence": [
+        "PRIVATE-DAYLIGHT",
+        "PRIVATE-VISUAL",
+        "PRIVATE-DELIVERY"
+      ],
+      "issues": [
+        8
+      ],
+      "gap": "No per-frame cloud inference; external solar/review/delivery and their failure combinations are not fully field-validated."
+    },
+    {
+      "id": "BW-GOAL-003",
+      "spec_hash": "73b444a3fd0d5a88b1cf1b8e4135364c0b5bd24df4052eeef22882591b7a3db6",
+      "feature": "Private regional hints and deployment identity",
+      "scope": "policy",
+      "implementation_status": "partial",
+      "test_status": "unverified",
+      "field_status": "not_applicable",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/TODO.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        7
+      ],
+      "gap": "No implemented species reranker or hard regional filter; privacy is an approved publication rule, not a fully automated repository-audit guarantee."
+    },
+    {
+      "id": "BW-HW-001",
+      "spec_hash": "96dcb118b906f7eb0d64b73d3500eeea36f96be5622f3e4f85ca674a1b236990",
+      "feature": "Linux USB MJPEG camera target",
+      "scope": "mixed",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "validated",
+      "code": [
+        "src/birdwatcher/camera.py"
+      ],
+      "tests": [
+        "tests/test_camera.py::test_jpeg_parser_preserves_next_frame"
+      ],
+      "evidence": [
+        "docs/VALIDATION_REPORT.md#hardware-evidence",
+        "docs/SETUP.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        8
+      ],
+      "gap": "No known gap for the initial C920 target: historical live smoke evidence exists; compatibility with every nominally compatible USB camera is not established."
+    },
+    {
+      "id": "BW-HW-002",
+      "spec_hash": "17b2d1c6cde3f38571e9b1a54de2026553b79fb45b79a2a1f269528e55e9c38c",
+      "feature": "Negotiated stream and hardware control verification",
+      "scope": "mixed",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/camera.py::Camera._read_settings",
+        "src/birdwatcher/camera.py::parse_settings"
+      ],
+      "tests": [
+        "tests/test_camera.py::test_metadata_parser_does_not_include_device_identifiers"
+      ],
+      "evidence": [
+        "docs/VALIDATION_REPORT.md#hardware-evidence",
+        "docs/DEPLOYMENT_EVIDENCE.md#focus"
+      ],
+      "private_evidence": [
+        "PRIVATE-FOCUS"
+      ],
+      "issues": [
+        8,
+        6
+      ],
+      "gap": "Historical smoke verifies decoded 1080p MJPEG and negotiated 15 fps, not sustained measured sensor throughput. Public doctor does not enumerate focus controls; private focus experiments do not complete a portable verification workflow."
+    },
+    {
+      "id": "BW-HW-003",
+      "spec_hash": "e3e635c3fdbd6db30a54be2be036b71988d16fe06ad864f4d10cff48b0e74271",
+      "feature": "Private setup-time camera discovery",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/camera.py::discover_device",
+        "src/birdwatcher/config.py"
+      ],
+      "tests": [
+        "tests/test_camera.py::test_auto_discovery_prefers_capture_endpoint",
+        "tests/test_camera.py::test_metadata_parser_does_not_include_device_identifiers"
+      ],
+      "evidence": [
+        "docs/SETUP.md",
+        "docs/VALIDATION_REPORT.md#hardware-evidence"
+      ],
+      "private_evidence": [],
+      "issues": [
+        8
+      ],
+      "gap": "Discovery prefers stable index0 paths and uses video0 only as fallback; tests cover preferred discovery and sanitized parsed metadata, not all configured-device error output or alternative hardware discovery."
+    },
+    {
+      "id": "BW-HW-004",
+      "spec_hash": "3b78fc728236e9d9eefd07a8ebde2b6d3c4c56de822e8dc1a0898da302115178",
+      "feature": "Runtime and storage deployment compatibility",
+      "scope": "mixed",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "pyproject.toml",
+        "requirements.txt",
+        "src/birdwatcher/config.py",
+        "src/birdwatcher/bird_detector.py"
+      ],
+      "tests": [
+        "tests/test_bird_detector.py::test_official_decoder_and_cpu_mocknet",
+        "tests/test_bird_detector.py::test_model_integrity_before_engine"
+      ],
+      "evidence": [
+        "docs/VALIDATION_REPORT.md#packaging-evidence",
+        "docs/MODEL_DECISION.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#storage"
+      ],
+      "private_evidence": [
+        "PRIVATE-STORAGE"
+      ],
+      "issues": [
+        7,
+        8
+      ],
+      "gap": "Python 3.13 ARM64 and local detector feasibility have historical reports; guarded storage evidence is private. Broader supported Python/model combinations and a single complete reproducible private deployment compatibility report are not established by these tests."
+    },
+    {
+      "id": "BW-MODEL-001",
+      "spec_hash": "eb4062825d29fbea57b8b9380e9d00e1d9187a2c7afaa0875258bb8e45b32a6c",
+      "feature": "On-device NanoDet CPU feasibility experiment",
+      "scope": "mixed",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/bird_detector.py",
+        "src/birdwatcher/_vendor/nanodet.py"
+      ],
+      "tests": [
+        "tests/test_bird_detector.py::test_official_decoder_and_cpu_mocknet"
+      ],
+      "evidence": [
+        "docs/MODEL_DECISION.md",
+        "docs/SHADOW_VALIDATION.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        7
+      ],
+      "gap": "A measured ARM64 experiment supports the provisional detector selection, not a detector-plus-bird-specific-classifier evaluation. Birder is not selected; species classifier compatibility and performance remain untested."
+    },
+    {
+      "id": "BW-MODEL-002",
+      "spec_hash": "3d1de6c0e53d830b3c75096e6ddb81a920f4558b9a3b79b7f64d59acb88cbab0",
+      "feature": "Pinned detector artifact and runtime provenance",
+      "scope": "mixed",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/bird_detector.py",
+        "requirements.txt",
+        "third_party/nanodet/THIRD_PARTY_NOTICES.txt"
+      ],
+      "tests": [
+        "tests/test_bird_detector.py::test_model_integrity_before_engine",
+        "tests/test_bird_detector.py::test_verified_model_buffer_survives_path_replacement",
+        "tests/test_bird_detector.py::test_model_read_is_bounded_and_rejects_trailing_bytes"
+      ],
+      "evidence": [
+        "docs/MODEL_DECISION.md",
+        "docs/SHADOW_VALIDATION.md",
+        "docs/SETUP.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        7,
+        8
+      ],
+      "gap": "NanoDet source revision, weights checksum, licenses, transform, tested ARM64/Python runtime, size, RSS and latency are documented. Generic bird class does not establish local species coverage; classifier candidate inventory and broader compatibility matrix are absent. Isolated runtime evidence is not universal Python support."
+    },
+    {
+      "id": "BW-MOTION-001",
+      "spec_hash": "eddf7c36eabb65302dab915583cf2fb92eecead0dd7ca5a9d20cd31a7d7b41cc",
+      "feature": "Downscaled MOG2 foreground change detector",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/motion.py::MotionDetector.update"
+      ],
+      "tests": [
+        "tests/test_motion.py::test_motion_persistence_regions_lighting_and_reset"
+      ],
+      "evidence": [
+        "docs/ARCHITECTURE.md",
+        "docs/IMPLEMENTATION_PLAN.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#pilot"
+      ],
+      "private_evidence": [],
+      "issues": [
+        3,
+        6
+      ],
+      "gap": "MOG2, blur, shadow exclusion, opening and minimum area are implemented. One synthetic combined test covers trigger persistence/outside-ROI/lighting/reset, not separate assertions for every preprocessing clause or real footage nuisance performance; no bird identity is inferred."
+    },
+    {
+      "id": "BW-MOTION-002",
+      "spec_hash": "abab16e8b2c19c9dd3e5684c8e594b382834fb2e11e2664856950eb0860febbb",
+      "feature": "Normalized validated optional feeder regions",
+      "scope": "mixed",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/config.py::Region",
+        "src/birdwatcher/config.py::_validate",
+        "src/birdwatcher/motion.py",
+        "config/config.example.toml"
+      ],
+      "tests": [
+        "tests/test_config.py::test_toml_validates_types_bounds_paths_and_unknowns",
+        "tests/test_config.py::test_validate_run_checks_direct_config_and_external_tmp_data",
+        "tests/test_motion.py::test_motion_persistence_regions_lighting_and_reset"
+      ],
+      "evidence": [
+        "docs/SETUP.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#focus"
+      ],
+      "private_evidence": [
+        "PRIVATE-FOCUS"
+      ],
+      "issues": [
+        6
+      ],
+      "gap": "Rectangle bounds and enabled regions are supported; example regions are disabled placeholders. Private priority ROI is approved, but public tests do not exercise an annotated preview or user-review workflow; no bundled calibrate command exists."
+    },
+    {
+      "id": "BW-MOTION-003",
+      "spec_hash": "17af6d015d035aae0a0f54dd3e2faa2489ee8d39775385d0b23ab23f1c8953aa",
+      "feature": "640-pixel and 8 Hz motion analysis targets",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "unverified",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/config.py::MotionConfig",
+        "src/birdwatcher/runner.py::run_capture",
+        "src/birdwatcher/motion.py::MotionDetector.update",
+        "config/config.example.toml"
+      ],
+      "tests": [],
+      "evidence": [
+        "docs/ARCHITECTURE.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        8
+      ],
+      "gap": "640 width default and hard-coded 1/8-second scheduling target exist. No test measures the defaults/cadence and no sustained hardware analysis rate is established; 8 Hz is a best-effort target, not a measured guarantee."
+    },
+    {
+      "id": "BW-MOTION-004",
+      "spec_hash": "5b265d8d1dd27792f40d6d1c2b6591a532ca5cf2795bae33169006b0188d75c4",
+      "feature": "Persistent area trigger with region tuning",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/config.py::MotionConfig",
+        "src/birdwatcher/motion.py::MotionDetector.update"
+      ],
+      "tests": [
+        "tests/test_motion.py::test_motion_persistence_regions_lighting_and_reset"
+      ],
+      "evidence": [
+        "docs/SETUP.md",
+        "docs/IMPLEMENTATION_PLAN.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#focus"
+      ],
+      "private_evidence": [
+        "PRIVATE-FOCUS"
+      ],
+      "issues": [
+        3,
+        6
+      ],
+      "gap": "Global defaults are 1% and three consecutive frames, but thresholds are not region-specific fields. Synthetic persistence test does not establish 1% boundary behavior or real-footage tuning for each region."
+    },
+    {
+      "id": "BW-MOTION-005",
+      "spec_hash": "b2d442f57235dd2acd59bf71f4c9e298e77f9016e5543d2b468d853b22f0c3b0",
+      "feature": "ROI-only triggers and background reset",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/motion.py::MotionDetector.reset",
+        "src/birdwatcher/motion.py::MotionDetector.update",
+        "src/birdwatcher/runner.py::run_capture"
+      ],
+      "tests": [
+        "tests/test_motion.py::test_motion_persistence_regions_lighting_and_reset"
+      ],
+      "evidence": [
+        "docs/OPERATIONS.md",
+        "docs/SETUP.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        6,
+        8
+      ],
+      "gap": "Outside-ROI motion is ignored and detector resets after camera reopen. Focus/exposure changes have no change-detection/reset hooks; automatic major exposure changes do not explicitly reset background. Reconnect reset integration is not directly asserted."
+    },
+    {
+      "id": "BW-MOTION-006",
+      "spec_hash": "c21b78f9fd5cde809faca43dfa0a71cdadc985fe622e9e2bacd96616155fec49",
+      "feature": "Broad lighting suppression and decision logging",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/motion.py::MotionDetector.update",
+        "src/birdwatcher/config.py::MotionConfig"
+      ],
+      "tests": [
+        "tests/test_motion.py::test_motion_persistence_regions_lighting_and_reset"
+      ],
+      "evidence": [
+        "docs/ARCHITECTURE.md",
+        "docs/IMPLEMENTATION_PLAN.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        6,
+        8
+      ],
+      "gap": "Configurable whole-image foreground fraction suppresses broad transients and increments an internal counter. No distinct intensity-change check or suppression decision logging/health publication exists; test asserts suppression outcome, not logs or field effectiveness."
+    },
+    {
+      "id": "BW-MOTION-007",
+      "spec_hash": "4e88512d3b2e3001c7d901332b4c808b0251da7c8210e91b6ff85a60f36c4331",
+      "feature": "Best-effort stationary-bird presence scan",
+      "scope": "future",
+      "implementation_status": "planned",
+      "test_status": "unverified",
+      "field_status": "unvalidated",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/IMPLEMENTATION_PLAN.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#limits"
+      ],
+      "private_evidence": [],
+      "issues": [
+        4,
+        8
+      ],
+      "gap": "No two-second presence-scan scheduler, capacity admission or skipped-scan reporting exists. Separate analysis of already-saved events cannot recover a stationary bird that never triggered photographs."
+    },
+    {
+      "id": "BW-OPS-001",
+      "spec_hash": "f59d1d0770d80d6c0bc74a8f99a9540b5ac916d5dd255db3bc15fc522b53290e",
+      "feature": "Private fail-closed daylight supervisor",
+      "scope": "private",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/DEPLOYMENT_EVIDENCE.md#daylight",
+        "docs/DEPLOYMENT_EVIDENCE.md#review-tests",
+        "docs/DEPLOYMENT_EVIDENCE.md#limits",
+        "docs/OPERATIONS.md"
+      ],
+      "private_evidence": [
+        "PRIVATE-DAYLIGHT",
+        "PRIVATE-SCHEDULER"
+      ],
+      "issues": [
+        8
+      ],
+      "gap": "Approved private scheduling/supervision reportedly validates local solar window, conservative absolute cutoff and launch refusal; public foreground command has only relative duration and no solar guard. Installed/enabled jobs do not prove liveness or reboot behavior; no physical darkness sensor or cumulative 24-hour daylight-only soak evidence."
+    },
+    {
+      "id": "BW-OPS-002",
+      "spec_hash": "06c6960b41fb0b245f238fc5b76d29659934adbdc171be68d04e9f0fd171fc23",
+      "feature": "Non-root execution and private data permissions",
+      "scope": "mixed",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/camera.py",
+        "src/birdwatcher/analysis_queue.py",
+        "src/birdwatcher/runner.py"
+      ],
+      "tests": [
+        "tests/test_analysis_queue.py::test_queue_durable_bounded_idempotent",
+        "tests/test_analysis_queue.py::test_page_size_and_existing_lock_permissions_are_bounded"
+      ],
+      "evidence": [
+        "docs/SETUP.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#pilot"
+      ],
+      "private_evidence": [
+        "PRIVATE-DAYLIGHT"
+      ],
+      "issues": [
+        8
+      ],
+      "gap": "Private deployment uses existing non-root user and public queue/root permissions are restricted. No bundled dedicated service account, sandbox or least-privilege access audit; file-permission tests do not establish complete deployment account confinement."
+    },
+    {
+      "id": "BW-OPS-003",
+      "spec_hash": "3c48012acda8a7f157c72b6325bb28eb6caf40fb16248f7396f2263f8e6481f1",
+      "feature": "Private single-supervisor runtime boundary",
+      "scope": "mixed",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/camera.py",
+        "src/birdwatcher/runner.py"
+      ],
+      "tests": [
+        "tests/test_camera.py::test_camera_lock_rejects_second_owner"
+      ],
+      "evidence": [
+        "docs/OPERATIONS.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#daylight",
+        "docs/DEPLOYMENT_EVIDENCE.md#limits"
+      ],
+      "private_evidence": [
+        "PRIVATE-SCHEDULER",
+        "PRIVATE-DAYLIGHT"
+      ],
+      "issues": [
+        8
+      ],
+      "gap": "Private approved Hermes schedules and separate immutable runtimes are reported; application locks only coordinate cooperating owners. Portable systemd installation plus coordinated reboot/rollback and sustained liveness verification remain absent; documentation enables nothing."
+    },
+    {
+      "id": "BW-OPS-004",
+      "spec_hash": "791f6b1afa8bb06fda83e6b0dd0b620a71114d1c2bc35430e70e87850273ae70",
+      "feature": "Offline local capture/model with independent private review",
+      "scope": "mixed",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/runner.py",
+        "src/birdwatcher/bird_detector.py",
+        "src/birdwatcher/analysis.py",
+        "src/birdwatcher/cli.py"
+      ],
+      "tests": [
+        "tests/test_bird_detector.py::test_model_integrity_before_engine",
+        "tests/test_shadow_cli.py::test_analyze_one_pass_does_not_construct_camera",
+        "tests/test_analysis.py::test_empty_event_is_failed_and_detector_error_is_contained"
+      ],
+      "evidence": [
+        "docs/MODEL_DECISION.md",
+        "docs/OPERATIONS.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#daylight",
+        "docs/DEPLOYMENT_EVIDENCE.md#delivery"
+      ],
+      "private_evidence": [
+        "PRIVATE-DAYLIGHT",
+        "PRIVATE-VISUAL",
+        "PRIVATE-DELIVERY"
+      ],
+      "issues": [
+        8
+      ],
+      "gap": "Core inference uses explicitly supplied hash-pinned local weights, without model downloads; separate private supervisor fails closed on invalid solar data. Cross-service failure independence is reported but not fully integration-tested from public checkout; external visual-review and Telegram failure windows remain operational limitations."
+    },
+    {
+      "id": "BW-OPS-005",
+      "spec_hash": "3fbb0ac66559405117fd23d33aa744065d73e98eaa11fc11600ab3835b7e598d",
+      "feature": "No default listener or bundled upload integration",
+      "scope": "mixed",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/cli.py",
+        "src/birdwatcher/runner.py",
+        "src/birdwatcher/analysis.py"
+      ],
+      "tests": [
+        "tests/test_shadow_cli.py::test_analyze_one_pass_does_not_construct_camera"
+      ],
+      "evidence": [
+        "docs/OPERATIONS.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#delivery"
+      ],
+      "private_evidence": [
+        "PRIVATE-DELIVERY"
+      ],
+      "issues": [
+        8
+      ],
+      "gap": "No known default listener/upload path in inspected CLI/capture/analyzer. Approved private Telegram/external-review integrations are separate; no comprehensive socket/egress-denial regression test or deployment network audit proves this property under all dependencies/configurations."
+    },
+    {
+      "id": "BW-OPS-006",
+      "spec_hash": "ed85a6108630662eb3d006d6d3880807f5f47a96f3561c3a3e4088fc017acccb",
+      "feature": "Hardware-independent events/storage with V4L2 adapter",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "verified",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/events.py",
+        "src/birdwatcher/storage.py",
+        "src/birdwatcher/motion.py",
+        "src/birdwatcher/camera.py",
+        "src/birdwatcher/runner.py"
+      ],
+      "tests": [
+        "tests/test_integration.py::test_replay_capture_writes_originals_and_health",
+        "tests/test_camera.py::test_jpeg_parser_preserves_next_frame",
+        "tests/test_camera.py::test_capture_read_timeout_terminates_child"
+      ],
+      "evidence": [
+        "docs/VALIDATION_REPORT.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        8
+      ],
+      "gap": "No known gap in injected-camera replay and separate adapter/library design. Hardware smoke evidence is short-duration only; synthetic tests do not establish physical unplug/replug or every device capability."
+    },
+    {
+      "id": "BW-OPS-007",
+      "spec_hash": "615a6f2c54088e53c0d3655bf725c2c74fedb65ec0db2e998e9a43d2eada4354",
+      "feature": "Capture counters and separate shadow summaries",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/runner.py",
+        "src/birdwatcher/analysis.py",
+        "src/birdwatcher/storage.py"
+      ],
+      "tests": [
+        "tests/test_integration.py::test_replay_capture_writes_originals_and_health",
+        "tests/test_runner.py::test_writer_reports_storage_errors_without_crashing_producer",
+        "tests/test_runner.py::test_writer_rejects_oversized_work_without_waiting"
+      ],
+      "evidence": [
+        "docs/OPERATIONS.md",
+        "docs/SHADOW_VALIDATION.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        8
+      ],
+      "gap": "Capture exposes received/invalid frames, reconnects, dropped saves and storage errors; analysis returns deferred/failed counts. Trigger-suppression and identification-latency counters are absent; sensor frame drops are not measured and queue/model counters are not integrated into capture health."
+    },
+    {
+      "id": "BW-OPS-008",
+      "spec_hash": "cb00bf5023f6179da33c6e943a9a8bd58d13009c319b11bf68493a9c729101da",
+      "feature": "Graceful capture shutdown and interrupted-job recovery",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/runner.py",
+        "src/birdwatcher/storage.py",
+        "src/birdwatcher/analysis_queue.py",
+        "src/birdwatcher/camera.py"
+      ],
+      "tests": [
+        "tests/test_runner.py::test_writer_drains_actions_on_close",
+        "tests/test_analysis_queue.py::test_queue_durable_bounded_idempotent",
+        "tests/test_analysis_queue.py::test_database_errors_are_health_errors_and_recovery_has_result",
+        "tests/test_storage_recovery.py::test_real_jpeg_rename_crash_is_recoverable_at_exact_quota"
+      ],
+      "evidence": [
+        "docs/VALIDATION_REPORT.md",
+        "docs/OPERATIONS.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#limits"
+      ],
+      "private_evidence": [],
+      "issues": [
+        8
+      ],
+      "gap": "Capture SIGTERM handler, context cleanup, writer draining and startup storage/queue recovery exist. Separate shadow worker does not install the capture SIGTERM cleanup handler; no full process SIGTERM-to-camera/database test, approved reboot test or physical power-loss test establishes the complete contract."
+    },
+    {
+      "id": "BW-OPS-009",
+      "spec_hash": "fb082fe391687b8b258fa676fd4c20b3d160c30bb0e2fa97874d869e5f44711d",
+      "feature": "Tested version snapshots, platform and license notices",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "requirements.txt",
+        "requirements-dev.txt",
+        "pyproject.toml",
+        "third_party/nanodet/LICENSE",
+        "third_party/nanodet/THIRD_PARTY_NOTICES.txt"
+      ],
+      "tests": [
+        "tests/test_bird_detector.py::test_model_integrity_before_engine"
+      ],
+      "evidence": [
+        "docs/VALIDATION_REPORT.md",
+        "docs/SHADOW_VALIDATION.md",
+        "docs/MODEL_DECISION.md",
+        "docs/SETUP.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        8
+      ],
+      "gap": "Runtime/dev versions, tested Linux ARM64/Python environment and separate code/weights licenses are documented. Requirements are version snapshots, not a complete hashed reproducible lock: build setuptools is unpinned and package dependency ranges remain broad. Wider platform compatibility and release-time license/packaging reproducibility remain incomplete."
+    },
+    {
+      "id": "BW-OPTICS-001",
+      "spec_hash": "698784a1bcda57d8c6745c72720605292d24d48b0374b921c5b52479adf0d831",
+      "feature": "Private focus-plane verification",
+      "scope": "private",
+      "implementation_status": "partial",
+      "test_status": "unverified",
+      "field_status": "partial",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/DEPLOYMENT_EVIDENCE.md#focus",
+        "docs/IMPLEMENTATION_PLAN.md"
+      ],
+      "private_evidence": [
+        "PRIVATE-FOCUS"
+      ],
+      "issues": [
+        6
+      ],
+      "gap": "Private reversible focus/framing work exists; exhaustive measured perch distances and focus-plane acceptance are not reproducible from sanitized public documents. No optical-quality inference from overview images."
+    },
+    {
+      "id": "BW-OPTICS-002",
+      "spec_hash": "f4f16c3860521a4db47467d7beff54ae8b8df51769bbc54b22c03329cb670ec9",
+      "feature": "Approved priority feeder rather than dual-focus promise",
+      "scope": "mixed",
+      "implementation_status": "policy",
+      "test_status": "not_applicable",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/config.py::Region"
+      ],
+      "tests": [],
+      "evidence": [
+        "docs/DEPLOYMENT_EVIDENCE.md#focus",
+        "docs/IMPLEMENTATION_PLAN.md"
+      ],
+      "private_evidence": [
+        "PRIVATE-FOCUS"
+      ],
+      "issues": [
+        6
+      ],
+      "gap": "One priority feeder has private approval; this does not establish acceptable bird-level focus at both possible distances or a keeper-quality release gate."
+    },
+    {
+      "id": "BW-OPTICS-003",
+      "spec_hash": "3950ad5e54f56e2269580c500ee732a962d6d9b8ea394066acf88e671ae8d787",
+      "feature": "Glare and overview-quality limitation",
+      "scope": "policy",
+      "implementation_status": "policy",
+      "test_status": "not_applicable",
+      "field_status": "not_applicable",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/SETUP.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#focus",
+        "docs/DEPLOYMENT_EVIDENCE.md#limits"
+      ],
+      "private_evidence": [],
+      "issues": [
+        6
+      ],
+      "gap": "No implementation promised by this caution. Reflection/glare and bird-level image quality still require private sample review; no general optical-quality guarantee is supported."
+    },
+    {
+      "id": "BW-OPTICS-004",
+      "spec_hash": "626109f7fa54031c7e8fe9777dc36e6a9ad7b2e6d808e8dd2ff504bf0b4bb93f",
+      "feature": "Daylight-only scope and inference limits",
+      "scope": "mixed",
+      "implementation_status": "policy",
+      "test_status": "not_applicable",
+      "field_status": "partial",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/SETUP.md",
+        "docs/OPERATIONS.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#daylight",
+        "docs/DEPLOYMENT_EVIDENCE.md#limits"
+      ],
+      "private_evidence": [
+        "PRIVATE-DAYLIGHT",
+        "PRIVATE-SCHEDULER"
+      ],
+      "issues": [
+        7,
+        8
+      ],
+      "gap": "Private supervisor enforces an approved solar window, but core run does not. Enabled schedules are not liveness evidence; night vision, species accuracy and real-time inference remain explicitly unguaranteed."
+    },
+    {
+      "id": "BW-OWNER-001",
+      "spec_hash": "65945add67b7a65f4634ae19cc7981a8274b2e2460f9421c987ec6a93f1eee9f",
+      "feature": "Target single-camera Pi hardware",
+      "scope": "policy",
+      "implementation_status": "policy",
+      "test_status": "not_applicable",
+      "field_status": "partial",
+      "code": [
+        "pyproject.toml"
+      ],
+      "tests": [],
+      "evidence": [
+        "docs/VALIDATION_REPORT.md#hardware-evidence",
+        "docs/MODEL_DECISION.md"
+      ],
+      "private_evidence": [],
+      "issues": [],
+      "gap": "Target platform is an owner-provided constraint; a live camera/model has been exercised, not every hardware compatibility combination."
+    },
+    {
+      "id": "BW-OWNER-002",
+      "spec_hash": "7b3c4542b5de722e185f108f2f444a8736f6ee89dc5629d0761d0c8d4b319aac",
+      "feature": "Python motion-triggered photography",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "verified",
+      "field_status": "validated",
+      "code": [
+        "src/birdwatcher/camera.py",
+        "src/birdwatcher/events.py",
+        "src/birdwatcher/runner.py",
+        "src/birdwatcher/storage.py"
+      ],
+      "tests": [
+        "tests/test_integration.py::test_replay_capture_writes_originals_and_health"
+      ],
+      "evidence": [
+        "docs/VALIDATION_REPORT.md#hardware-evidence"
+      ],
+      "private_evidence": [],
+      "issues": [],
+      "gap": "No known implementation gap within this bounded requirement; broader field gates remain separate."
+    },
+    {
+      "id": "BW-OWNER-003",
+      "spec_hash": "b4aa0603022ab55e50d059d8d45cd3d784f96becdbf9a0686b42ac0d0487a8e8",
+      "feature": "Candidate prioritization before future species work",
+      "scope": "mixed",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/analysis.py",
+        "src/birdwatcher/bird_detector.py"
+      ],
+      "tests": [
+        "tests/test_analysis.py::test_unknown_result_is_explicit_sample_not_absence_claim"
+      ],
+      "evidence": [
+        "docs/SHADOW_VALIDATION.md#visual-review-of-candidates"
+      ],
+      "private_evidence": [
+        "PRIVATE-COLLECTOR"
+      ],
+      "issues": [
+        4,
+        7
+      ],
+      "gap": "Candidate analysis exists and has false positives; validated species identification is not implemented."
+    },
+    {
+      "id": "BW-OWNER-004",
+      "spec_hash": "a6324e1555c3a0cb38921f592bfada1f84825ce7c842f63b4de3399c18ba2df5",
+      "feature": "Near-sunrise start and conservative sunset stop",
+      "scope": "private",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/DEPLOYMENT_EVIDENCE.md#daylight"
+      ],
+      "private_evidence": [
+        "PRIVATE-DAYLIGHT"
+      ],
+      "issues": [
+        8
+      ],
+      "gap": "Private safeguards and bounded historical sessions exist; public run has no solar guard and full clock/solar/reboot field cases remain open."
+    },
+    {
+      "id": "BW-OWNER-005",
+      "spec_hash": "44df5dffda142f2ac94397be1532e5714be9d06cba2cf9a4915941638085fb37",
+      "feature": "Bounded keeper review and private digest",
+      "scope": "private",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/DEPLOYMENT_EVIDENCE.md#review-tests",
+        "docs/DEPLOYMENT_EVIDENCE.md#delivery"
+      ],
+      "private_evidence": [
+        "PRIVATE-COLLECTOR",
+        "PRIVATE-SCHEDULER",
+        "PRIVATE-FINALIZER",
+        "PRIVATE-VISUAL",
+        "PRIVATE-DELIVERY"
+      ],
+      "issues": [
+        6,
+        8
+      ],
+      "gap": "Private implementation and regressions exist; this work does not verify a new end-to-end delivered digest."
+    },
+    {
+      "id": "BW-OWNER-006",
+      "spec_hash": "458eadff378e50db0617821aeb4c076137c0a7e4146f8320ae72a316edcfbeb3",
+      "feature": "Rolling raw expiry without keeper or backup deletion",
+      "scope": "mixed",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/storage.py"
+      ],
+      "tests": [
+        "tests/test_storage.py::test_quota_retention_symlinks_pins_unmanaged_and_camera_metadata"
+      ],
+      "evidence": [
+        "docs/DEPLOYMENT_EVIDENCE.md#storage",
+        "docs/DEPLOYMENT_EVIDENCE.md#review-tests"
+      ],
+      "private_evidence": [
+        "PRIVATE-STORAGE",
+        "PRIVATE-FINALIZER"
+      ],
+      "issues": [
+        8
+      ],
+      "gap": "Managed-retention and finalizer isolation are tested; sustained hardware media/retention behavior remains a field gate."
+    },
+    {
+      "id": "BW-OWNER-007",
+      "spec_hash": "38cd3f9abd387edf58a65692f82bdce555ac55b882b8355b213fd3cdf69234e6",
+      "feature": "One-camera/no-purchase scope",
+      "scope": "policy",
+      "implementation_status": "policy",
+      "test_status": "not_applicable",
+      "field_status": "not_applicable",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/TODO.md"
+      ],
+      "private_evidence": [],
+      "issues": [],
+      "gap": "Scope decision, not a demand to purchase or implement additional hardware."
+    },
+    {
+      "id": "BW-PIPE-001",
+      "spec_hash": "b1c706852336c73fbb94a26b07b7d7d0e251a5dd83f71afa3fcdec9217847674",
+      "feature": "Capture isolated from optional single inference worker",
+      "scope": "mixed",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/runner.py::run_capture",
+        "src/birdwatcher/cli.py::run_shadow_analysis",
+        "src/birdwatcher/analysis.py",
+        "src/birdwatcher/analysis_queue.py"
+      ],
+      "tests": [
+        "tests/test_integration.py::test_replay_capture_writes_originals_and_health",
+        "tests/test_shadow_cli.py::test_analyze_one_pass_does_not_construct_camera",
+        "tests/test_analysis_queue.py::test_lock_schema_symlinks_and_three_attempts",
+        "tests/test_analysis.py::test_empty_event_is_failed_and_detector_error_is_contained"
+      ],
+      "evidence": [
+        "docs/SHADOW_VALIDATION.md",
+        "docs/ARCHITECTURE.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#pilot"
+      ],
+      "private_evidence": [
+        "PRIVATE-COLLECTOR"
+      ],
+      "issues": [
+        8
+      ],
+      "gap": "Public capture has no model call and optional analyzer is separately locked. Historical concurrent capture/analysis evidence exists; comprehensive overloaded/failed-model capture fault injection and sustained resource contention remain unverified. Capture-internal worker orchestration is future, not silently implemented."
+    },
+    {
+      "id": "BW-PRIVACY-001",
+      "spec_hash": "93c48c7b8db25f152744f7559e6d7e9b8835b47c6eeedbfc894f98d381b36f79",
+      "feature": "Sanitized hardware observations and private calibration",
+      "scope": "mixed",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/camera.py",
+        "src/birdwatcher/config.py",
+        "src/birdwatcher/analysis.py",
+        ".gitignore"
+      ],
+      "tests": [
+        "tests/test_camera.py::test_metadata_parser_does_not_include_device_identifiers",
+        "tests/test_camera.py::test_snapshot_requires_private_location",
+        "tests/test_regressions.py::test_snapshot_refuses_any_git_checkout_even_when_package_installed_elsewhere"
+      ],
+      "evidence": [
+        "docs/VALIDATION_REPORT.md",
+        "docs/MODEL_DECISION.md",
+        "docs/SHADOW_VALIDATION.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#focus",
+        "docs/DEPLOYMENT_EVIDENCE.md#storage",
+        "docs/DEPLOYMENT_EVIDENCE.md#limits"
+      ],
+      "private_evidence": [
+        "PRIVATE-FOCUS",
+        "PRIVATE-STORAGE"
+      ],
+      "issues": [
+        8
+      ],
+      "gap": "Live camera negotiation/focus/storage observations are summarized in sanitized reports and private photos/configuration remain outside Git. Reports are not reproducible calibration data; dynamic deployment properties require fresh checks. Guards/traceability checks are not a full privacy/secret scanner or proof every observation is current."
+    },
+    {
+      "id": "BW-QUALITY-001",
+      "spec_hash": "a8bd61c5136410a70fc67bdb693059272c4b83e148b4b94005bfa0cb614f7520",
+      "feature": "Synthetic/replay pytest capture and shadow regression suite",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/runner.py",
+        "src/birdwatcher/events.py",
+        "src/birdwatcher/storage.py",
+        "src/birdwatcher/analysis.py",
+        "src/birdwatcher/analysis_queue.py"
+      ],
+      "tests": [
+        "tests/test_integration.py::test_replay_capture_writes_originals_and_health",
+        "tests/test_config.py::test_toml_validates_types_bounds_paths_and_unknowns",
+        "tests/test_events.py::test_timing_bounds_burst_cap_cooldown_and_segments",
+        "tests/test_events.py::test_prebuffer_shared_regions_unique_frames_and_shutdown",
+        "tests/test_analysis_queue.py::test_queue_durable_bounded_idempotent",
+        "tests/test_analysis_queue.py::test_unversioned_existing_database_is_rejected",
+        "tests/test_storage.py::test_quota_retention_symlinks_pins_unmanaged_and_camera_metadata"
+      ],
+      "evidence": [
+        "docs/VALIDATION_REPORT.md",
+        "docs/SHADOW_VALIDATION.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#review-tests",
+        "docs/DEPLOYMENT_EVIDENCE.md#limits"
+      ],
+      "private_evidence": [
+        "PRIVATE-COLLECTOR",
+        "PRIVATE-SCHEDULER",
+        "PRIVATE-FINALIZER"
+      ],
+      "issues": [
+        7,
+        8
+      ],
+      "gap": "Capture/shadow suites exercise synthetic/replay frames, fake adapters, temporary storage, timing, retention and schema/recovery. Correction-preservation tests are absent because corrections are not implemented. Private review suites reportedly ran 41 collector + 30 scheduler + 111 finalizer tests, but are not public-reproducible; local pytest is not remote CI, hardware validation or a 24-hour soak."
+    },
+    {
+      "id": "BW-QUEUE-001",
+      "spec_hash": "bd24c0bc347e4e0e3065ee7c6b5867e7e76ef6d3b47e63e11866aac1e8281cde",
+      "feature": "Bounded durable SQLite shadow job queue",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/analysis_queue.py",
+        "src/birdwatcher/analysis.py",
+        "src/birdwatcher/cli.py"
+      ],
+      "tests": [
+        "tests/test_analysis_queue.py::test_queue_durable_bounded_idempotent",
+        "tests/test_analysis_queue.py::test_lock_schema_symlinks_and_three_attempts",
+        "tests/test_analysis_queue.py::test_database_errors_are_health_errors_and_recovery_has_result",
+        "tests/test_analysis.py::test_backlog_is_bounded_and_settings_change_reanalyzes"
+      ],
+      "evidence": [
+        "docs/SHADOW_ANALYSIS.md",
+        "docs/SHADOW_VALIDATION.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        8
+      ],
+      "gap": "Source implements queue_limit=100 with allowed range 1..100, pending/running/completed/failed, three interrupted attempts, completed-manifest discovery, deferred summary counters and bounded scans/storage. Deferred jobs are not persisted as per-event analysis_deferred markers; no explicit reanalysis command or opportunistic-scan priority exists. Changed settings/manifest can create a new job but are not that command; queue is not a complete event index."
+    },
+    {
+      "id": "BW-SCOPE-001",
+      "spec_hash": "04dce371c00e7750870145f8eb378c2819eb780c59996185d5e5e3d36de2d95a",
+      "feature": "Capture milestone surface",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/camera.py",
+        "src/birdwatcher/events.py",
+        "src/birdwatcher/runner.py",
+        "src/birdwatcher/storage.py",
+        "src/birdwatcher/cli.py"
+      ],
+      "tests": [
+        "tests/test_integration.py::test_replay_capture_writes_originals_and_health",
+        "tests/test_storage.py::test_quota_retention_symlinks_pins_unmanaged_and_camera_metadata"
+      ],
+      "evidence": [
+        "docs/VALIDATION_REPORT.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        8
+      ],
+      "gap": "Core components are implemented; complete physical recovery and sustained reliability gates remain open."
+    },
+    {
+      "id": "BW-SCOPE-002",
+      "spec_hash": "ccabac5d21832aa04b2649c2d4fef9975458837876b92fcb91aea999a3dae8d3",
+      "feature": "Approved private keeper workflow versus package boundary",
+      "scope": "mixed",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "partial",
+      "code": [
+        "src/birdwatcher/camera.py",
+        "src/birdwatcher/events.py",
+        "src/birdwatcher/runner.py",
+        "src/birdwatcher/storage.py"
+      ],
+      "tests": [
+        "tests/test_integration.py::test_replay_capture_writes_originals_and_health"
+      ],
+      "evidence": [
+        "docs/ARCHITECTURE.md",
+        "docs/DEPLOYMENT_EVIDENCE.md#pilot",
+        "docs/DEPLOYMENT_EVIDENCE.md#delivery"
+      ],
+      "private_evidence": [
+        "PRIVATE-DAYLIGHT",
+        "PRIVATE-COLLECTOR",
+        "PRIVATE-SCHEDULER",
+        "PRIVATE-FINALIZER",
+        "PRIVATE-VISUAL",
+        "PRIVATE-DELIVERY"
+      ],
+      "issues": [
+        8
+      ],
+      "gap": "Private orchestration is not installed by a fresh clone; enabled/prepared states do not prove liveness or delivery."
+    },
+    {
+      "id": "BW-SCOPE-003",
+      "spec_hash": "f1f062a74066f182b37a6ed3726aafebb46a8080b643f9c3180e46c9bd413c12",
+      "feature": "Later portable/species/correction release",
+      "scope": "future",
+      "implementation_status": "planned",
+      "test_status": "unverified",
+      "field_status": "unvalidated",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/TODO.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        7,
+        8
+      ],
+      "gap": "Reusable orchestration, species suggestions/corrections, and full recovery evidence are not a completed release."
+    },
+    {
+      "id": "BW-SCOPE-004",
+      "spec_hash": "7ce06938f9cbfeb787400510374648b3096b2d943779443c5190147de23676cd",
+      "feature": "Excluded features and no public photo publication",
+      "scope": "policy",
+      "implementation_status": "excluded",
+      "test_status": "not_applicable",
+      "field_status": "not_applicable",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/TODO.md"
+      ],
+      "private_evidence": [],
+      "issues": [],
+      "gap": "Negative scope/approval boundary, not an implemented audio/web/multicamera feature or exhaustive security audit."
+    },
+    {
+      "id": "BW-TRACE-001",
+      "spec_hash": "bd434d1cb6fa7eb380ed82efb64c14235aa84a12d0b7992163b417334e1e117b",
+      "feature": "Stable requirement identity and compound-status boundaries",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "verified",
+      "field_status": "not_applicable",
+      "code": [
+        "scripts/check_traceability.py"
+      ],
+      "tests": [
+        "tests/test_traceability.py::test_rejects_spec_drift_and_incomplete_registration",
+        "tests/test_traceability.py::test_whole_spec_hash_rejects_untagged_prose_without_refreshing_manifest"
+      ],
+      "evidence": [],
+      "private_evidence": [],
+      "issues": [],
+      "gap": "Mapping integrity is automated; semantic coverage, human review, permanent ID governance and private evidence truth are not independently proven by the checker."
+    },
+    {
+      "id": "BW-TRACE-002",
+      "spec_hash": "5fe52cdd29c8a25da6db8ea70bedd1db90b203db9ece1a3da219987019acdd9f",
+      "feature": "Generated feature/evidence map and reverse indexes",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "verified",
+      "field_status": "not_applicable",
+      "code": [
+        "scripts/check_traceability.py"
+      ],
+      "tests": [
+        "tests/test_traceability.py::test_report_groups_categories_labels_evidence_and_reverse_indexes",
+        "tests/test_traceability.py::test_private_ids_substantiate_mapping_without_opening_private_records"
+      ],
+      "evidence": [],
+      "private_evidence": [],
+      "issues": [],
+      "gap": "Mapping integrity is automated; semantic coverage, human review, permanent ID governance and private evidence truth are not independently proven by the checker."
+    },
+    {
+      "id": "BW-TRACE-003",
+      "spec_hash": "bcfbff0df56bee75f8938c1aea2c67167a42e1692a13fe9f2c1d5a35340640ac",
+      "feature": "Explicit review, fingerprints and stale-report checks",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "verified",
+      "field_status": "not_applicable",
+      "code": [
+        "scripts/check_traceability.py"
+      ],
+      "tests": [
+        "tests/test_traceability.py::test_check_rejects_stale_report_without_rewriting",
+        "tests/test_traceability.py::test_write_help_explains_hash_review_boundary",
+        "tests/test_traceability.py::test_write_refuses_output_alias_without_modifying_source"
+      ],
+      "evidence": [],
+      "private_evidence": [],
+      "issues": [],
+      "gap": "Mapping integrity is automated; semantic coverage, human review, permanent ID governance and private evidence truth are not independently proven by the checker."
+    }
+  ]
+}

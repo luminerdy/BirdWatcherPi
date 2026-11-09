@@ -1,11 +1,11 @@
 # BirdWatcherPi — Current status and next work
 
-Current tracker, aligned with [SPECIFICATION.md](SPECIFICATION.md) v0.3, [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md), and [ARCHITECTURE.md](ARCHITECTURE.md). The goal is **good keeper photographs, not an exhaustive visitor census**. Missed images, sampled review, and expiry of ordinary capture history are accepted.
+Current tracker, aligned with [SPECIFICATION.md](SPECIFICATION.md) v0.4, [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md), and [ARCHITECTURE.md](ARCHITECTURE.md). The goal is **good keeper photographs, not an exhaustive visitor census**. Missed images, sampled review, and expiry of ordinary capture history are accepted.
 
 ## Delivery status and implementation boundary
 
 - **Public capture baseline:** delivered to main through PR #1; persistent USB capture, diagnostics, validated regions, motion bursts, bounded writing, filesystem recovery/retention, and health.
-- **Optional shadow analyzer:** merged into main through PR #2 with owner approval. **139 repository tests passed locally** during this refresh; this is not a remote-CI or detector-accuracy claim.
+- **Optional shadow analyzer:** merged into main through PR #2 with owner approval. The capture/shadow baseline passed **139 local tests**, with additional dedicated traceability regressions now part of the repository suite; this is not a remote-CI or detector-accuracy claim.
 - **Approved private automation:** recurring daylight capture, evening packet preparation, and change-gated digest jobs are installed and were enabled when inspected. These helpers are outside the checkout; a fresh clone does not install them. Scheduled/enabled is not live-camera or delivery evidence.
 - **USB storage:** private guarded-volume migration and full copy verification were completed while preserving the internal backup. The deployed recorder uses separately tested storage-pressure improvements and saves three photos/second from a requested 15-fps stream. Reconciliation into reviewed public source remains pending.
 - **Private sampled review:** collector, scheduler/monitor, and provenance finalizer are implemented and independently reviewed. **182 private review tests passed locally**: 41 collector, 30 scheduler, 111 finalizer. A real packet was produced with source-preservation checks; this is not exhaustive image review or proof of a delivered digest.
@@ -24,6 +24,10 @@ Current tracker, aligned with [SPECIFICATION.md](SPECIFICATION.md) v0.3, [IMPLEM
 - [x] Private sampled candidate/control packet creation and bounded visual-review/finalizer workflow.
 - [x] Separate verified keeper archive, idempotent photo-observation logging, and prepared receipts.
 - [x] Mermaid system/lifecycle diagrams and deployed-versus-packaged component outline.
+
+## Requirement coverage and verification
+
+See [TRACEABILITY.md](TRACEABILITY.md) and its [machine-readable registry](traceability.json). Stable IDs distinguish implemented, partial, planned, policy, and excluded requirements, with separate automated-test and field-evidence statuses. Private-only evidence is not reproducible public test coverage. An integrity pass means the map is complete and its references resolve, not that every feature or release gate is complete.
 
 ## Approval and packaging gates
 

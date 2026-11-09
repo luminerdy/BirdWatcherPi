@@ -59,7 +59,8 @@ The initial shadow-mode detector is a pinned OpenCV Zoo NanoDet model, exercised
 ## Project documents
 
 - [Architecture and how it works](docs/ARCHITECTURE.md) — Mermaid system/lifecycle diagrams, deployed-vs-packaged scope, privacy boundaries, and operating outline.
-- [Product and engineering specification](docs/SPECIFICATION.md) — scope, behavior, data handling, reliability, and acceptance criteria.
+- [Product and engineering specification](docs/SPECIFICATION.md) — stable requirement IDs, scope, behavior, reliability, and acceptance criteria.
+- [Requirement-to-feature traceability](docs/TRACEABILITY.md) — implementation/test/field status, exact source/test references, evidence, issue gaps, and reverse indexes; [machine-readable registry](docs/traceability.json).
 - [Implementation plan](docs/IMPLEMENTATION_PLAN.md) — ordered work packages, dependencies, tests, and release gates.
 - [Current status and prioritized to-do list](docs/TODO.md) — completed building blocks, merged source, and remaining work tracked in issues #3–#8.
 - [Capture validation report](docs/VALIDATION_REPORT.md) — sanitized live-test evidence and remaining acceptance gaps.
@@ -75,7 +76,7 @@ Implemented building blocks are not the same as a fully validated release:
 
 - [x] **Capture baseline:** Python package/CLI, validated regions, persistent capture, buffered photo bursts, bounded writing, storage safeguards, recovery tests, and health.
 - [x] **Private setup workflow:** region review and reversible feeding-plane focus experiments; an integrated calibration UI remains pending.
-- [x] **Shadow analysis delivered through PR #2:** pinned local model, durable bounded analysis queue, uncertainty/provenance, and 139 passing local tests; now merged into main.
+- [x] **Shadow analysis delivered through PR #2:** pinned local model, durable bounded analysis queue, uncertainty/provenance, and 139 capture/shadow baseline tests; now merged into main. A separate traceability test suite checks the requirement registry.
 - [x] **Private daylight/review automation:** owner-approved schedules, solar/storage guards, sampled candidate/control packets, verified keeper finalization, and change-gated digest preparation; 182 private review tests passed locally.
 - [x] **Private rolling storage:** verified USB migration with preserved backup; selected keeper archive stays outside raw cleanup.
 - [x] **PR #2 merged into main** with owner approval. Merging source does not authorize filtering, change the running recorder, or replace private schedules.
@@ -112,6 +113,8 @@ The included `.gitignore` is a safeguard, not a security boundary: review staged
 ## Development approach
 
 Implement small vertical slices with tests first: observe the expected failing test, implement the behavior, run the regression suite, then refactor. Keep hardware-dependent checks separate from repeatable unit/integration tests.
+
+Check the requirement registry and generated matrix with `python3 scripts/check_traceability.py --check`. After explicitly reviewing registry/spec changes, regenerate the view with `python3 scripts/check_traceability.py --write`; generation does not automatically approve new requirements, refresh their fingerprints, run mapped tests, or pass field gates. See [TRACEABILITY.md](docs/TRACEABILITY.md).
 
 Numerical targets in the specification are proposed acceptance criteria, not established results. Field reports must distinguish passed, failed, and pending checks. Model evaluation must report abstentions and detector misses as well as successful classifications.
 
