@@ -17,9 +17,19 @@ A dedicated private data directory contains date/event directories, `originals/*
 
 Event manifests distinguish complete/incomplete captures and mark identification as not configured. Camera-reconnect and writer-overload interruptions must remain visible. Keep private manifests, logs, configurations, and views out of public issues and commits.
 
-Storage cleanup applies only to recognized, eligible managed events. Active/pinned events are protected. Pinning is a metadata protection mechanism in this early release; a dedicated pin/unpin CLI is not implemented. The configured age/quota/free-space limits can remove unpinned events. Back up important photos outside the managed data root.
+Storage cleanup applies only to recognized, eligible managed events. Active/pinned events are protected. Pinning is a metadata protection mechanism in this early release; a dedicated pin/unpin CLI is not implemented. The configured age/quota/free-space limits can remove unpinned events. The approved private review copies verified selected originals into a separate keeper archive outside this raw-retention root. The deployed raw policy is 14 days / 40 GiB with a 2-GiB reserve; package examples use a 5-GiB quota. Ordinary history may expire; do not wipe keepers, preserved backups, or unknown files. Review is not a recognition-based deletion policy.
 
 A bounded writer separates camera acquisition from disk writes. Missed saves and I/O failures are counted. This is not lossless capture: stalls, connection failures, overload, poor light, or missed motion can lose photos. Inspect health rather than assuming zero losses.
+
+## Private daylight and review automation
+
+Approved private schedules arm near-sunrise capture and periodically check evening readiness. The supervisor validates date/timezone/ephemeris, pause/storage identity, and an absolute conservative sunset cutoff. A missing/wrong volume must not fall back to internal storage. The deployed recorder includes a separately tested storage-pressure fix that still needs reconciliation into reviewed public source.
+
+The core foreground run command does not implement those solar/volume guards. Do not bypass them for unattended operation or install a second competing recorder. A job marked enabled/scheduled and an old health file do not establish liveness; inspect the real process plus fresh increasing frame receipts at the configured live root.
+
+After capture is idle, bounded local NanoDet sampling produces candidate/control sheets. The approved visual-review agent inspects at most six sheets / 120 tiles and up to three originals/crops, selecting at most three keeper photographs for the digest. Source hashes and explicit packet-bound decisions are checked before finalization. The finalizer supports at most five keepers, but the automatic review uses the smaller budget. Sampling is intentional; no box/unknown does not mean an empty feeder.
+
+Capture and local NanoDet do not use cloud inference. Solar lookup, selected-image external AI review, and private Telegram delivery are separate service boundaries. The prepared receipt proves local finalization, not delivery. Unchanged packet fingerprints/receipts suppress duplicates; uncertain delivery must not be blindly replayed.
 
 ## Stop and recovery
 
@@ -33,6 +43,6 @@ Recovery claims temporary files only when their journal-recorded identity, canon
 
 ## Validation and limitations
 
-Repeatable tests use synthetic/replayed scenes and isolated temporary files. They do not establish real-world bird arrival capture yield or species accuracy. Actual feeder calibration, reviewed bird-arrival samples, disconnect testing, model feasibility, and a 24-hour soak remain separate release gates in [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md).
+Repeatable tests use synthetic/replayed scenes and isolated temporary files. They do not establish real-world bird arrival capture yield or species accuracy. Private framing/focus review, real photos, and local detector runtime feasibility have been exercised. Calibrated field accuracy, physical disconnect/power-loss testing, and a 24-hour cumulative daylight-only soak remain distinct evidence gaps in [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md).
 
-No automated install or reboot is part of this milestone. Later deployment must include an approved least-privilege service and tested rollback. To revert an experimental session now, stop it and use the prior known-good virtual environment/configuration; retain data outside the checkout.
+The public package installs no automated service and this documentation performs no reboot. Private approved scheduling exists separately; portable packaging and coordinated reboot/rollback validation remain incomplete. To revert a session, coordinate the existing supervisor/schedule, stop capture, and use the prior known-good environment/configuration without starting a competing owner. Preserve raw data, keeper archives, and backups outside the checkout.

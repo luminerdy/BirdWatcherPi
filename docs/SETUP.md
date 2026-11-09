@@ -1,6 +1,6 @@
 # Setup — early capture milestone
 
-This is an experimental, foreground-only capture application with optional separate-process shadow bird analysis. Species identification, automatic focus calibration, and an installed background service are not provided. The shadow analyzer has its own durable work queue but never filters capture or changes the camera. Keep private settings and photos outside the checkout. See [SHADOW_ANALYSIS.md](SHADOW_ANALYSIS.md) for the optional model and analyzer setup.
+The public package provides experimental foreground capture with optional separate-process shadow bird analysis. It does not install species identification, automatic focus calibration, or a background service. The approved deployed setup has separate private daylight/storage/review helpers and schedules; this guide does not install or alter them. See [ARCHITECTURE.md](ARCHITECTURE.md) for that boundary. The shadow analyzer has its own durable work queue but never filters capture or changes the camera. Keep private settings and photos outside the checkout. See [SHADOW_ANALYSIS.md](SHADOW_ANALYSIS.md) for the optional model and analyzer setup.
 
 ## Environment
 
@@ -53,6 +53,6 @@ Edit that private copy. Each region uses normalized `x`, `y`, `width`, and `heig
 .venv/bin/birdwatcher --config "$HOME/.config/birdwatcher/config.toml" events --limit 5
 ```
 
-Omit `--duration` only for an intentionally started foreground session; press Ctrl-C to stop. No systemd service is installed or enabled. Capture does not upload images or contact a model service. Motion events are not confirmed birds and event counts are not bird counts.
+The foreground CLI does not enforce a solar window. Start supervised runs only within an established daylight window and choose a duration that ends conservatively before sunset; omit `--duration` only with deliberate manual supervision and a before-dark stop. Press Ctrl-C to stop. This guide installs/enables no systemd service or private scheduler. Capture itself does not upload images or contact a model service; approved private visual review/Telegram are separate integrations. Motion events are not confirmed birds and event counts are not bird counts.
 
 See [OPERATIONS.md](OPERATIONS.md) for limitations and recovery. Run from the checkout's virtual environment, not an unrelated interpreter.

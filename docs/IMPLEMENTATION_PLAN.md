@@ -1,257 +1,138 @@
 # BirdWatcherPi — Implementation Plan
 
-Status: Plan v0.2 with an implemented-scope progress summary. Updating this document does not install software, change camera controls, start recording, or merge a pull request.
+Status: Plan v0.3, aligned with [SPECIFICATION.md](SPECIFICATION.md) v0.3 and the owner's keeper-focused goal. This plan distinguishes implemented source, private deployed automation, and unpassed release gates. Documentation updates do not change the recorder, install services, merge code, or publish private data.
 
-Source of truth: [SPECIFICATION.md](SPECIFICATION.md), draft v0.2. Where this plan proposes an implementation detail not fixed in that specification, it is provisional and must be validated. The detailed phase checklists below retain the full target scope; partial implementation is not a passed phase gate. Current priorities and completed building blocks are tracked in [TODO.md](TODO.md).
+## 1. Product priority and implementation boundary
 
-## Current progress and next actions
+Collect good bird photographs, not every visit. Missed images and sampled review are acceptable. Preserve selected keepers separately and let approved retention reclaim ordinary history. Species identification and exhaustive coverage are not prerequisites for a useful photo collection.
 
-- Capture, bounded writing, event storage/recovery, diagnostics, configuration validation, and supervised live operation are implemented in the baseline delivered through PR #1.
-- Optional separate-process shadow analysis is implemented and independently reviewed on the PR #2 branch, with 139 passing local tests. PR #2 is not merged by this documentation update; there is no automatic filtering or permanent service.
-- Private region/focus review, finite capture sessions, and prototype sighting/coverage logs have been exercised. An integrated calibration UI, formal configuration-schema versioning, general visit-report CLI, species classifier, and full release validation remain pending.
-- Next: #3 daylight comparison dataset, #4 bird-confirmation validation, #5 local visit-time report, #6 representative photos/crops, #7 species feasibility, and #8 approved daylight automation/recovery.
-- **Operational constraint: daylight only.** Resolve the correct local date/timezone and daylight window, stop conservatively before sunset using an independent absolute deadline, and refuse launch after the cutoff. Reliability testing must accumulate daylight operating time across sessions with the camera off overnight; a sunset timer is not a darkness sensor.
+The public branch contains the capture CLI and optional shadow analyzer. The approved deployment adds private daylight/storage supervisors, sampled review, provenance finalization, and Hermes/Telegram orchestration outside this checkout. A fresh clone does not install those helpers or schedules. The deployed recorder also uses a separately tested storage-pressure fix; source/runtime reconciliation remains a packaging task rather than a completed merge.
 
-## 1. Delivery strategy
+Architecture and editable Mermaid sources: [ARCHITECTURE.md](ARCHITECTURE.md).
 
-Deliver a useful motion-triggered camera first, then add local bird/species identification without putting model inference on the capture path. Finish with recovery testing and an explicitly approved unattended installation.
+## 2. Current evidence and operating decisions
 
-Use small, reviewable vertical slices. For production behavior: write one focused failing test, run it and confirm the expected failure, implement the minimum behavior, rerun it and the regression suite, then refactor. Do not write all tests and all implementation in separate bulk phases. Use real temporary files and SQLite in storage tests; fake only the physical camera, clock, model boundary, and externally induced failures where necessary.
+- [x] Persistent USB capture, validated regions, motion/prebuffered bursts, bounded writing, filesystem manifests/recovery/retention, diagnostics, and health are implemented.
+- [x] Private feeder framing/region approval and reversible focus comparison were exercised; an integrated calibration command is not implemented.
+- [x] Pinned local NanoDet and a separate bounded durable shadow-analysis queue are implemented on the PR #2 branch. Latest documentation check: **139 repository tests passed locally**; this is not remote CI or a field-accuracy result.
+- [x] Approved private recurring daylight capture and evening review/digest jobs are installed and were enabled when inspected. A job's scheduled state does not prove a live recorder, successful next launch, or message delivery.
+- [x] Guarded USB migration was verified with matching file sets, sizes, and SHA-256 hashes, while preserving the internal backup. Wrong/absent-volume protection and a lower saved-photo rate were exercised; a short replay is not a full live-camera soak.
+- [x] Private collector, scheduler/monitor, and finalizer are implemented and independently reviewed. Latest documentation check: **182 private review tests passed locally** (41 collector, 30 scheduler, 111 finalizer).
+- [x] A real sampled review packet was produced with source-preservation checks. This demonstrates the packet path, not exhaustive review or a delivered digest.
+- [ ] PR #2 approval/merge, reusable packaged orchestration, species validation, and full hardware reliability evidence remain separate work.
 
-Work on a feature branch once implementation starts. Keep source/config examples/tests/docs in Git; keep photos, local calibration/config, model weights, data/index, environment files, credentials, and virtual environments outside tracked content. Publishing to GitHub is a separate explicit step with remote read-back verification.
+The deployment requests 15 camera frames/second and saves at three photos/second. Raw policy is 14 days / 40 GiB with a 2-GiB free-space reserve; the package example remains 14 days / 5 GiB. Current automatic review uses at most six sheets / 120 shortlisted frames, inspects up to three full-resolution originals/crops, and selects at most three keeper photos. The finalizer itself has a five-keeper ceiling. These are bounded operating budgets, not guarantees that every frame is inspected.
 
-### Critical path
+## 3. Delivery sequence
 
-P0 foundation → P1 camera/calibration → P2 motion and capture → P3 durable storage/status → P4 field tuning → P7 integrated verification → P8 unattended deployment.
+### P0 — Reproducible foundation and contracts
 
-P5 model feasibility can run alongside P2/P3 after its own runtime checks; P6 analysis integration depends on both P3 and a successful P5 decision. The first complete release additionally requires P6 and the identification portion of P7. A motion-only MVP is a useful interim deliverable, not completion of the full specification.
+Implemented: package/CLI, isolated tested dependencies, configuration and rectangle validation, privacy-aware ignore rules, fake-camera/clock/replay tests, and local quality checks.
 
-No calendar estimate is promised before camera focus and AI runtime feasibility are tested. Field evaluation depends on actual bird arrivals and the owner's help with perch distances, calibration review, and image labels.
+Remaining:
+- [ ] Formal configuration schema versioning and supported migrations.
+- [ ] Recheck fresh-environment installation and supported runtime combinations for each release.
+- [ ] Keep frame identity, UTC receipt time, errors, and model provenance explicit; do not claim sensor-exposure timestamps or universal platform support.
 
-## 2. P0 — Repository, contracts, and reproducible foundation
+### P1 — Camera, composition, and calibration
 
-Dependencies: specification available. No physical camera required for most work.
+Implemented: one persistent camera owner, negotiated capture diagnostics, snapshots, warm-up/reconnect behavior, and a privately approved priority-feeder setup.
 
-### Tasks
+Remaining:
+- [ ] A reusable focus/ROI calibration command with safe restoration on cancellation.
+- [ ] Additional optical/glare/exposure improvements only when actual keeper quality warrants them.
 
-- [ ] Recheck repository status, available Python interpreters, architecture, OS, free space, camera ownership, and existing tooling. Do not overwrite unrelated changes.
-- [ ] Establish a feature branch and safe .gitignore before producing samples or environment files. Inspect the existing repository license; do not replace it.
-- [ ] Create pyproject.toml, src/birdwatcher, and unit/integration/fixture directories. Choose a minimal isolated development environment after verifying dependency compatibility. No system-Python replacement.
-- [ ] Add the CLI entry point and version/help behavior as the first tested slice.
-- [ ] Implement versioned TOML parsing and validation: positive timings, valid resolution/rate, storage constraints, focus-control modes, inference settings, and two calibrated regions. Example regions must be clearly disabled/unconfigured until calibration.
-- [ ] Standardize normalized rectangles as x/y/width/height and reject zero area or out-of-bounds coordinates. Document conversion and clipping rules for image crops.
-- [ ] Define minimal interfaces for camera frames, UTC/monotonic clock, trigger signals, event IDs, persistent storage, detector, and classifier. Grow interfaces from exercised slices rather than creating unused abstractions.
-- [ ] Define frame identity, capture timestamp, negotiated settings, event JSON schema, analysis states, and authoritative manual-correction representation.
-- [ ] Add local quality checks for tests, linting/formatting, config examples, and accidental tracked secrets/data. Freeze a compatible environment once exercised.
+Only approved regions need be enabled. Two possible feeder regions do not require two sharp focal planes or a second camera. Keep calibration images and deployment geometry private.
 
-### Exit evidence
+### P2 — Motion-triggered photographs
 
-- [ ] A fresh virtual environment installs the project and runs the CLI help and test suite.
-- [ ] Tests reject invalid ROIs, unsafe data locations, invalid limits, and unsupported config versions with actionable messages.
-- [ ] A documented config example parses but cannot silently start unattended capture with guessed feeder regions.
-- [ ] Development setup, actual interpreter/dependency versions, and repeatable check commands are recorded.
+Implemented: approved-region MOG2 change detection, bounded JPEG prebuffer, burst/event lifecycle, producer/writer separation, and visible overload/missed-save counters.
 
-Deliverables: package skeleton, configuration layer, CLI baseline, test harness, ignore rules, initial SETUP.md.
+Remaining:
+- [ ] Automatic quality ranking, if it improves keeper selection over bounded visual review.
+- [ ] Optional stationary-bird presence scans only after capacity and behavior are validated.
 
-## 3. P1 — Persistent camera access and focus calibration
+Motion is not bird confirmation. Never place neural inference on the camera's critical path or use model scores to discard photos without a separately approved policy.
 
-Dependencies: P0. Requires live camera access; coordinate with any other camera owner.
+### P3 — Storage, retention, and provenance
 
-### Tasks
+Implemented: readable filesystem events/manifests, crash-recovery safeguards, managed-retention limits, health snapshots, and a separate durable SQLite shadow queue. Do not imply a complete species/event database or migration framework exists.
 
-- [ ] Implement a fake-camera snapshot test and the real Linux capture adapter. Compare available capture mechanisms briefly; select the simplest that demonstrates persistent streaming, actual format reporting, and reliable release.
-- [ ] Discover the stable camera device path and supported formats/controls. Default requests: 1920 × 1080 MJPEG at 15 fps, subject to actual negotiation.
-- [ ] Implement warm-up, one persistent camera owner, frame timestamps/IDs, stale-frame detection, and explicit degraded-format reporting. Do not duplicate frames to meet a rate target.
-- [ ] Implement doctor and snapshot commands. A camera lock must prevent the service and calibration/snapshot tools from competing.
-- [ ] Add calibration capture with automatic focus and a supported manual sweep. Preserve original control values; restore them on error/cancellation and apply a chosen persistent setting only after review.
-- [ ] Generate a private annotated ROI preview plus unmodified test photos. Confirm near/far distances with the owner, including whether the near distance really is 4–6 inches.
-- [ ] Have the owner compare the expected bird/perch locations at both distances, including glare and exposure, then choose focus mode and any priority region.
+Private deployment adds expected-volume checks, preserved migration backup, separately tested storage-pressure improvements, and a keeper archive outside raw cleanup.
 
-### Exit evidence and stop condition
+Remaining:
+- [ ] Reconcile the recorder's tested storage-pressure fix into reviewed public source without silently replacing deployed environments.
+- [ ] Reusable packaging/documentation for volume guards, backup/restore, and rollback.
+- [ ] More physical media/power-loss and sustained live-camera evidence; synthetic/replay/process-kill tests are not equivalent.
 
-- [ ] Real sample JPEGs have verified dimensions and capture settings; camera ownership and release are exercised.
-- [ ] Samples from both intended perch positions receive approval, or a documented single-priority/degraded compromise is accepted.
-- [ ] Calibration settings/regions are valid and stored outside Git.
-- [ ] If focus is unacceptable, stop physical deployment and adjust placement/perch distance. Continue isolated software tests if useful, but do not call unattended capture ready.
+Retain original bytes during review. Age/quota pruning of eligible raw events is approved; deleting keepers, backups, unknown files, or unrelated photos is not.
 
-Deliverables: camera.py, calibration.py, doctor/snapshot/calibrate commands, focus/ROI decision record, private samples.
+### P4 — Keeper quality and field evidence — issues #3, #4, #6
 
-## 4. P2 — End-to-end motion-triggered photo events
+- [x] Supervised field sessions, real bird photographs, and sampled local-analysis/visual review have been exercised.
+- [ ] Improve sharpness, exposure, framing, pose variety, and representative selection using real keeper results.
+- [ ] Evaluate detector positives and no-candidate controls against feeder hardware, sway, glare, small birds, and difficult lighting.
+- [ ] Separate tuning samples from held-out evaluation and keep uncertain labels out of ground truth.
+- [ ] Measure storage growth, writer pressure, and missed saves; optimize for useful photos rather than an exhaustive visitor log.
 
-Dependencies: P0; a real field demonstration also requires P1 approval.
+The former 18-of-20-arrivals and nuisance-rate studies are optional diagnostic benchmarks, not keeper-workflow release blockers or evidence of a complete census. Do not infer usual visit patterns from sparse photographs.
 
-Build each slice through frame input → trigger/event behavior → saved photo or observable event output. Do not stop with a detector that only prints motion scores.
+### P5 — Local model feasibility and species work — issue #7
 
-### Tasks
+- [x] A pinned, licensed NanoDet model runs locally with measured latency/memory and known preprocessing/labels.
+- [ ] Choose a species classifier only after crop quality, license, labels, runtime compatibility, and useful local performance are established.
+- [ ] Preserve unknown/failed states, separate detector/classifier scores, and immutable human corrections.
+- [ ] Before any validated species-accuracy claim, use independent event-grouped labels and report sample sizes, accepted-label precision, abstention, and misses.
 
-- [ ] Build repeatable frame-sequence fixtures for a feeder arrival, outside-region motion, quiet scene, lighting transition, and two simultaneous active regions. Synthetic fixtures test logic, not real bird-detection accuracy.
-- [ ] Add downscaling and per-region MOG2 analysis, shadow handling, blur/cleanup, foreground thresholds, and three-frame persistence.
-- [ ] Implement warm-up/reset behavior and configurable broad-light-change suppression, with counters for suppressed triggers.
-- [ ] Implement the event state machine with an injected monotonic clock: WARMUP, IDLE, ACTIVE, COOLDOWN, and camera-error/reconnect handling.
-- [ ] Implement a one-second, five-sample/second JPEG prebuffer, bounded by both frame count and bytes. Never retain an unbounded full-resolution decoded-frame history.
-- [ ] Persist pre-trigger frames and up to ten unique post-trigger frames across two seconds at the proposed rate. Preserve original resolution and actual timestamps.
-- [ ] Implement shared events across two regions, five-second quiet timeout, 30-second event segmentation, five-second minimum repeat-burst interval, three-second cooldown, and a configurable per-event burst cap.
-- [ ] Mark the best photo using documented sharpness/exposure heuristics without changing originals. Treat image-quality scores as heuristics, not proof of a correct species result.
-- [ ] Bound capture-to-writer work by count and byte budget. When overloaded, keep acquisition responsive, record missed saves, and mark affected events incomplete; never silently invent saved frames.
+No automatic cloud substitution, large runtime installation, or new hardware purchase follows from this plan. The already approved selected-image AI review is a separate external boundary, not a local species model.
 
-### Exit evidence
+### P6 — Bounded evening review, keepers, and digest
 
-- [ ] A replayed arrival creates an event with available preceding imagery, unique frame IDs, region IDs, and usable image files.
-- [ ] Tests cover exact timing boundaries, overlapping regions, burst caps, cooldown, segmentation, warm-up, and reset after discontinuity.
-- [ ] A controlled live trigger produces a viewable full-resolution burst; no AI model is required.
+Private implementation exists and its 182 tests pass locally. Preserve the existing contract:
 
-Deliverables: motion.py, events.py, capture.py, runnable foreground capture path and regression fixtures.
+1. Wait until cutoff and recorder idle; require the existing capture-data lock and one bounded worker.
+2. Sample retained frames, run local NanoDet, and include systematic no-candidate controls.
+3. Publish hashed packet, contact sheets, source mapping, errors, and scope atomically.
+4. Wake the visual-review agent only for a new stable completed packet; inspect all listed sheets and a bounded number of originals.
+5. Bind explicit reviewed/confirmed/best indices to the packet hash; verify source bytes before copying keepers and appending complete idempotent observations.
+6. Read the exact prepared receipt, then return one dated private digest with verified attachment paths and honest review/error scope.
 
-## 5. P3 — Durable events, retention, and health
+Remaining:
+- [ ] Package reusable helpers/integration instructions without publishing private settings or credentials.
+- [ ] Verify delivery separately when needed: prepared is not delivered, and uncertain delivery must not cause blind duplicate sends.
+- [ ] Improve selection quality without changing review into unbounded processing or an exhaustive census.
 
-Dependencies: P2's event contract; storage primitives may be developed alongside P2.
+### P7 — Reliability and release verification — issue #8
 
-### Tasks
+- [x] Repeatable capture/analysis and private review regression suites pass as recorded above.
+- [ ] Accumulate 24 cumulative daylight-only soak hours with CPU/memory/temperature, queue/writer/storage health, and event-integrity evidence.
+- [ ] Complete physical camera disconnect/reconnect, low-disk/volume-removal, clock/timezone, restart, and power-loss validation within approved scope.
+- [ ] Keep failures visible and mark gates passed/failed/pending using actual evidence, not implemented code alone.
+- [ ] Keep repository tests, private helper tests, remote CI, packet preparation, and delivery evidence distinct.
 
-- [ ] Implement date/event directory allocation, collision-resistant IDs, atomic image/JSON writes, UTC filenames, and privately configured local folder/display dates. Do not publish deployment timestamps or timezone settings.
-- [ ] Add a versioned SQLite index and job schema; migrations must preserve data and create index backups before modifying an existing schema.
-- [ ] Define the filesystem/SQLite handoff: create a committed event manifest first, then index/enqueue idempotently. Startup reconciles committed manifests missing from the index and marks interrupted writes incomplete.
-- [ ] Add a bounded durable analysis queue with pending/running/completed/failed states, retry limits, stale-job recovery, a 100-event backlog cap, and analysis_deferred handling. Queue execution can use a fake model until P6.
-- [ ] Coordinate retention with active captures and worker leases: do not delete an event while it is being written/read. Deleting a retained-out event must remove/cancel its jobs and index references safely. Pinned events remain protected.
-- [ ] Implement 14-day/5-GiB proposed retention and 2-GiB free-space reserve, oldest eligible first, with symlink/path-escape protection. Include temporary/crop/index growth in monitoring.
-- [ ] Implement storage_full behavior when eligible pruning cannot restore reserve. Protect existing photos and report suspended writes clearly.
-- [ ] Add status and event-list commands, bounded logging, last-frame/event health, and queue/dropped-frame/storage/error counters.
-- [ ] Handle SIGTERM, camera loss, capped reconnect backoff, and interrupted-job recovery.
+Species-release validation remains separate from keeper-workflow usefulness. Never record overnight to satisfy a soak target.
 
-### Exit evidence — capture MVP
+### P8 — Approved automation and portable handoff — issue #8
 
-- [ ] Real motion events are saved, indexed, listable, and viewable without the running application.
-- [ ] Restart during write, full-disk simulation, pinned events, symlink escapes, interrupted jobs, and writer overload tests pass using isolated data, never the owner's photo collection.
-- [ ] Killing the analysis worker does not stop capture; a disabled model does not prevent capture startup.
-- [ ] SETUP.md and OPERATIONS.md explain foreground operation, safe test capture, paths, cleanup, and recovery.
+- [x] Private daily arming/daylight supervision and change-gated evening review jobs are installed with owner approval.
+- [x] The daylight supervisor validates date/timezone/solar window, pause/storage prerequisites, and a conservative absolute stop deadline.
+- [ ] Make deployment reusable from reviewed source; do not imply cloning this repository installs private helpers or credentials.
+- [ ] Validate reboot/startup and rollback with coordination. A running schedule is not proof of reboot recovery.
+- [ ] If adding a systemd alternative, prevent competing camera owners and do not silently install it beside the current scheduler.
 
-Deliverables: durable motion-only MVP with local storage, health, and recovery. This milestone is not a species-identification release.
+The foreground run CLI does not enforce a solar window itself. Core local capture/model inference does not require cloud inference; valid ephemeris is required for automatic daylight starts, while selected-image AI review and Telegram require their external services.
 
-## 6. P4 — Real feeder tuning and labeled evidence
+## 4. Next work and acceptance traceability
 
-Dependencies: P1 approval and P3 MVP. No unattended service enabled automatically.
+Priority is keeper quality and safe repeatable operation. Issues #4/#6 concern confirmation and representative photos; #8 still covers packaging/recovery/soak gaps despite privately deployed scheduling. #3 can supply comparison examples without promising complete coverage. #5 is an optional observation/coverage report, not an exhaustive visitor log; the private finalizer already provides provenance-backed photo observations. #7 remains future species work.
 
-### Tasks
+- Specification §§1–4: product priority, composition, camera and motion → P1/P2/P4.
+- §5: local-model uncertainty and later species validation → P5/P6.
+- §6: rolling raw history, keeper separation, hashes, receipts → P3/P6.
+- §§7–8: available versus future CLI, privacy, deployment boundaries → P0/P7/P8.
+- §9A: calibration/capture evidence → P1/P2/P4; optional coverage studies are not census requirements.
+- §9B: later model/accuracy claims → P5/P7.
+- §9C: bounded review, verified keepers and honest delivery → P6.
+- §9D: recovery, soak, restart and secret/data protection → P3/P7/P8.
 
-- [ ] Run a supervised daylight session; inspect missed/false events, glare, exposure, blur, framing, and idle behavior.
-- [ ] Collect a manually reviewed two-hour sample and at least 20 visibly usable arrivals when birds provide them. Preserve privacy; keep raw footage and photos outside Git.
-- [ ] Tune one setting at a time and record configuration versions and conditions. Separate tuning samples from later evaluation samples.
-- [ ] Measure capture yield, nuisance-only events/hour, daily storage growth, dropped frames, and CPU/memory/temperature under the actual capture configuration.
-- [ ] Build a private labeling manifest with event-level grouping and reference species labels only when reasonably established; uncertain reference labels must not become ground truth.
-
-### Exit evidence
-
-- [ ] At least 18 of 20 reviewed usable arrivals captured, and proposed nuisance target assessed against no more than five nuisance-only events/hour during the two-hour sample.
-- [ ] Publish measured counts and conditions in a sanitized report, or document failures and tune/retest. Lack of bird visits leaves this gate pending, not passed.
-- [ ] Review retention defaults against measured usage and user preferences.
-
-Deliverables: working local capture configuration, private labeled samples, sanitized CAPTURE_VALIDATION.md.
-
-## 7. P5 — On-device model feasibility and selection
-
-Dependencies: P0 environment discovery; private calibration images or suitable licensed test images. Can overlap P2/P3 without owning the camera.
-
-This is an evidence-gathering gate, not permission to declare a model selected from documentation alone. Obtain approval before installing substantial runtimes or downloading large weights. Research official model/runtime documentation at execution time.
-
-### Feasibility questions
-
-- [ ] Given the actual Pi environment, can a licensed lightweight detector locate a bird from a saved feeder photo with measured memory/latency?
-- [ ] Given a usable bird crop, can a bird-specific classifier return a documented label set and ranked scores on this device?
-- [ ] Given capture running concurrently, does inference stay within the provisional memory/latency budget without materially degrading capture?
-
-### Tasks
-
-- [ ] Compare a short list of detector/classifier candidates; include Birder only as a candidate. Inspect code and weight licenses separately, label coverage, preprocessing, ARM64 support, and Python/runtime availability.
-- [ ] Use an isolated environment; if the current interpreter is unsupported, test a separate compatible environment rather than modifying system Python. Document whether the worker needs a separate runtime/process protocol.
-- [ ] Record exact artifacts/checksums, provenance, model sizes, versions, preprocessing, labels, warm/cold inference times, and peak resident memory.
-- [ ] Run multiple representative images plus no-bird, tiny/partial bird, blur, and multiple-bird cases. Repeat with capture active when available.
-- [ ] Record VALIDATED, PARTIAL, or INVALIDATED for each feasibility question, with real evidence and a decision. Do not promote disposable experiment code into production without tested reimplementation.
-
-### Exit evidence and fallback
-
-- [ ] Selected detector/classifier artifacts run locally with documented licenses and known labels, or AI feasibility is explicitly unresolved.
-- [ ] Measure the candidate median ten-second/event analysis target and combined application 2-GiB resident-memory target. Missing a target requires a documented constrained mode or redesign, not a fabricated pass.
-- [ ] If AI is not feasible, retain the useful capture MVP and stop claiming completion of species identification. No automatic cloud substitution or new hardware purchase.
-
-Deliverables: MODEL_DECISION.md, benchmark records, artifact manifest; no weights committed to Git.
-
-## 8. P6 — Integrate asynchronous bird/species analysis
-
-Dependencies: P3 durable queue and successful P5 runtime/model decision.
-
-### Tasks
-
-- [ ] Implement detector/classifier adapters from failing behavioral tests, with a single worker process and explicit startup/readiness failures.
-- [ ] Read candidate frames, detect each bird, save contextual crops, and keep source-frame/crop-coordinate links. Preserve multiple birds as separate records.
-- [ ] Store separate detector/classifier scores, top-three species candidates, common/scientific names where supplied, label/model versions, quality signals, and timestamps.
-- [ ] Implement cross-frame comparison using spatial/temporal consistency; do not combine votes from obviously different birds. When association is ambiguous, keep per-detection suggestions and abstain from a combined identity.
-- [ ] Implement configurable score/margin/quality/agreement gates and distinct unknown_bird, no_bird_detected, and analysis_failed outcomes. Represent single-frame evidence explicitly.
-- [ ] Add correct and reanalyze CLI operations with immutable original model outputs or versioned revisions; never overwrite manual corrections.
-- [ ] Add opportunistic two-second presence scans using the same bounded worker scheduling, not a second camera stream. Share a bounded latest-frame snapshot and prioritize saved-event work; log skipped scans.
-- [ ] Test queue cap, retries, worker crash/restart, deferred events, failed/corrupt models, duplicate job execution, and concurrent manual edits/analysis.
-- [ ] Leave location-based reranking disabled unless a documented source and reproducible method are selected. Any privately configured region is a hint, not a species whitelist; never publish deployment location settings.
-
-### Exit evidence
-
-- [ ] A real captured event receives reviewable local detections, crops, species suggestions or explicit abstention, and complete provenance.
-- [ ] Inference failure and backlog saturation leave capture functioning with visible health degradation.
-- [ ] Reanalysis preserves the original photos and manual corrections; multiple birds do not collapse into one forced species label.
-
-Deliverables: integrated local analysis pipeline, species/event inspection and correction commands, offline startup verification.
-
-## 9. P7 — Release verification and failure testing
-
-Dependencies: P4 for field evidence; P6 for a complete release. Capture-only verification may proceed earlier.
-
-### Tasks
-
-- [ ] Run unit/integration suites, lint/config checks, fresh-environment installation, and tracked-secret/data scans. Exercise documented commands rather than assuming help text proves they work.
-- [ ] Partition private labels by event/visit grouping into calibration and untouched evaluation sets; do not split neighboring frames from one visit across them.
-- [ ] Evaluate at least 100 labeled local bird crops where available. Require at least 20 examples for each species with a species-specific performance claim; otherwise explicitly withhold that claim.
-- [ ] Report top-1 accuracy, accepted-label precision, abstention, detector misses, per-species counts/results, and uncertainty. The provisional accepted-label precision gate is 90%; insufficient evidence or failure keeps species suggestions experimental.
-- [ ] Preserve out-of-set/unknown samples and test uncertainty behavior; reference labels must be credible and independent of the model being evaluated.
-- [ ] Exercise camera unplug/replug, restart during write, disk reserve exhaustion, pin protection, writer/queue saturation, inference crash, clock jumps, and timezone transitions. Recovery target: within 60 seconds after camera availability returns.
-- [ ] Accumulate at least 24 hours of recorded daylight-only soak testing across multiple sessions with capture and selected analysis active; stop the camera outside approved daylight windows. Monitor memory, queue depth, dropped frames, CPU, temperature, logs, disk, and event integrity.
-- [ ] Summarize every specification acceptance item as passed/failed/pending with evidence paths. No release gate is passed solely because its code exists.
-
-### Exit evidence
-
-- [ ] VALIDATION_REPORT.md contains actual commands, environment, results, failures, and evidence locations.
-- [ ] No unhandled crash or unbounded growth during the soak; any performance or accuracy deviations have an explicit scope decision.
-- [ ] The capture-only and complete-release readiness decisions are separate and truthful.
-
-## 10. P8 — Approved unattended deployment and handoff
-
-Dependencies: appropriate P7 readiness gate, owner approval for service installation and reboot testing.
-
-### Tasks
-
-- [ ] Review the final config, privacy behavior, storage policy, selected environment/models, and known limitations with the owner.
-- [ ] Install a least-privilege systemd unit using absolute executable/config/data paths, proper camera access, bounded restart behavior, and clean shutdown. Do not run the application as root.
-- [ ] Stop foreground capture before service startup; verify a single camera owner and no unexpected network listener.
-- [ ] Verify enabled service state, health, camera release after stop, restart recovery, and reboot startup through real read-backs. A reboot requires coordination, not an unannounced command.
-- [ ] Document start/stop/status, viewing photos, corrections/reanalysis, retention pinning, backup/restore, updating, and rollback to the previous known-good environment/config.
-- [ ] If publication is approved, push only reviewed source/docs/tests/config examples, then read back the exact remote branch/commit and any CI results before claiming publication or CI success.
-
-Deliverables: operating service, SETUP.md, OPERATIONS.md, release notes, validated rollback procedure. Notifications/dashboard remain out of scope.
-
-## 11. Acceptance traceability
-
-- Specification §2 assumptions and §4 focus gate → P1, with explicit owner review.
-- §4 camera format/ownership/recovery → P1, P3, P7, P8.
-- §4 motion, timing, prebuffer, bursts, segmentation → P2, P4, P7.
-- §5 model/license/runtime selection → P5; detections/uncertainty/multiple birds/corrections → P6, P7.
-- §5 durable queue/overload and §6 atomic storage/retention → P3, P6, P7.
-- §6 timestamps/schema/provenance → P0, P3, P6, P7.
-- §7 CLI/config → P0 through P3, P6; exercised in P7.
-- §8 offline operation/security/health/shutdown → P0, P3, P6 through P8.
-- §9A capture acceptance → P1, P2, P4, P7.
-- §9B AI evaluation and uncertainty acceptance → P5 through P7.
-- §9C soak/recovery/storage/reboot/credential checks → P3, P7, P8.
-- §10 implementation structure/testing and §11 sequence → this entire plan; create modules only as exercised slices need them.
-
-## 12. First implementation session
-
-Start with P0's CLI/config test harness and P1's safe doctor/snapshot path. The first user-visible output should be a verified test photograph plus a clear focus/ROI calibration procedure, not an untested AI installation. Request the perch-distance confirmation when physical calibration becomes necessary; it does not block isolated configuration or event tests.
-
-Plan completion means the document and its traceability are checked. Implementation completion requires actual evidence for every applicable release gate above.
+Use tested vertical slices: observe a focused failing regression, implement the minimum change, rerun affected/regression suites, then refactor. Keep hardware-independent fixtures separate from live-camera evidence. A documentation refresh is not a passed implementation gate.

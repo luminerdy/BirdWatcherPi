@@ -4,7 +4,7 @@
 
 This document describes both the **repository's capture/optional-analysis components** and the **approved deployed workflow** around them. The goal is a collection of good bird photographs, not an exhaustive visitor census.
 
-The core CLI is in this repository. Daylight supervision, the evening packet collector, explicit review finalization, and Telegram automation are currently **private operational helpers outside the checkout**. Their presence in this diagram does not mean a fresh clone installs or enables them. Capture and review use separate, non-editable runtime environments; reviewing pictures does not replace the running recorder.
+The core CLI is in this repository. Daylight supervision, the evening packet collector, explicit review finalization, and Telegram automation are currently **private operational helpers outside the checkout**. Their presence in this diagram does not mean a fresh clone installs or enables them. The deployed recorder also contains a separately tested storage-pressure fix that still needs reconciliation into reviewed public source. Capture and review use separate, non-editable runtime environments; reviewing pictures does not replace the running recorder.
 
 No deployment location, device identifier, personal path, credential, real photograph, or private configuration is included here.
 
@@ -139,7 +139,7 @@ Motion is only a trigger: feeder sway, lighting and other activity can produce e
 
 Raw captures and manifests live on the configured private photo volume. Storage code may reclaim only eligible managed history under configured age, quota and free-space rules. Protected/active events and unrecognized data are not casually deleted.
 
-Selected keeper originals are copied into a separate private archive. Routine raw-history cleanup does not own that archive, review logs or unrelated backups. The review itself never suppresses a capture or deletes an original.
+Selected keeper originals are copied into a separate private archive. Routine raw-history cleanup does not own that archive, review logs or unrelated backups. The review itself never suppresses a capture or deletes an original. The current deployed raw policy is 14 days / 40 GiB with a 2-GiB free-space reserve, distinct from the package example's 5-GiB quota. The approved ordinary-history expiry does not authorize deleting keeper archives or preserved backups.
 
 ### D. Prepare a bounded local review packet
 
@@ -153,7 +153,7 @@ This is **sampled analysis**, not a guarantee that every image was inspected. A 
 
 A stable fingerprint monitor wakes the Hermes review agent only for a new completed packet. Repeated unchanged checks do not continually invoke the language model.
 
-The agent uses a configured vision-capable AI provider to inspect selected contact sheets and a small number of originals or original-resolution crops. It chooses useful, sharp, well-exposed bird photographs with variety, while keeping uncertain cases separate. A specialized species classifier is not part of the current core; any visual species suggestion remains distinct from a validated species-model result.
+The agent uses a configured vision-capable AI provider to inspect selected contact sheets and a small number of originals or original-resolution crops. It chooses useful, sharp, well-exposed bird photographs with variety, while keeping uncertain cases separate. Current automatic budgets are at most six contact sheets / 120 shortlisted frames, up to three full-resolution originals/crops, and at most three keeper attachments; the finalizer itself permits at most five. These are sampled-review limits, not exhaustive coverage or implemented automatic quality ranking. A specialized species classifier is not part of the current core; any visual species suggestion remains distinct from a validated species-model result.
 
 **Local-first does not mean nothing leaves the Pi.** Capture, raw storage and NanoDet inference run locally. Selected review images/context are supplied to the configured AI provider, and selected best photos are delivered privately through Telegram. The workflow does not send every camera frame to a cloud model or publish photos to a website.
 

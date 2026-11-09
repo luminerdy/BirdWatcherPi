@@ -1,66 +1,70 @@
 # BirdWatcherPi — Current status and next work
 
-This is the current project tracker. The detailed [implementation plan](IMPLEMENTATION_PLAN.md) describes the full target; an implemented component does not mean every release gate has passed.
+Current tracker, aligned with [SPECIFICATION.md](SPECIFICATION.md) v0.3, [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md), and [ARCHITECTURE.md](ARCHITECTURE.md). The goal is **good keeper photographs, not an exhaustive visitor census**. Missed images, sampled review, and expiry of ordinary capture history are accepted.
 
-## Delivery status
+## Delivery status and implementation boundary
 
-- **Capture baseline:** delivered to `main` through PR #1. Persistent USB capture, diagnostics/snapshots, validated regions, buffered motion bursts, bounded writing, event manifests, retention safeguards, recovery, and health reporting are implemented.
-- **Optional shadow analyzer:** submitted in **draft PR #2**, not merged as part of this documentation update. The reviewed source has **139 passing local tests** and independent review approval. It records provisional bird candidates using a pinned, verified local model and a bounded durable queue; it never suppresses or deletes photos.
-- **Private field setup:** feeder geometry has been reviewed, a reversible middle-plane focus comparison was exercised, and finite capture sessions with clean automatic stops were verified. Capture configuration, focus samples, observations, and coverage logs remain private.
-- **Recognition remains experimental:** real birds and feeder/seed false candidates have both been observed. Model scores are not calibrated probabilities. Unknown results are not empty-feeder assertions, and motion events/boxes are not individual-bird counts.
-- **No permanent deployment:** no automatic boot service or daily schedule is installed. One-off session approval is not permanent-operation approval.
+- **Public capture baseline:** delivered to main through PR #1; persistent USB capture, diagnostics, validated regions, motion bursts, bounded writing, filesystem recovery/retention, and health.
+- **Optional shadow analyzer:** on draft PR #2, not merged by this documentation update. **139 repository tests passed locally** during this refresh; this is not a remote-CI or detector-accuracy claim.
+- **Approved private automation:** recurring daylight capture, evening packet preparation, and change-gated digest jobs are installed and were enabled when inspected. These helpers are outside the checkout; a fresh clone does not install them. Scheduled/enabled is not live-camera or delivery evidence.
+- **USB storage:** private guarded-volume migration and full copy verification were completed while preserving the internal backup. The deployed recorder uses separately tested storage-pressure improvements and saves three photos/second from a requested 15-fps stream. Reconciliation into reviewed public source remains pending.
+- **Private sampled review:** collector, scheduler/monitor, and provenance finalizer are implemented and independently reviewed. **182 private review tests passed locally**: 41 collector, 30 scheduler, 111 finalizer. A real packet was produced with source-preservation checks; this is not exhaustive image review or proof of a delivered digest.
+- **Selection and retention:** visual review prioritizes sharpness, exposure, pose, and variety. Automatic digest budgets are six sheets / 120 shortlisted frames, up to three full-resolution inspections and three keepers; finalizer maximum is five. Keepers are outside raw cleanup. Deployed raw policy is 14 days / 40 GiB / 2-GiB reserve; package examples use a 5-GiB quota.
+- **Recognition remains experimental:** model scores are not calibrated probabilities, candidates are not confirmations, no box/unknown is not absence, and photo observations/segments are not unique birds or visits. A validated species classifier and automatic quality ranking are not implemented.
 
 ## Completed building blocks
 
-- [x] Exercised Python package, CLI, configuration validation, and automated tests.
-- [x] Real full-resolution camera snapshots and supervised motion-burst capture.
-- [x] Bounded buffers/writer, original JPEG preservation, event lifecycle, and capture health.
-- [x] Filesystem recovery/retention tests, including process-interruption and quota-boundary regressions.
-- [x] Private region preview/approval workflow and reversible focus experiments; no claim that an integrated calibration UI exists.
-- [x] Pinned-model runtime/license feasibility, immutable-buffer loading, and uncertainty-preserving shadow analysis on the PR #2 branch.
-- [x] Private prototype sighting and recording-coverage logs; a reusable visit-report CLI is still pending.
+- [x] Exercised package, CLI, configuration/region validation, and capture/analysis tests.
+- [x] Real full-resolution snapshots and bounded motion-triggered event capture.
+- [x] Storage recovery/retention and process-interruption regressions; health and overload reporting.
+- [x] Private reviewed feeder geometry/focus workflow; no integrated calibration UI claim.
+- [x] Pinned local-model provenance/license/runtime feasibility and separate shadow queue on PR #2.
+- [x] Approved private daylight scheduling with solar/pause/storage guards and an absolute before-sunset deadline.
+- [x] Guarded USB copy/verification, preserved backup, and lower-rate write replay.
+- [x] Private sampled candidate/control packet creation and bounded visual-review/finalizer workflow.
+- [x] Separate verified keeper archive, idempotent photo-observation logging, and prepared receipts.
+- [x] Mermaid system/lifecycle diagrams and deployed-versus-packaged component outline.
 
-## Immediate approval gate
+## Approval and packaging gates
 
-- [ ] Approve and merge PR #2 when desired. Merging source does **not** enable filtering, start a recorder, install a service, or publish private data.
+- [ ] Approve/merge PR #2 when desired. Publishing documentation does not merge code or enable filtering.
+- [ ] Reconcile tested recorder storage-pressure changes into reviewed public source.
+- [ ] Package reusable daylight/storage/review integration without secrets, private geometry, or personal paths.
+- [ ] Complete coordinated reboot/rollback and longer physical recovery/soak evidence. Do not claim a fully validated unattended release from scheduled jobs alone.
 
-## Prioritized implementation and validation backlog
+## Prioritized work and issue mapping
 
-### P1 — Collect morning/daylight comparison data — issue #3
+### P1 — Improve confirmation and keeper quality — issues #4 and #6
 
-This is the highest-value next operational step. Compare reviewed morning and afternoon observations over multiple daylight sessions. Keep session approval, a before-dark cutoff, original-frame provenance, coverage windows, and labeled positives/controls. Do not infer a usual visiting pattern from one day or treat recorder-off gaps as bird absence.
+Use actual bird photographs and systematic no-candidate controls to assess false candidates/misses, feeder sway, lighting, blur, and small/partial birds. Choose useful sharp photos with variety; optional original-coordinate crops must preserve originals and not invent detail through upscaling. Automatic quality scoring is future work. The existing sampled visual-review path is useful without being exhaustive.
 
-### P1 — Validate bird confirmation — issue #4
+### P1 — Recovery, source reconciliation, and portable automation — issue #8
 
-Use real birds, seeds/hardware, feeder sway, and difficult lighting from the private labeled set. Evaluate held-out examples, preserve unknown/failed states, and test any geometry/temporal rules before adopting a filtering policy. Keep every original during validation; automatic suppression/deletion needs separate approval.
+Private daily scheduling already exists; do not describe it as unimplemented. Remaining work includes reconciling the recorder fix into public source, reusable deployment/volume guards, recovery and rollback, sustained daylight soak, and coordinated reboot validation. The foreground CLI has no built-in solar guard; never bypass daylight constraints or install a competing recorder.
 
-### P1 — Build the local visit-time report — issue #5
+### P2 — Comparison photographs, not a census — issue #3
 
-Group confirmed observations by the privately configured local timezone, alongside UTC provenance and monitoring coverage. Keep provisional candidates separate. Distinguish first/last photographed presence from actual arrival/departure, mark approximate snapshot times, and avoid counting burst frames or linked segments as distinct visits.
+Morning/afternoon examples may improve composition and selection when useful. Preserve provenance and sampling/error context. Complete arrival coverage and usual visiting-pattern estimates are not owner requirements; sparse photos do not support them.
 
-### P2 — Choose representative photos and close-ups — issue #6
+### P2 — Optional photo-observation report — issue #5
 
-Rank useful images for sharpness, exposure, and blur in the bird/feeding plane. Create contextual original-coordinate crops without changing originals, inventing detail through upscaling, or treating a sharpness score as bird confirmation.
+The private finalizer already logs confirmed photo observations with source hashes/timestamps. A reusable local report remains pending. Keep provisional candidates separate, display timezone privately, and distinguish photographed presence from actual arrival/departure or unique visits.
 
-### P2 — Add species identification — issue #7
+### P2 — Future species classifier — issue #7
 
-First validate bird detection and crop quality. Then select a licensed, pinned, Pi-compatible classifier, measure actual latency/memory, retain ranked suggestions and unknown outcomes, and evaluate an independent labeled set. Manual corrections must not be overwritten.
+Validate license/runtime/labels, crop quality, measured resources, and an independent labeled set before accuracy claims. Preserve ranked suggestions, abstention, and authoritative manual corrections. The approved external visual-review provider is not a validated local species classifier.
 
-### P2 — Daylight scheduling and recovery — issue #8
+## Remaining limitations
 
-Add approved daylight-only startup/stop automation with correct date/timezone, validated sunrise/sunset, and an absolute deadline independent of relative duration. Fail closed if the window cannot be established. Test camera disconnect/restart, low disk, model failure, queue bounds, and rollback. Complete longer reliability testing across daylight sessions with the camera off overnight.
-
-## Still outside the completed scope
-
-- Calibrated detection accuracy, independent missed-arrival recall, and a verified filtering threshold.
-- Automatic photo suppression/deletion, species recognition, manual correction UI, and best-photo ranking.
-- Capture-internal analysis integration, stationary-bird presence scans, and local-date capture partitions.
-- Formal configuration-schema versioning and an integrated focus/region calibration command.
-- Fully validated recovery on physical hardware, cumulative daylight reliability gates, and approved permanent deployment.
+- Calibrated detection/species accuracy, automatic recognition-based suppression, correction/reanalysis UI, stationary-bird scans, local-date capture partitions, formal config-schema versioning, and an integrated calibration command.
+- Portable packaged private orchestration, complete event-database/migration tooling, and automatic quality ranking.
+- Full physical power-loss/camera-recovery/soak/reboot evidence. Process-kill and synthetic tests do not establish all hardware outcomes.
+- A prepared receipt is not message-delivery proof; uncertain delivery must not be blindly replayed.
 
 ## Operating and privacy rules
 
-- **Daylight only.** Choose conservative before-sunset stops, recompute remaining time after delays/calibration, and distinguish a sunset timer from a darkness sensor. Do not record after dark, including during reliability testing.
-- Preserve private photographs and logs outside Git. No passwords, tokens, personal identifiers, locations, device serials, exact sighting times, deployment geometry, or private configuration in public issues/docs.
-- Keep required third-party license/attribution notices; those are not deployment identifiers.
-- Report local tests and remote CI separately. Passing tests or a model benchmark does not establish field accuracy or authorize unattended capture.
+- **Daylight only**, including tests. Validate the local date/timezone and solar window, stop conservatively before sunset, and fail closed when prerequisites cannot be established. A sunset timer is not a darkness sensor.
+- Raw-history age/quota pruning is approved. Review itself must not mutate originals or wipe keeper archives, backups, unrecognized data, or unrelated files. A recognition-based rejection policy needs separate approval.
+- Capture/storage/NanoDet are local. Selected review images/context go to the configured AI provider and selected keepers to private Telegram; do not claim all processing is offline or that every frame is uploaded.
+- Keep photos, logs, exact sighting times, names/locations, identifiers, credentials, calibration geometry, and deployment configuration outside public Git/issues. Preserve required third-party legal notices.
+- Test counts, remote CI, live recorder health, prepared packets, and delivery are separate evidence. A job list or stale health snapshot is not camera liveness.

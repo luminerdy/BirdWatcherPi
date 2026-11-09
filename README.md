@@ -1,8 +1,8 @@
 # BirdWatcherPi
 
-A local-first Python bird-feeder camera project for Raspberry Pi: capture close-up photographs when activity occurs, then attempt bird and species identification without delaying the next photograph.
+A local-first Python bird-feeder camera project for Raspberry Pi: collect good bird photographs without delaying capture. Prioritize sharp, well-exposed keepers and variety, not an exhaustive visitor census.
 
-> **Project status: experimental capture + shadow analysis.** Motion-triggered photography is available, with optional separate-process bird-candidate analysis of saved events and a bounded durable analysis queue. Shadow analysis never filters/deletes captures and does not prove a bird is present or absent. Species identification, automatic calibration, a capture-internal AI worker, and background-service installation remain future work. Field detection accuracy is not established.
+> **Project status: experimental capture + shadow analysis, with approved private keeper automation.** This branch provides motion photography and optional separate-process local bird-candidate analysis. The deployed setup adds daylight scheduling, guarded USB storage, sampled evening visual review, a separate keeper archive, and a private Telegram digest through helpers outside this checkout. A fresh clone installs none of those private jobs. Recognition accuracy, validated species classification, automatic quality ranking/calibration, and a fully validated portable deployment remain incomplete.
 
 ## Start here
 
@@ -17,19 +17,19 @@ python3 -m venv .venv
 
 The example configuration deliberately has no enabled feeder regions. Keep your calibrated settings and photographs outside this repository. Nothing installs or enables an unattended service.
 
-## What the project will do
+## Product goals and release boundary
 
 - Watch one USB camera with two configurable feeder regions.
 - Detect movement near the feeder instead of reacting to the whole scene.
 - Save full-resolution photo bursts with a short pre-trigger buffer to help capture arrivals.
-- Analyze saved images asynchronously to locate birds and suggest species.
+- Prioritize sampled saved images with local bird-candidate analysis; validated species classification is later work.
 - Preserve original photographs and use **unknown bird** when evidence is insufficient.
 - Support multiple birds in a frame and retain manual identification corrections.
-- Store photographs and event records locally, with configurable retention limits.
+- Keep rolling raw photographs/events under configurable retention, with selected keeper originals archived separately.
 - Recover from camera disconnects and report storage, camera, and analysis health.
-- Eventually support approved automatic startup through systemd.
+- Support approved daylight automation; private Hermes supervision exists, while a portable packaged installer/systemd alternative remains future work.
 
-This list describes the complete project goal. The status above and operating documentation distinguish the current capture milestone from future identification and deployment features.
+These goals include both implemented and future features; they are not a completed-release checklist. Missing images and sampled review are accepted. The status and architecture distinguish public package behavior from private deployment and later species/correction features.
 
 ## Target hardware
 
@@ -39,7 +39,7 @@ This list describes the complete project goal. The status above and operating do
 
 The first setup task is **focus calibration**. Very close perches must be tested at their actual distances. Two regions in the same picture do not guarantee both will be sharply focused. Requested capture settings start at 1920 × 1080 MJPEG; the application must report what the camera actually negotiates.
 
-No extra hardware purchase, second camera, or cloud service is assumed for the initial release.
+Core photography and NanoDet run locally without a second camera or per-frame cloud inference. The approved private workflow uses an external solar ephemeris, selected-image AI review, and Telegram; do not describe the entire deployment as offline.
 
 ## Architecture
 
@@ -76,15 +76,15 @@ Implemented building blocks are not the same as a fully validated release:
 - [x] **Capture baseline:** Python package/CLI, validated regions, persistent capture, buffered photo bursts, bounded writing, storage safeguards, recovery tests, and health.
 - [x] **Private setup workflow:** region review and reversible feeding-plane focus experiments; an integrated calibration UI remains pending.
 - [x] **Shadow analysis on the PR #2 branch:** pinned local model, durable bounded analysis queue, uncertainty/provenance, and 139 passing local tests. PR #2 remains a separate approval/merge step.
-- [ ] **Approve/merge PR #2** without enabling photo filtering or permanent monitoring.
-- [ ] **P1 / #3:** collect reviewed morning/daylight comparison data.
-- [ ] **P1 / #4:** validate bird confirmation against seeds, feeder motion, and lighting controls.
-- [ ] **P1 / #5:** build local visit-time reports with recording-coverage context.
-- [ ] **P2 / #6:** rank representative photos and create non-destructive close-ups.
+- [x] **Private daylight/review automation:** owner-approved schedules, solar/storage guards, sampled candidate/control packets, verified keeper finalization, and change-gated digest preparation; 182 private review tests passed locally.
+- [x] **Private rolling storage:** verified USB migration with preserved backup; selected keeper archive stays outside raw cleanup.
+- [ ] **Approve/merge PR #2** as a separate source-review step; this does not authorize filtering or replace private schedules.
+- [ ] **P1 / #4 and #6:** improve confirmation, keeper quality/variety, and optional non-destructive close-ups.
+- [ ] **P1 / #8:** reconcile the deployed storage-pressure fix into reviewed public source, package reusable guards/review integration, and complete physical recovery/soak/rollback evidence.
+- [ ] **P2 / #3 and #5:** optional comparison photos and a reusable photo-observation report, not an exhaustive census.
 - [ ] **P2 / #7:** select and validate a species classifier after detection/crop quality is established.
-- [ ] **P2 / #8:** add approved daylight-only scheduling, recovery/rollback checks, and longer cumulative daylight reliability tests.
 
-See [TODO.md](docs/TODO.md) for acceptance boundaries and remaining technical gaps. **Do not record after dark**, including during long reliability tests. No daily schedule or service is installed by this roadmap.
+See [TODO.md](docs/TODO.md) for acceptance boundaries and remaining technical gaps. **Do not record after dark**, including during reliability tests. Private schedules already exist; this roadmap and a fresh clone do not install, enable, or change them. Scheduled/enabled does not prove camera liveness or digest delivery.
 
 A reliable motion-triggered photo recorder is the first useful milestone. Species identification is a later milestone, not a prerequisite for saving pictures.
 
@@ -92,7 +92,7 @@ A reliable motion-triggered photo recorder is the first useful milestone. Specie
 
 The current CLI provides `doctor`, `snapshot`, `run`, `status`, `events`, and optional `analyze`. Use an isolated virtual environment and the documented commands in [SETUP.md](docs/SETUP.md). Runtime and development version snapshots are supplied in `requirements.txt` and `requirements-dev.txt`. Analysis requires a separately obtained, hash-verified model; no model download happens at capture startup.
 
-Automatic calibration/focus control, correction/reanalysis, species models, and unattended deployment remain future work. The current camera adapter preserves existing focus/exposure controls and does not download models. Event folders currently use UTC dates; configurable local date partitioning remains pending.
+Automatic calibration/focus control, correction/reanalysis, validated species models, and a portable unattended installer remain future package work. The current camera adapter preserves existing focus/exposure controls and does not download models. Event folders currently use UTC dates; configurable local date partitioning remains pending.
 
 ## Privacy and repository hygiene
 
@@ -105,7 +105,7 @@ This public repository is for source code, generic configuration examples, tests
 - Personal filesystem paths, private configuration, calibration views, captured photos/video/audio, logs, databases, or event metadata.
 - Model weights, local virtual environments, or private evaluation datasets.
 
-Keep operational data outside the checkout. Any optional region/timezone configuration stays private. Network uploads and public photo sharing are out of scope unless separately enabled by the operator.
+Keep operational data outside the checkout. Any optional region/timezone configuration stays private. Selected-image review and private Telegram delivery are already approved in the deployed workflow; additional uploads/public sharing require separate operator approval.
 
 The included `.gitignore` is a safeguard, not a security boundary: review staged changes and commit metadata before publishing. Avoid attaching private diagnostics or photos to public issues.
 
@@ -117,7 +117,7 @@ Numerical targets in the specification are proposed acceptance criteria, not est
 
 ## Initial non-goals
 
-Multiple cameras, audio identification, a web dashboard, live streaming, individual-bird recognition, cloud inference, and automatic messaging are not included in the first release.
+Multiple cameras, audio identification, a web dashboard, live streaming, individual-bird recognition, public photo publication, and per-frame cloud inference remain out of scope. The approved private AI-assisted review and Telegram digest are deployed integrations, not bundled fresh-clone capabilities.
 
 ## License
 
