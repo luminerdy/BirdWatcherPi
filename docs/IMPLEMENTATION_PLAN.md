@@ -14,12 +14,13 @@ Architecture and editable Mermaid sources: [ARCHITECTURE.md](ARCHITECTURE.md).
 
 - [x] Persistent USB capture, validated regions, motion/prebuffered bursts, bounded writing, filesystem manifests/recovery/retention, diagnostics, and health are implemented.
 - [x] Private feeder framing/region approval and reversible focus comparison were exercised; an integrated calibration command is not implemented.
-- [x] Pinned local NanoDet and a separate bounded durable shadow-analysis queue are implemented on the PR #2 branch. Latest documentation check: **139 repository tests passed locally**; this is not remote CI or a field-accuracy result.
+- [x] Pinned local NanoDet and a separate bounded durable shadow-analysis queue are implemented and merged into main through PR #2. Latest documentation check: **139 repository tests passed locally**; this is not remote CI or a field-accuracy result.
 - [x] Approved private recurring daylight capture and evening review/digest jobs are installed and were enabled when inspected. A job's scheduled state does not prove a live recorder, successful next launch, or message delivery.
 - [x] Guarded USB migration was verified with matching file sets, sizes, and SHA-256 hashes, while preserving the internal backup. Wrong/absent-volume protection and a lower saved-photo rate were exercised; a short replay is not a full live-camera soak.
 - [x] Private collector, scheduler/monitor, and finalizer are implemented and independently reviewed. Latest documentation check: **182 private review tests passed locally** (41 collector, 30 scheduler, 111 finalizer).
 - [x] A real sampled review packet was produced with source-preservation checks. This demonstrates the packet path, not exhaustive review or a delivered digest.
-- [ ] PR #2 approval/merge, reusable packaged orchestration, species validation, and full hardware reliability evidence remain separate work.
+- [x] PR #2 merged into main with owner approval; this does not change the deployed recorder or schedules.
+- [ ] Reusable packaged orchestration, recorder-fix source reconciliation, species validation, and full hardware reliability evidence remain separate work.
 
 The deployment requests 15 camera frames/second and saves at three photos/second. Raw policy is 14 days / 40 GiB with a 2-GiB free-space reserve; the package example remains 14 days / 5 GiB. Current automatic review uses at most six sheets / 120 shortlisted frames, inspects up to three full-resolution originals/crops, and selects at most three keeper photos. The finalizer itself has a five-keeper ceiling. These are bounded operating budgets, not guarantees that every frame is inspected.
 

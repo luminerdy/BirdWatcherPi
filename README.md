@@ -61,7 +61,7 @@ The initial shadow-mode detector is a pinned OpenCV Zoo NanoDet model, exercised
 - [Architecture and how it works](docs/ARCHITECTURE.md) — Mermaid system/lifecycle diagrams, deployed-vs-packaged scope, privacy boundaries, and operating outline.
 - [Product and engineering specification](docs/SPECIFICATION.md) — scope, behavior, data handling, reliability, and acceptance criteria.
 - [Implementation plan](docs/IMPLEMENTATION_PLAN.md) — ordered work packages, dependencies, tests, and release gates.
-- [Current status and prioritized to-do list](docs/TODO.md) — completed building blocks, PR #2 approval gate, and tracked issues #3–#8.
+- [Current status and prioritized to-do list](docs/TODO.md) — completed building blocks, merged source, and remaining work tracked in issues #3–#8.
 - [Capture validation report](docs/VALIDATION_REPORT.md) — sanitized live-test evidence and remaining acceptance gaps.
 - [Bird-presence model decision](docs/MODEL_DECISION.md) — pinned provenance, actual feasibility measurements, and uncertainty.
 - [Shadow analysis](docs/SHADOW_ANALYSIS.md) — optional local analysis without changing or filtering photographs.
@@ -75,10 +75,10 @@ Implemented building blocks are not the same as a fully validated release:
 
 - [x] **Capture baseline:** Python package/CLI, validated regions, persistent capture, buffered photo bursts, bounded writing, storage safeguards, recovery tests, and health.
 - [x] **Private setup workflow:** region review and reversible feeding-plane focus experiments; an integrated calibration UI remains pending.
-- [x] **Shadow analysis on the PR #2 branch:** pinned local model, durable bounded analysis queue, uncertainty/provenance, and 139 passing local tests. PR #2 remains a separate approval/merge step.
+- [x] **Shadow analysis delivered through PR #2:** pinned local model, durable bounded analysis queue, uncertainty/provenance, and 139 passing local tests; now merged into main.
 - [x] **Private daylight/review automation:** owner-approved schedules, solar/storage guards, sampled candidate/control packets, verified keeper finalization, and change-gated digest preparation; 182 private review tests passed locally.
 - [x] **Private rolling storage:** verified USB migration with preserved backup; selected keeper archive stays outside raw cleanup.
-- [ ] **Approve/merge PR #2** as a separate source-review step; this does not authorize filtering or replace private schedules.
+- [x] **PR #2 merged into main** with owner approval. Merging source does not authorize filtering, change the running recorder, or replace private schedules.
 - [ ] **P1 / #4 and #6:** improve confirmation, keeper quality/variety, and optional non-destructive close-ups.
 - [ ] **P1 / #8:** reconcile the deployed storage-pressure fix into reviewed public source, package reusable guards/review integration, and complete physical recovery/soak/rollback evidence.
 - [ ] **P2 / #3 and #5:** optional comparison photos and a reusable photo-observation report, not an exhaustive census.

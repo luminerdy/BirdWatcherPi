@@ -5,7 +5,7 @@ Current tracker, aligned with [SPECIFICATION.md](SPECIFICATION.md) v0.3, [IMPLEM
 ## Delivery status and implementation boundary
 
 - **Public capture baseline:** delivered to main through PR #1; persistent USB capture, diagnostics, validated regions, motion bursts, bounded writing, filesystem recovery/retention, and health.
-- **Optional shadow analyzer:** on draft PR #2, not merged by this documentation update. **139 repository tests passed locally** during this refresh; this is not a remote-CI or detector-accuracy claim.
+- **Optional shadow analyzer:** merged into main through PR #2 with owner approval. **139 repository tests passed locally** during this refresh; this is not a remote-CI or detector-accuracy claim.
 - **Approved private automation:** recurring daylight capture, evening packet preparation, and change-gated digest jobs are installed and were enabled when inspected. These helpers are outside the checkout; a fresh clone does not install them. Scheduled/enabled is not live-camera or delivery evidence.
 - **USB storage:** private guarded-volume migration and full copy verification were completed while preserving the internal backup. The deployed recorder uses separately tested storage-pressure improvements and saves three photos/second from a requested 15-fps stream. Reconciliation into reviewed public source remains pending.
 - **Private sampled review:** collector, scheduler/monitor, and provenance finalizer are implemented and independently reviewed. **182 private review tests passed locally**: 41 collector, 30 scheduler, 111 finalizer. A real packet was produced with source-preservation checks; this is not exhaustive image review or proof of a delivered digest.
@@ -18,7 +18,7 @@ Current tracker, aligned with [SPECIFICATION.md](SPECIFICATION.md) v0.3, [IMPLEM
 - [x] Real full-resolution snapshots and bounded motion-triggered event capture.
 - [x] Storage recovery/retention and process-interruption regressions; health and overload reporting.
 - [x] Private reviewed feeder geometry/focus workflow; no integrated calibration UI claim.
-- [x] Pinned local-model provenance/license/runtime feasibility and separate shadow queue on PR #2.
+- [x] Pinned local-model provenance/license/runtime feasibility and separate shadow queue delivered through merged PR #2.
 - [x] Approved private daylight scheduling with solar/pause/storage guards and an absolute before-sunset deadline.
 - [x] Guarded USB copy/verification, preserved backup, and lower-rate write replay.
 - [x] Private sampled candidate/control packet creation and bounded visual-review/finalizer workflow.
@@ -27,7 +27,7 @@ Current tracker, aligned with [SPECIFICATION.md](SPECIFICATION.md) v0.3, [IMPLEM
 
 ## Approval and packaging gates
 
-- [ ] Approve/merge PR #2 when desired. Publishing documentation does not merge code or enable filtering.
+- [x] PR #2 merged into main with owner approval. Source merge does not enable filtering or change private schedules/runtime environments.
 - [ ] Reconcile tested recorder storage-pressure changes into reviewed public source.
 - [ ] Package reusable daylight/storage/review integration without secrets, private geometry, or personal paths.
 - [ ] Complete coordinated reboot/rollback and longer physical recovery/soak evidence. Do not claim a fully validated unattended release from scheduled jobs alone.
