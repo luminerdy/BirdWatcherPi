@@ -1,6 +1,6 @@
 # BirdWatcherPi — Product and Engineering Specification
 
-Status: Specification v0.4 — stable requirement IDs and checked feature traceability for keeper-focused photography with approved private daylight/review automation. This separates the public package, deployed operational helpers, and future work; it does not declare all release gates passed. See [TODO.md](TODO.md), [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md), and [ARCHITECTURE.md](ARCHITECTURE.md).
+Status: Specification v0.5 — private offline activity/gallery reporting and stable requirement IDs and checked feature traceability for keeper-focused photography with approved private daylight/review automation. This separates the public package, deployed operational helpers, and future work; it does not declare all release gates passed. See [TODO.md](TODO.md), [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md), and [ARCHITECTURE.md](ARCHITECTURE.md).
 
 ## Requirement identity and traceability
 
@@ -60,7 +60,7 @@ Status: Specification v0.4 — stable requirement IDs and checked feature tracea
 
 ### Explicitly excluded initially
 
-<a id="bw-scope-004"></a> **BW-SCOPE-004** — Two-camera support, audio recognition, a web dashboard, live streaming, public remote access, individual-bird recognition, sex/age estimation, and model training remain excluded. The approved private AI-assisted review and Telegram digest are in deployed scope, but are not bundled integrations in a fresh clone. No public photo publication or per-frame cloud inference is authorized.
+<a id="bw-scope-004"></a> **BW-SCOPE-004** — Two-camera support, audio recognition, a publicly hosted web dashboard, live streaming, public remote access, individual-bird recognition, sex/age estimation, and model training remain excluded. The private offline gallery/activity report is in approved scope and creates no web listener. The approved private AI-assisted review and Telegram digest are in deployed scope, but are not bundled integrations in a fresh clone. No public photo publication or per-frame cloud inference is authorized.
 
 ## 4. Operating pipeline
 
@@ -170,7 +170,7 @@ The separate optional shadow CLI has its own durable analysis queue. It is not t
 
 ## 7. User interface and configuration
 
-<a id="bw-cli-001"></a> **BW-CLI-001** — Available package CLI: doctor, snapshot, run, status, events, and optional analyze. These do not install private daylight/review jobs. In particular, run is foreground capture and does not itself enforce a solar cutoff. Operator-managed sessions must remain within approved daylight.
+<a id="bw-cli-001"></a> **BW-CLI-001** — Available package CLI: doctor, snapshot, run, status, events, optional analyze, and offline report. These do not install private daylight/review jobs. In particular, run is foreground capture and does not itself enforce a solar cutoff. Operator-managed sessions must remain within approved daylight.
 
 The following is the broader target contract; calibrate, correct, reanalyze, species filtering, and capture-internal analysis remain future work:
 
@@ -184,6 +184,21 @@ The following is the broader target contract; calibrate, correct, reanalyze, spe
 - <a id="bw-cli-009"></a> **BW-CLI-009** — birdwatcher reanalyze: enqueue selected existing events with a selected model version.
 
 <a id="bw-config-001"></a> **BW-CONFIG-001** — TOML configuration groups: camera, motion, regions, capture, detection, classification, storage, logging, location, and runtime. Ship a documented example with calibration-required placeholders, not guessed ROI coordinates. Validate all bounds and writable paths before starting. Version the configuration schema. No GitHub token is needed by the capture service.
+
+### Offline daily gallery and activity report
+
+- <a id="bw-report-001"></a> **BW-REPORT-001** — Provide a read-only offline report command for completed review packets, with optional packet-matched prepared receipts. Validate original frame identity, timestamps, hashes and confirmation provenance before treating any image as visually confirmed.
+- <a id="bw-report-002"></a> **BW-REPORT-002** — Make every inventory frame and local-model result browsable independently of the three-photo keeper digest. Distinguish confirmed images, provisional candidates, sampled no-box/unknown, unsampled frames, failures and unavailable sources; no state proves absence or unique-bird identity.
+- <a id="bw-report-003"></a> **BW-REPORT-003** — Show local-hour analyzed/candidate/confirmed photo observations using the packet timezone, including real 23/24/25-hour daylight-saving days. Union and clip valid matching-source session bounds, disclose gaps/unknown coverage, and never call session bounds continuous per-frame monitoring.
+- <a id="bw-report-004"></a> **BW-REPORT-004** — Show first/last confirmed photographed presence and configurable UTC-gap groups of confirmed photo observations. The 1–3600-second grouping option is a heuristic, not an actual arrival/departure, feeding-duration, visit or unique-bird count.
+- <a id="bw-report-005"></a> **BW-REPORT-005** — Compare completed days with sampling effort, evidence availability and coverage limitations visible. Missing confirmation/coverage evidence is unknown, not zero activity; provisional model histograms must not be presented as verified feeding rates.
+- <a id="bw-report-006"></a> **BW-REPORT-006** — Let the on-device report open retained originals at original resolution and use validated archived keeper copies when available. Verify known source hashes, keep original bytes unchanged and disclose expired, changed or undecodable sources.
+- <a id="bw-report-007"></a> **BW-REPORT-007** — Offer a portable offline HTML attachment with bounded embedded previews/originals, explicit omission counts and no raw host paths, external asset requests or outside-file links. Show original-opening actions only for embedded bytes; enforce a 44,000,000-byte attachment ceiling.
+- <a id="bw-report-008"></a> **BW-REPORT-008** — Keep report outputs outside source, packet/receipt inputs and Git; reject symlink/hard-link aliases and unsafe paths before mutation. Use private atomic publication and bounded reads/work, preserve prior valid reports on failure, and never delete unknown data or mutate capture/review evidence.
+- <a id="bw-report-009"></a> **BW-REPORT-009** — In the approved private workflow, generate the report from the completed packet and validated finalization receipt and attach it alongside the existing private digest. Keep generation bounded, report failures honestly, suppress duplicate digests and distinguish local artifact preparation from actual delivery.
+- <a id="bw-report-010"></a> **BW-REPORT-010** — Bound generated report history independently of keeper archives and raw captures. Reclaim only report-owned expired exports under a documented policy; preserve modified/unrecognized files, source originals, keeper archives and unrelated backups.
+
+See [DAILY_REPORT.md](DAILY_REPORT.md) for usage, portability limits and counting semantics. Individual-bird recognition remains a later experimental research idea, not part of this approved milestone.
 
 ## 8. Reliability, privacy, and deployment
 
@@ -277,7 +292,7 @@ The following is the dependency order, not a claim that current work starts from
 
 Already decided privately: one priority feeder region with sway allowance, the exercised focus choice, a pinned local NanoDet detector, tested isolated runtimes, guarded USB storage, three saved photos/second, recurring daylight operation, sampled evening review, separate keepers, and rolling raw retention. These are deployment decisions, not portable package defaults.
 
-Still open: validated species model/thresholds, automatic image-quality ranking, reusable calibration/review/deployment tooling, source/runtime reconciliation of the deployed storage-pressure fix, and longer physical recovery/soak evidence. The approved keeper workflow does not authorize new integrations, destructive cleanup, public photographs, or unannounced installation/reboots.
+Still open: validated species model/thresholds, automatic image-quality ranking, reusable calibration/review/deployment tooling, runtime adoption verification of additional health reporting, and longer physical recovery/soak evidence. The approved keeper workflow does not authorize new integrations, destructive cleanup, public photographs, or unannounced installation/reboots.
 
 ## 12. Primary technical references
 

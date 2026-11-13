@@ -4,7 +4,7 @@
 
 This document describes both the **repository's capture/optional-analysis components** and the **approved deployed workflow** around them. The goal is a collection of good bird photographs, not an exhaustive visitor census.
 
-The core CLI is in this repository. Daylight supervision, the evening packet collector, explicit review finalization, and Telegram automation are currently **private operational helpers outside the checkout**. Their presence in this diagram does not mean a fresh clone installs or enables them. The deployed recorder also contains a separately tested storage-pressure fix that still needs reconciliation into reviewed public source. Capture and review use separate, non-editable runtime environments; reviewing pictures does not replace the running recorder.
+The core CLI is in this repository. Daylight supervision, the evening packet collector, explicit review finalization, and Telegram automation are currently **private operational helpers outside the checkout**. Their presence in this diagram does not mean a fresh clone installs or enables them. The repository now includes the separately tested storage-pressure fix used by the deployed recorder; private runtime configuration and orchestration remain distinct. Capture and review use separate, non-editable runtime environments; reviewing pictures does not replace the running recorder.
 
 No deployment location, device identifier, personal path, credential, real photograph, or private configuration is included here.
 
@@ -37,6 +37,10 @@ flowchart TB
             detector --> packet --> monitor --> agent
             agent -->|explicit visual decisions| finalizer
             finalizer --> keepers
+            report["Offline report builder<br/>gallery, hourly activity, bounded export"]
+            packet --> report
+            keepers -->|validated receipt| report
+            report -. "HTML attachment path" .-> agent
             finalizer -. "prepared receipt" .-> agent
         end
         retention["Managed history retention<br/>eligible raw events only"]
@@ -44,7 +48,7 @@ flowchart TB
 
     solar["External solar ephemeris service<br/>general region and timezone"]
     model["External vision-capable AI provider<br/>selected image context, not every frame"]
-    telegram["External Telegram service<br/>one private digest and best photos"]
+    telegram["External Telegram service<br/>private digest, photos and offline report"]
 
     scheduler -. "arm approved session" .-> guard
     solar -. "sunrise and sunset" .-> guard
@@ -52,15 +56,16 @@ flowchart TB
     scheduler -. "change-gated review" .-> monitor
     raw -->|read only| detector
     raw -->|selected originals, read only| finalizer
+    raw -->|retained originals, read only| report
     raw -. "configured age and quota policy" .-> retention
     agent <-->|selected images and reasoning| model
-    agent -->|dated digest and verified photo attachments| telegram
+    agent -->|dated digest and verified attachments| telegram
 
     classDef local fill:#12384a,stroke:#22d3ee,color:#e2e8f0;
     classDef data fill:#2e2054,stroke:#a78bfa,color:#f1f5f9;
     classDef safety fill:#492331,stroke:#fb7185,color:#f1f5f9;
     classDef outside fill:#293548,stroke:#94a3b8,color:#f1f5f9;
-    class scheduler,camera,motion,gate,detector,monitor,agent,finalizer local;
+    class scheduler,camera,motion,gate,detector,monitor,agent,finalizer,report local;
     class raw,packet,keepers data;
     class guard,retention safety;
     class solar,model,telegram outside;
@@ -83,6 +88,7 @@ sequenceDiagram
     participant Local as Local review worker
     participant Agent as Review agent and AI provider
     participant Finalizer as Provenance finalizer
+    participant Report as Offline gallery and activity report
     participant Owner as Telegram user
 
     Scheduler->>Guard: Arm approved daily session
@@ -110,7 +116,10 @@ sequenceDiagram
         Finalizer->>Raw: Verify selected original bytes
         Finalizer->>Finalizer: Preserve best photos and append idempotent observations
         Finalizer-->>Agent: Prepared receipt and keeper paths
-        Agent->>Owner: Dated digest, best photos, scope and error notes
+        Agent->>Report: Build from packet and validated prepared receipt
+        Report->>Raw: Read retained originals and verify known hashes
+        Report-->>Agent: Private gallery and bounded portable attachment paths
+        Agent->>Owner: Dated digest, best photos, offline report and limitations
     else Review failed
         Local-->>Scheduler: Classified failure without a fake empty-feeder result
         Scheduler-->>Owner: Failure notice rather than an invented bird count
@@ -165,9 +174,15 @@ CSV validation checks complete records before any append, not just observation I
 
 The receipt says **prepared**, not delivered. A local receipt proves finalization, not that Telegram accepted a message.
 
-### G. Deliver one honest digest
+### G. Browse saved photographs and activity
 
-Hermes delivers the dated digest and keeper attachments to the private chat. It includes representative confirmed times, review/sample scope, important capture errors and uncertainty. Confirmed photo observations are not a count of distinct birds or visits.
+The public offline-report components normalize all inventory/model-result metadata, validate packet-matched visual confirmations, and render an on-device gallery plus a bounded portable HTML attachment. The gallery is independent of the keeper limit and distinguishes candidates, confirmed photos, unknown/no-box samples, unsampled frames and unavailable sources.
+
+Hourly counts and UTC-gap photo groups are activity proxies, not unique birds, actual visits or measured feeding duration. Coverage uses coarse session bounds rather than a continuous-frame claim. Local original links require retained files on the Pi; the portable attachment embeds only bounded selected bytes and explicitly labels omissions. It is a private file, not a hosted website. See [DAILY_REPORT.md](DAILY_REPORT.md).
+
+### H. Deliver one honest digest
+
+Hermes delivers the dated digest, keeper attachments and bounded offline-report file to the private chat. It includes representative confirmed times, review/sample scope, important capture errors and uncertainty. Confirmed photo observations are not a count of distinct birds or visits.
 
 The prepared receipt and packet fingerprint suppress duplicate reports. Classified review failures produce failure handling rather than fabricated photos or a false no-birds conclusion. Delivery status is checked separately from receipt preparation; ambiguous delivery must not be blindly replayed.
 
@@ -183,6 +198,10 @@ The prepared receipt and packet fingerprint suppress duplicate reports. Classifi
 - [storage.py](../src/birdwatcher/storage.py): manifests, crash recovery, managed retention and quotas.
 - [bird_detector.py](../src/birdwatcher/bird_detector.py): pinned local NanoDet candidates and geometry/provenance.
 - [analysis.py](../src/birdwatcher/analysis.py): optional durable shadow worker; this is separate from the deployed evening-packet orchestration.
+
+- [report_data.py](../src/birdwatcher/report_data.py): read-only packet/receipt normalization, hourly sampled activity and explicit coverage/uncertainty.
+- [report_view.py](../src/birdwatcher/report_view.py): offline responsive gallery, filters, activity chart and image inspector.
+- [report_export.py](../src/birdwatcher/report_export.py): private bounded source-safe on-device and portable artifact generation.
 
 ### Private deployment helpers — names only, not installed by this repository
 

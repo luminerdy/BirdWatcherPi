@@ -1,5 +1,6 @@
 """Atomic capture-only manifests; no index or durable analysis queue yet."""
 
+import errno
 import hashlib
 import json
 import os
@@ -251,6 +252,7 @@ class EventStore:
 
     def _prune(self, additional, enforce=True, quota_credit=0):
         now = datetime.now(timezone.utc)
+        self._used = self._usage()
         for path, data in sorted(self._scan(), key=lambda pair: pair[1]["started_utc"]):
             try:
                 timestamp = datetime.fromisoformat(data["started_utc"].replace("Z", "+00:00"))
@@ -258,7 +260,7 @@ class EventStore:
             except (ValueError, TypeError):
                 expired = False
             over = (
-                self._usage() + additional > self.config.max_bytes + quota_credit
+                self._used + additional > self.config.max_bytes + quota_credit
                 or shutil.disk_usage(self.root).free - additional < self.config.min_free_bytes
             )
             if not expired and not over:
@@ -271,7 +273,10 @@ class EventStore:
                 or path.parent == getattr(self, "_writing", None)
             ):
                 continue
-            self._delete_managed(path, data)
+            if self._delete_managed(path, data):
+                # Retained/protected candidates do not change tree usage. Refresh
+                # only after deletion, while still checking every event's expiry.
+                self._used = self._usage()
         self._used = self._usage()
         self._storage_full = (
             self._used + additional > self.config.max_bytes + quota_credit
@@ -325,6 +330,15 @@ class EventStore:
         self._atomic(path, json.dumps(data, sort_keys=True).encode())
 
     def apply(self, action: EventAction) -> None:
+        try:
+            self._apply(action)
+        except OSError as error:
+            # Capacity checks cannot predict ENOSPC/EDQUOT during writes or fsync.
+            if error.errno in (errno.ENOSPC, errno.EDQUOT):
+                self._storage_full = True
+            raise
+
+    def _apply(self, action: EventAction) -> None:
         if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,127}", action.event_id):
             raise StorageError("Invalid event ID")
         if action.kind not in ("start", "frame", "end"):

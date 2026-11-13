@@ -7,6 +7,7 @@ sequenceDiagram
     participant Local as Local review worker
     participant Agent as Review agent and AI provider
     participant Finalizer as Provenance finalizer
+    participant Report as Offline gallery and activity report
     participant Owner as Telegram user
 
     Scheduler->>Guard: Arm approved daily session
@@ -34,7 +35,10 @@ sequenceDiagram
         Finalizer->>Raw: Verify selected original bytes
         Finalizer->>Finalizer: Preserve best photos and append idempotent observations
         Finalizer-->>Agent: Prepared receipt and keeper paths
-        Agent->>Owner: Dated digest, best photos, scope and error notes
+        Agent->>Report: Build from packet and validated prepared receipt
+        Report->>Raw: Read retained originals and verify known hashes
+        Report-->>Agent: Private gallery and bounded portable attachment paths
+        Agent->>Owner: Dated digest, best photos, offline report and limitations
     else Review failed
         Local-->>Scheduler: Classified failure without a fake empty-feeder result
         Scheduler-->>Owner: Failure notice rather than an invented bird count

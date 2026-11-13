@@ -22,6 +22,10 @@ flowchart TB
             detector --> packet --> monitor --> agent
             agent -->|explicit visual decisions| finalizer
             finalizer --> keepers
+            report["Offline report builder<br/>gallery, hourly activity, bounded export"]
+            packet --> report
+            keepers -->|validated receipt| report
+            report -. "HTML attachment path" .-> agent
             finalizer -. "prepared receipt" .-> agent
         end
         retention["Managed history retention<br/>eligible raw events only"]
@@ -29,7 +33,7 @@ flowchart TB
 
     solar["External solar ephemeris service<br/>general region and timezone"]
     model["External vision-capable AI provider<br/>selected image context, not every frame"]
-    telegram["External Telegram service<br/>one private digest and best photos"]
+    telegram["External Telegram service<br/>private digest, photos and offline report"]
 
     scheduler -. "arm approved session" .-> guard
     solar -. "sunrise and sunset" .-> guard
@@ -37,15 +41,16 @@ flowchart TB
     scheduler -. "change-gated review" .-> monitor
     raw -->|read only| detector
     raw -->|selected originals, read only| finalizer
+    raw -->|retained originals, read only| report
     raw -. "configured age and quota policy" .-> retention
     agent <-->|selected images and reasoning| model
-    agent -->|dated digest and verified photo attachments| telegram
+    agent -->|dated digest and verified attachments| telegram
 
     classDef local fill:#12384a,stroke:#22d3ee,color:#e2e8f0;
     classDef data fill:#2e2054,stroke:#a78bfa,color:#f1f5f9;
     classDef safety fill:#492331,stroke:#fb7185,color:#f1f5f9;
     classDef outside fill:#293548,stroke:#94a3b8,color:#f1f5f9;
-    class scheduler,camera,motion,gate,detector,monitor,agent,finalizer local;
+    class scheduler,camera,motion,gate,detector,monitor,agent,finalizer,report local;
     class raw,packet,keepers data;
     class guard,retention safety;
     class solar,model,telegram outside;
