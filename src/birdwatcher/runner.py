@@ -3,6 +3,7 @@
 import queue
 import threading
 from dataclasses import replace
+from datetime import datetime, timezone
 
 
 class ActionWriter:
@@ -20,6 +21,8 @@ class ActionWriter:
         self._reserved_endings = set()
         self._ignored_events = set()
         self._lock = threading.Lock()
+        self._storage_health = store.health() if hasattr(store, "health") else {}
+        self._storage_health_updated_utc = datetime.now(timezone.utc).isoformat()
         self._thread = threading.Thread(target=self._work, daemon=True, name="photo-writer")
 
     def __enter__(self):
@@ -57,6 +60,24 @@ class ActionWriter:
                 self._reserved_endings.discard(action.event_id)
         return True
 
+    def health(self):
+        """Cheap snapshot; queued items exclude work already in flight.
+
+        Pending JPEG bytes include in-flight work, not metadata or disk usage.
+        Storage fullness is last observed at initialization/after a write attempt,
+        not a live disk probe. Errors are cumulative, with the last error retained.
+        """
+        with self._lock:
+            return {
+                "writer_queue_depth": self.queue.qsize(),
+                "writer_pending_bytes": self.pending_bytes,
+                "dropped_saves": self.dropped,
+                "storage_errors": self.errors,
+                "storage_last_error": self.last_error,
+                "storage_full": self._storage_health.get("storage_full"),
+                "storage_health_updated_utc": self._storage_health_updated_utc,
+            }
+
     def _drop(self, action):
         self.dropped += 1
         self.bad_events.add(action.event_id)
@@ -85,7 +106,10 @@ class ActionWriter:
                     self.last_error = "storage_write_failed"
                     self.bad_events.add(action.event_id)
             finally:
+                storage_health = self.store.health() if hasattr(self.store, "health") else {}
                 with self._lock:
+                    self._storage_health = storage_health
+                    self._storage_health_updated_utc = datetime.now(timezone.utc).isoformat()
                     self.pending_bytes -= size
                     if action.kind == "end":
                         self.bad_events.discard(action.event_id)
@@ -210,9 +234,8 @@ def run_capture(config, duration=None, camera_factory=None, motion_factory=None)
                                             writer.put(action)
                                         last_sample = now
                                     if now - last_health >= 1:
+                                        health.update(writer.health())
                                         health.update(
-                                            dropped_saves=writer.dropped,
-                                            storage_errors=writer.errors,
                                             updated_utc=datetime.now(timezone.utc).isoformat(),
                                         )
                                         _write_health(root, health)
@@ -224,12 +247,13 @@ def run_capture(config, duration=None, camera_factory=None, motion_factory=None)
                             health["state"] = "reconnecting"
                             health["reconnects"] += 1
                             health["last_error"] = "camera_unavailable"
+                            health.update(writer.health())
                             _write_health(root, health)
                             stopped.wait(max(0, min(backoff, deadline - time.monotonic())))
                             backoff = min(backoff * 2, 30)
                     for action in machine.close():
                         writer.put(action)
-                health.update(dropped_saves=writer.dropped, storage_errors=writer.errors)
+                health.update(writer.health())
             finally:
                 store.close()
             health["state"] = "stopped"

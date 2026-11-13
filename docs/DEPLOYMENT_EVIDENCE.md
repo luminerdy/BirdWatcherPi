@@ -4,6 +4,18 @@ This is a bounded evidence summary for [requirement traceability](TRACEABILITY.m
 
 **Evidence boundaries:** implementation, automated tests, physical field validation, packet preparation, and message delivery are separate. A referenced document or an existing test function does not itself prove an entire requirement. Historical smoke/model reports retain their original scope; their old pending lists are not the current project tracker. Current status is in [TODO.md](TODO.md).
 
+## Current failed production status — not superseded by historical passes
+
+**Production capture is manually paused and not restored.** Kernel NTFS3 failed actual production health-file replacement. Limited `ntfsfix` work and the NTFS-3G replacement driver allowed isolated temporary-file and replayed-writer tests, but subsequent actual recorder startup still failed with `EIO` replacing production `health.json`. Persisted `capturing` is stale, not a live recorder. Synthetic URL-whitespace/ENOSPC fixes do not repair this filesystem failure.
+
+Keep capture stopped until approved supervised daylight real recorder startup, saved-JPEG readback, and restart checks pass. A separate sunrise failure involved a fixed solar-cache temporary filename; concurrent writers are a hypothesis, not an established cause. This checkpoint supplies no new live-camera, successful recovery, or delivery evidence. See [OPERATIONS.md](OPERATIONS.md#current-recovery-status).
+
+Gallery/report source is implemented locally but unactivated; automatic generation and delivery must remain disabled. Private helper review found import-resolution binding, unrelated-artifact adoption/deletion, and historical-receipt symlink gaps. Earlier synthetic tests below did not establish those protections. Exporter performance work is partially edited and unverified.
+
+## Historical bounded evidence
+
+The logical references and historical pass results below retain their original scope; they are not current production-health or activation claims.
+
 <a id="focus"></a>
 ## Focus and composition
 
@@ -12,7 +24,7 @@ This is a bounded evidence summary for [requirement traceability](TRACEABILITY.m
 <a id="storage"></a>
 ## USB storage and recorder runtime
 
-`PRIVATE-STORAGE`: migration to a dedicated private USB photo volume compared complete file sets, sizes, and SHA-256 hashes, while preserving the original internal archive as a backup. An actual absent-volume permission check and remount were exercised. Private expected-volume guards and a separately tested storage-pressure fix protect the deployed path; the latter is not yet reconciled into this public capture source. Bounded write replays exercised the lower saved-photo rate, but are not a sustained live-camera soak or physical power-loss validation.
+`PRIVATE-STORAGE`: migration to a dedicated private USB photo volume compared complete file sets, sizes, and SHA-256 hashes, while preserving the original internal archive as a backup. An actual absent-volume permission check and remount were exercised. Private expected-volume guards and a separately tested storage-pressure fix protect the deployed path; the reviewed pruning-scan change is now reconciled into source; runtime adoption of additional health fields remains a separate check. Bounded write replays exercised the lower saved-photo rate, but are not a sustained live-camera soak or physical power-loss validation.
 
 The deployed raw policy is 14 days / 40 GiB with a 2-GiB reserve; the package example remains 14 days / 5 GiB. Acquisition requests 15 frames/second while the private saved-photo setting is three photos/second. Keepers and preserved backups are outside managed raw cleanup. Configured limits and a preserved copy do not prove the live volume is currently healthy.
 
@@ -59,6 +71,20 @@ Current automatic budgets are at most six sheets / 120 shortlisted frames, up to
 <a id="limits"></a>
 ## Unpassed field and release gates
 
-No evidence here passes the 24-cumulative-hour daylight soak, complete physical unplug/replug and power-loss matrix, coordinated reboot/rollback test, combined workload memory budget, calibrated field detection accuracy, or future species-classifier accuracy gate. Referenced subset tests and short sessions are useful evidence, not substitutes for those checks. Public deployment packaging and reconciliation of the recorder's separate storage-pressure fix remain open.
+No evidence here passes the 24-cumulative-hour daylight soak, complete physical unplug/replug and power-loss matrix, coordinated reboot/rollback test, combined workload memory budget, calibrated field detection accuracy, or future species-classifier accuracy gate. Referenced subset tests and short sessions are useful evidence, not substitutes for those checks. Public deployment packaging and actual production recovery remain open; the recorder's separate storage-pressure fix is reconciled into source but does not repair the filesystem.
 
 All reports intentionally omit deployment locations, personal paths, device identifiers, exact sighting times, credentials, and captured images. Preserve private originals, keeper archives, and backups; publishing this report authorizes no additional integration or destructive cleanup.
+
+<a id="report-bridge"></a>
+## Offline report bridge
+
+`PRIVATE-REPORT-GENERATOR`: a new bounded private bridge validates the selected completed-day packet location, requires an installed-source fingerprint manifest, uses the matching prepared receipt and prior-day packet/receipt pairs, validates returned artifact locations, and delegates read-only report generation to a separate runtime. Synthetic regression tests exercise these guards and controlled errors. Installation and scheduled delivery are separate acceptance checks; this entry initially records tested implementation, not a claimed successful new daily delivery.
+
+A real saved-day **metadata-only** load was exercised against an existing completed packet and prior receipt. It derived all inventory/model/confirmation records and local-hour/photo-group summaries without reading or changing photographs. This is not the complete export/browser/source-preservation test or evidence that each raw photo has been analyzed.
+
+<a id="report-retention"></a>
+## Generated-report ownership and expiry
+
+`PRIVATE-REPORT-RETENTION`: private housekeeping registers generated HTML/summary artifacts by their exact paths and SHA-256 hashes under a dedicated report root. The intended policy permits only registered unchanged expired files and protects modified, unknown, aliased or unrelated files and all source/keeper roots. The subsequent ownership/deletion and symlink findings mean those protections are not established. The default policy is older than 14 local calendar days, independent of raw-capture retention. Synthetic regressions exercise expiry, preservation and alias rejection. Runtime activation and actual housekeeping must be verified separately from these tests.
+
+The historical bridge/retention regression selection passed **9 tests**; that subset did not cover the subsequent security findings and is not activation approval. These private helpers are not installed from the public command or reproducible from the source checkout; generated report records and photographs stay outside Git.

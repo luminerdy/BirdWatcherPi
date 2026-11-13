@@ -1,12 +1,18 @@
 # BirdWatcherPi — Implementation Plan
 
-Status: Plan v0.4, aligned with [SPECIFICATION.md](SPECIFICATION.md) v0.4 and the owner's keeper-focused goal. This plan distinguishes implemented source, private deployed automation, and unpassed release gates. Documentation updates do not change the recorder, install services, merge code, or publish private data.
+Status: Plan v0.5, aligned with [SPECIFICATION.md](SPECIFICATION.md) v0.5 and the owner's keeper-focused goal. This plan distinguishes implemented source, private deployed automation, and unpassed release gates. Documentation updates do not change the recorder, install services, merge code, or publish private data.
+
+## Recovery checkpoint — current failed production status
+
+**Capture is manually paused and not restored.** Actual recorder startup still fails with `EIO` replacing production `health.json`, despite isolated temporary-file and replayed-writer successes after limited NTFS repair and a replacement driver. Persisted `capturing` health is stale. Keep capture stopped until approved supervised daylight real recorder startup, saved-JPEG readback, and restart checks pass; preserve data and backups. A fixed solar-cache temporary-filename failure also needs investigation; concurrency is only a hypothesis. See [OPERATIONS.md](OPERATIONS.md#current-recovery-status).
+
+Gallery/report source is implemented locally but unactivated. Automatic generation and delivery must remain disabled pending private-helper import-resolution binding, unrelated-artifact adoption/deletion, and historical-receipt symlink fixes and adversarial verification. Exporter performance work is partially edited and unverified. Historical evidence and completed implementation checkboxes below do not pass these current recovery/activation gates.
 
 ## 1. Product priority and implementation boundary
 
 Collect good bird photographs, not every visit. Missed images and sampled review are acceptable. Preserve selected keepers separately and let approved retention reclaim ordinary history. Species identification and exhaustive coverage are not prerequisites for a useful photo collection.
 
-The public branch contains the capture CLI and optional shadow analyzer. The approved deployment adds private daylight/storage supervisors, sampled review, provenance finalization, and Hermes/Telegram orchestration outside this checkout. A fresh clone does not install those helpers or schedules. The deployed recorder also uses a separately tested storage-pressure fix; source/runtime reconciliation remains a packaging task rather than a completed merge.
+The public branch contains the capture CLI and optional shadow analyzer. The approved deployment adds private daylight/storage supervisors, sampled review, provenance finalization, and Hermes/Telegram orchestration outside this checkout. A fresh clone does not install those helpers or schedules. The separately reviewed recorder storage-pressure fix is now reconciled into source with its original pressure regressions. Additional cached writer/storage-health fields are tested without putting storage scans on the acquisition thread; deployment/runtime adoption and portable orchestration remain separate.
 
 Architecture and editable Mermaid sources: [ARCHITECTURE.md](ARCHITECTURE.md).
 
@@ -20,9 +26,9 @@ Architecture and editable Mermaid sources: [ARCHITECTURE.md](ARCHITECTURE.md).
 - [x] Private collector, scheduler/monitor, and finalizer are implemented and independently reviewed. Latest documentation check: **182 private review tests passed locally** (41 collector, 30 scheduler, 111 finalizer).
 - [x] A real sampled review packet was produced with source-preservation checks. This demonstrates the packet path, not exhaustive review or a delivered digest.
 - [x] PR #2 merged into main with owner approval; this does not change the deployed recorder or schedules.
-- [ ] Reusable packaged orchestration, recorder-fix source reconciliation, species validation, and full hardware reliability evidence remain separate work.
+- [ ] Restore and verify production filesystem/recorder operation; reusable packaged orchestration, species validation, and full hardware reliability evidence remain separate work. Recorder storage-pressure source reconciliation is complete, not a filesystem repair.
 
-The deployment requests 15 camera frames/second and saves at three photos/second. Raw policy is 14 days / 40 GiB with a 2-GiB free-space reserve; the package example remains 14 days / 5 GiB. Current automatic review uses at most six sheets / 120 shortlisted frames, inspects up to three full-resolution originals/crops, and selects at most three keeper photos. The finalizer itself has a five-keeper ceiling. These are bounded operating budgets, not guarantees that every frame is inspected.
+The deployment configuration requests 15 camera frames/second and three saved photos/second; capture is currently paused, not successfully saving at that rate. Raw policy is 14 days / 40 GiB with a 2-GiB free-space reserve; the package example remains 14 days / 5 GiB. Current automatic review uses at most six sheets / 120 shortlisted frames, inspects up to three full-resolution originals/crops, and selects at most three keeper photos. The finalizer itself has a five-keeper ceiling. These are bounded operating budgets, not guarantees that every frame is inspected.
 
 ## 3. Delivery sequence
 
@@ -62,7 +68,7 @@ Implemented: readable filesystem events/manifests, crash-recovery safeguards, ma
 Private deployment adds expected-volume checks, preserved migration backup, separately tested storage-pressure improvements, and a keeper archive outside raw cleanup.
 
 Remaining:
-- [ ] Reconcile the recorder's tested storage-pressure fix into reviewed public source without silently replacing deployed environments.
+- [x] Reconcile the exact reviewed storage-pressure fix and add bounded cached writer/storage-health reporting in source, without silently replacing the deployed recorder.
 - [ ] Reusable packaging/documentation for volume guards, backup/restore, and rollback.
 - [ ] More physical media/power-loss and sustained live-camera evidence; synthetic/replay/process-kill tests are not equivalent.
 
@@ -87,9 +93,9 @@ The former 18-of-20-arrivals and nuisance-rate studies are optional diagnostic b
 
 No automatic cloud substitution, large runtime installation, or new hardware purchase follows from this plan. The already approved selected-image AI review is a separate external boundary, not a local species model.
 
-### P6 — Bounded evening review, keepers, and digest
+### P6 — Bounded evening review, keepers, digest and offline activity report
 
-Private implementation exists and its 182 tests pass locally. Preserve the existing contract:
+Private implementation exists; 182 tests passed locally in the historical review baseline. This does not verify current operation or the new report helpers. Preserve the existing contract:
 
 1. Wait until cutoff and recorder idle; require the existing capture-data lock and one bounded worker.
 2. Sample retained frames, run local NanoDet, and include systematic no-candidate controls.
@@ -123,11 +129,22 @@ Species-release validation remains separate from keeper-workflow usefulness. Nev
 
 The foreground run CLI does not enforce a solar window itself. Core local capture/model inference does not require cloud inference; valid ephemeris is required for automatic daylight starts, while selected-image AI review and Telegram require their external services.
 
+### P6b — Approved gallery and daily activity report — issue #5
+
+Implement and verify the contracts in specification BW-REPORT-001 through BW-REPORT-010. The gallery includes inventory/model records beyond the keeper selection, with safe original access, bounded portable bytes, explicitly sampled hourly activity, coarse session coverage, prepared-receipt confirmation provenance, and UTC-gap photo groups. Do not infer individual birds, exact visits, or feeding duration.
+
+- [x] Read-only normalization and offline rendering have focused provenance/timezone/UI tests and a real saved-day metadata smoke check.
+- [ ] Complete interrupted exporter performance work and verify secure export, a real desktop/mobile report, original preservation and portable attachment budgets. No performance success is claimed.
+- [ ] Fix private-helper import binding, artifact ownership/deletion, and historical-receipt symlink gaps; verify adversarial cases before source-pinned generation, report-owned retention, and existing-digest attachment integration. Automatic generation/delivery remains disabled.
+- [ ] Observe actual scheduled delivery separately; preparation and enabled jobs are not delivery proof.
+
+See [DAILY_REPORT.md](DAILY_REPORT.md). Experimental individual recognition remains future work after this milestone.
+
 ## 4. Next work and acceptance traceability
 
 The authoritative requirement-level map is [TRACEABILITY.md](TRACEABILITY.md), generated from [traceability.json](traceability.json). Each stable specification ID maps to a feature, source/test references or declared private evidence, separate implementation/test/field statuses, and outstanding issues. The phase-level mapping below complements that registry; it does not substitute for individual requirement evidence. Validate changes with `python3 scripts/check_traceability.py --check` from the repository root.
 
-Priority is keeper quality and safe repeatable operation. Issues #4/#6 concern confirmation and representative photos; #8 still covers packaging/recovery/soak gaps despite privately deployed scheduling. #3 can supply comparison examples without promising complete coverage. #5 is an optional observation/coverage report, not an exhaustive visitor log; the private finalizer already provides provenance-backed photo observations. #7 remains future species work.
+Priority is keeper quality and safe repeatable operation. Issues #4/#6 concern confirmation and representative photos; #8 still covers packaging/recovery/soak gaps despite privately deployed scheduling. #3 can supply comparison examples without promising complete coverage. #5 is now an owner-approved daily gallery/activity report, not an exhaustive visitor log; the private finalizer already provides provenance-backed photo observations. #7 remains future species work.
 
 - Specification §§1–4: product priority, composition, camera and motion → P1/P2/P4.
 - §5: local-model uncertainty and later species validation → P5/P6.

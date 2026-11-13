@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "specification": "docs/SPECIFICATION.md",
-  "spec_sha256": "de771b4f1022288a87b1602e5eca11136611a53dcfbb1f33a4aa16823e882bfb",
+  "spec_sha256": "3543d982e9a219019968cac792dcef191a352686cbbcfa65ee96736f31ff50e9",
   "private_evidence": [
     {
       "id": "PRIVATE-FOCUS",
@@ -42,6 +42,16 @@
       "id": "PRIVATE-DELIVERY",
       "summary": "Private preparation/Telegram integration; no new delivery verified here",
       "public_report": "docs/DEPLOYMENT_EVIDENCE.md#delivery"
+    },
+    {
+      "id": "PRIVATE-REPORT-GENERATOR",
+      "summary": "Bounded source-verified report-generation bridge; deployment and delivery require separate evidence",
+      "public_report": "docs/DEPLOYMENT_EVIDENCE.md#report-bridge"
+    },
+    {
+      "id": "PRIVATE-REPORT-RETENTION",
+      "summary": "Hash-backed private report ownership and expiry protection; no raw/keeper deletion",
+      "public_report": "docs/DEPLOYMENT_EVIDENCE.md#report-retention"
     }
   ],
   "requirements": [
@@ -1161,7 +1171,7 @@
     },
     {
       "id": "BW-CLI-001",
-      "spec_hash": "d902a58dd7b42767194c7a984e6d1154a42323276e96bc4243e9a8f077328e1d",
+      "spec_hash": "ec6bba3e0ef355a619d7932457ef879fe284421cddbd07be175831c223d4709c",
       "feature": "Available foreground CLI and private automation boundary",
       "scope": "mixed",
       "implementation_status": "implemented",
@@ -1174,7 +1184,8 @@
       "tests": [
         "tests/test_cli.py::test_help_lists_capture_commands",
         "tests/test_shadow_cli.py::test_analyze_help_explains_shadow_mode",
-        "tests/test_shadow_cli.py::test_analyze_one_pass_does_not_construct_camera"
+        "tests/test_shadow_cli.py::test_analyze_one_pass_does_not_construct_camera",
+        "tests/test_report_cli.py::test_report_cli_dispatches_without_camera"
       ],
       "evidence": [
         "docs/SETUP.md",
@@ -1188,7 +1199,7 @@
       "issues": [
         8
       ],
-      "gap": "Six commands exist and package does not install private jobs; solar cutoff is not in run. Help/analysis tests do not prove end-to-end behavior for every command or operator adherence to approved daylight. Enabled schedules cannot establish liveness."
+      "gap": "Seven commands include offline report and do not install private jobs; foreground run still has no solar guard. Available command surface is distinct from all broader target CLI clauses, operator daylight adherence and live process health."
     },
     {
       "id": "BW-CLI-002",
@@ -1609,7 +1620,7 @@
       "issues": [
         8
       ],
-      "gap": "Public defaults are 14 days / 5 GiB / 2-GiB reserve; private deployed raw policy is 14 days / 40 GiB / 2-GiB reserve. No guaranteed review availability or long-duration reserve-pressure validation; deployed recorder storage-pressure fix remains outside public source."
+      "gap": "Public defaults are 14 days / 5 GiB / 2-GiB reserve; private deployed raw policy is 14 days / 40 GiB / 2-GiB reserve. No guaranteed review availability or long-duration reserve-pressure validation; reviewed storage-pressure fix is now reconciled in source; runtime adoption remains separate."
     },
     {
       "id": "BW-DATA-007",
@@ -1692,7 +1703,7 @@
       "issues": [
         8
       ],
-      "gap": "Pins/active events and unknown/symlink content are protected; _usage counts nonsymlink files under raw root including metadata/temporaries. External analysis SQLite has its own budget, not a unified crop/index-overhead storage monitor; no public pin/unpin CLI and deployed storage-pressure fix is not reconciled."
+      "gap": "Pins/active events and unknown/symlink content are protected; _usage counts nonsymlink files under raw root including metadata/temporaries. External analysis SQLite has its own budget, not a unified crop/index-overhead storage monitor; no public pin/unpin CLI and reviewed storage-pressure fix is now reconciled in source; runtime adoption remains separate."
     },
     {
       "id": "BW-DATA-010",
@@ -1709,7 +1720,8 @@
       "tests": [
         "tests/test_storage.py::test_full_disk_restart_still_reports_health_and_incomplete",
         "tests/test_runner.py::test_writer_reports_storage_errors_without_crashing_producer",
-        "tests/test_storage_recovery.py::test_impossible_frame_is_rejected_before_journal_or_jpeg"
+        "tests/test_storage_recovery.py::test_impossible_frame_is_rejected_before_journal_or_jpeg",
+        "tests/test_runner.py::test_writer_health_caches_storage_full_and_retains_write_error"
       ],
       "evidence": [
         "docs/OPERATIONS.md",
@@ -1721,7 +1733,7 @@
       "issues": [
         8
       ],
-      "gap": "EventStore rejects writes with storage_full and preserves pins; writer counts failures. Public run_capture does not merge EventStore.health storage_full into periodic health or implement the separately deployed pressure-suspension fix. Continued healthy reporting under every full-disk condition is not proved."
+      "gap": "Storage rejects quota/reserve-constrained writes and preserves pins; public writer now publishes cached fullness and last-error snapshots. Exhaustive full-disk I/O failure reporting and physical-media behavior remain unvalidated; snapshots are not current disk probes."
     },
     {
       "id": "BW-DATA-011",
@@ -2622,7 +2634,8 @@
       "tests": [
         "tests/test_integration.py::test_replay_capture_writes_originals_and_health",
         "tests/test_runner.py::test_writer_reports_storage_errors_without_crashing_producer",
-        "tests/test_runner.py::test_writer_rejects_oversized_work_without_waiting"
+        "tests/test_runner.py::test_writer_rejects_oversized_work_without_waiting",
+        "tests/test_runner.py::test_capture_publishes_writer_health_periodically_on_reconnect_and_stop"
       ],
       "evidence": [
         "docs/OPERATIONS.md",
@@ -2632,7 +2645,7 @@
       "issues": [
         8
       ],
-      "gap": "Capture exposes received/invalid frames, reconnects, dropped saves and storage errors; analysis returns deferred/failed counts. Trigger-suppression and identification-latency counters are absent; sensor frame drops are not measured and queue/model counters are not integrated into capture health."
+      "gap": "Capture exposes existing counters plus writer queue depth, pending JPEG bytes and cached storage-full/last-error fields without acquisition-thread scans. Trigger-suppression and identification-latency counters remain absent; sensor-frame drops and complete combined inference health are not measured."
     },
     {
       "id": "BW-OPS-008",
@@ -3091,6 +3104,249 @@
       "gap": "Source implements queue_limit=100 with allowed range 1..100, pending/running/completed/failed, three interrupted attempts, completed-manifest discovery, deferred summary counters and bounded scans/storage. Deferred jobs are not persisted as per-event analysis_deferred markers; no explicit reanalysis command or opportunistic-scan priority exists. Changed settings/manifest can create a new job but are not that command; queue is not a complete event index."
     },
     {
+      "id": "BW-REPORT-001",
+      "spec_hash": "e0afd101961f5c6f7ac6620a06fdffc32716c89c06790a71764e47a47fe63ef7",
+      "feature": "Completed packet/receipt report command",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "unvalidated",
+      "code": [
+        "src/birdwatcher/report_data.py",
+        "src/birdwatcher/cli.py"
+      ],
+      "tests": [
+        "tests/test_report_cli.py::test_report_cli_dispatches_without_camera",
+        "tests/test_report_data.py::test_receipt_provenance_must_match_original_shortlist"
+      ],
+      "evidence": [
+        "docs/DAILY_REPORT.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        5
+      ],
+      "gap": "Core normalization/CLI are tested; integrated export and real artifact verification are still being completed."
+    },
+    {
+      "id": "BW-REPORT-002",
+      "spec_hash": "f79e626df6e4d435405be09141d22cb248313bc663bf6f46ed417522fcb29f3f",
+      "feature": "All-inventory gallery independent of keeper selection",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "verified",
+      "field_status": "unvalidated",
+      "code": [
+        "src/birdwatcher/report_data.py",
+        "src/birdwatcher/report_view.py"
+      ],
+      "tests": [
+        "tests/test_report_data.py::test_normalization_uses_all_inventory_not_shortlist",
+        "tests/test_report_view.py::test_gallery_has_distinct_states_filters_pagination_and_inspector"
+      ],
+      "evidence": [
+        "docs/DAILY_REPORT.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        5,
+        6
+      ],
+      "gap": "All metadata states are exposed; source availability and model misses remain limits, not absence claims."
+    },
+    {
+      "id": "BW-REPORT-003",
+      "spec_hash": "09bce23045a831c60999be64496704504e9ac70fedf405b19212bf84efcb4c29",
+      "feature": "DST-aware sampled hourly activity and coarse coverage",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "verified",
+      "field_status": "unvalidated",
+      "code": [
+        "src/birdwatcher/report_data.py",
+        "src/birdwatcher/report_view.py"
+      ],
+      "tests": [
+        "tests/test_report_data.py::test_dst_days_have_real_hours_and_session_totals",
+        "tests/test_report_data.py::test_session_union_is_clipped_and_hourly_not_continuous_coverage",
+        "tests/test_report_data.py::test_incomplete_coverage_never_claims_monitored_day"
+      ],
+      "evidence": [
+        "docs/DAILY_REPORT.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        5
+      ],
+      "gap": "Session bounds are approximate; neither complete frame coverage nor feeding rates are established."
+    },
+    {
+      "id": "BW-REPORT-004",
+      "spec_hash": "ca51655ab1ed70b9756413230a382dad28a24c76a848558e50b3acd6c1b7a670",
+      "feature": "First/last confirmed photos and UTC-gap groups",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "verified",
+      "field_status": "unvalidated",
+      "code": [
+        "src/birdwatcher/report_data.py",
+        "src/birdwatcher/cli.py"
+      ],
+      "tests": [
+        "tests/test_report_data.py::test_receipt_confirms_even_no_box_control_and_groups_utc_observations",
+        "tests/test_report_data.py::test_confirmed_groups_cross_dst_fold_in_utc_not_wall_clock",
+        "tests/test_report_cli.py::test_report_cli_rejects_invalid_group_gap_before_export"
+      ],
+      "evidence": [
+        "docs/DAILY_REPORT.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        5
+      ],
+      "gap": "Groups are a declared heuristic, not actual visits, elapsed feeding time or distinct individuals."
+    },
+    {
+      "id": "BW-REPORT-005",
+      "spec_hash": "c8d80c18a20fa76d12541c9e4e138c5ef5d42857f7b356e318e3990f5764b5d7",
+      "feature": "Honest inter-day comparison of sampled activity",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "unvalidated",
+      "code": [
+        "src/birdwatcher/report_data.py",
+        "src/birdwatcher/report_export.py",
+        "src/birdwatcher/report_view.py"
+      ],
+      "tests": [
+        "tests/test_report_view.py::test_activity_and_limits_remain_explicit"
+      ],
+      "evidence": [
+        "docs/DAILY_REPORT.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        5
+      ],
+      "gap": "Cross-day export/receipt integration is being completed; unequal observation effort and coarse coverage limit interpretation."
+    },
+    {
+      "id": "BW-REPORT-006",
+      "spec_hash": "1fc59dca6f290f13c385ce7147f8dd56219d5576dbd91d00d982ee4d2d2dde18",
+      "feature": "Original/archived-keeper image access with verified provenance",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "unvalidated",
+      "code": [
+        "src/birdwatcher/report_data.py",
+        "src/birdwatcher/report_export.py"
+      ],
+      "tests": [
+        "tests/test_report_data.py::test_validated_keeper_archive_path_is_internal_metadata_only"
+      ],
+      "evidence": [
+        "docs/DAILY_REPORT.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        5,
+        6
+      ],
+      "gap": "Metadata validates archive provenance; original/keeper fallback and expiry/export behavior still require complete exporter proof."
+    },
+    {
+      "id": "BW-REPORT-007",
+      "spec_hash": "e180203469cb55951acac78678e33b0a39dca3a947262f1a1c078e610bf116f7",
+      "feature": "Private bounded portable offline attachment",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "unvalidated",
+      "code": [
+        "src/birdwatcher/report_export.py",
+        "src/birdwatcher/report_view.py"
+      ],
+      "tests": [
+        "tests/test_report_view.py::test_urls_are_available_only_when_safe_for_export_mode",
+        "tests/test_report_view.py::test_serialization_escapes_html_and_strips_private_fields_without_mutation"
+      ],
+      "evidence": [
+        "docs/DAILY_REPORT.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        5
+      ],
+      "gap": "Portable budget/source-byte export and real mobile HTML verification are still in progress."
+    },
+    {
+      "id": "BW-REPORT-008",
+      "spec_hash": "c61b205d0b28445370861aed47f8fa4c0b470e3d07b5e387995b4451449d28b7",
+      "feature": "Disjoint read-only input and atomic private artifact publication",
+      "scope": "public",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "unvalidated",
+      "code": [
+        "src/birdwatcher/report_export.py"
+      ],
+      "tests": [],
+      "evidence": [
+        "docs/DAILY_REPORT.md"
+      ],
+      "private_evidence": [],
+      "issues": [
+        5,
+        8
+      ],
+      "gap": "Exporter alias, ownership, atomic-failure and idempotence safety are being completed after an interrupted implementation worker."
+    },
+    {
+      "id": "BW-REPORT-009",
+      "spec_hash": "e3aaca003a354ce747cb8adc4c8dd82e79d78286f869ca0723df458e16b04152",
+      "feature": "Existing-digest report generation and delivery boundary",
+      "scope": "private",
+      "implementation_status": "partial",
+      "test_status": "partial",
+      "field_status": "unvalidated",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/DAILY_REPORT.md"
+      ],
+      "private_evidence": [
+        "PRIVATE-REPORT-GENERATOR"
+      ],
+      "issues": [
+        5
+      ],
+      "gap": "The bounded source-verification bridge has synthetic tests; runtime installation, wiring and first scheduled delivery remain unverified."
+    },
+    {
+      "id": "BW-REPORT-010",
+      "spec_hash": "31e2114ca4e15caaf3e2e1b74a71663edf6ae9760543ab6bdc41ed7185e66732",
+      "feature": "Report-owned expiry without deleting unknown or keeper data",
+      "scope": "private",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "unvalidated",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/DAILY_REPORT.md"
+      ],
+      "private_evidence": [
+        "PRIVATE-REPORT-RETENTION"
+      ],
+      "issues": [
+        5,
+        8
+      ],
+      "gap": "Private retention regression tests protect known files, modifications, aliases and unrelated data; actual installed runtime/housekeeping verification remains pending."
+    },
+    {
       "id": "BW-SCOPE-001",
       "spec_hash": "04dce371c00e7750870145f8eb378c2819eb780c59996185d5e5e3d36de2d95a",
       "feature": "Capture milestone surface",
@@ -3175,7 +3431,7 @@
     },
     {
       "id": "BW-SCOPE-004",
-      "spec_hash": "7ce06938f9cbfeb787400510374648b3096b2d943779443c5190147de23676cd",
+      "spec_hash": "8091fd2a883638cc9e79130ea0e6bfd50fe415bc5c8a1a9e346c85de3b6add93",
       "feature": "Excluded features and no public photo publication",
       "scope": "policy",
       "implementation_status": "excluded",
@@ -3188,7 +3444,7 @@
       ],
       "private_evidence": [],
       "issues": [],
-      "gap": "Negative scope/approval boundary, not an implemented audio/web/multicamera feature or exhaustive security audit."
+      "gap": "Negative scope/approval boundary: a private offline gallery/activity report is approved, not a public web service. Individual recognition is future experimental research, not part of this implementation."
     },
     {
       "id": "BW-TRACE-001",

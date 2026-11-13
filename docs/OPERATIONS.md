@@ -1,5 +1,17 @@
 # Operations — early capture milestone
 
+## Current recovery status
+
+**Production capture is manually paused and not restored. Keep it stopped.** The kernel NTFS3 driver failed actual production health-file replacement. Limited `ntfsfix` work and the NTFS-3G replacement driver allowed isolated temporary-file and replayed-writer tests, but subsequent actual recorder startup still failed with `EIO` replacing the real `health.json`. A stale `capturing` value is not live evidence. Do not repeat filesystem repair blindly or treat synthetic URL-whitespace/ENOSPC regression results as a filesystem repair.
+
+Recovery acceptance requires an approved supervised daylight test: real recorder startup, fresh saved JPEGs read back successfully, and a successful restart, with current process/frame evidence and all storage/solar guards intact. Preserve originals, keepers, backups, and unknown files. This checkpoint does not pass those gates or authorize a restart.
+
+A sunrise attempt also failed on a fixed solar-cache temporary filename. Concurrent writers are a hypothesis, not an established cause. Validate the launch path separately after repair.
+
+Gallery/report source is implemented locally but unactivated. Private helper review found import-resolution binding, unrelated-artifact adoption/deletion, and historical-receipt symlink gaps. Automatic report generation and delivery must remain disabled until fixes and adversarial verification pass. Exporter performance work is partially edited and unverified.
+
+The implementation and historical evidence below do not override this failed production status.
+
 ## What is available
 
 - `doctor`: brief live camera check and negotiated capture summary.
@@ -7,6 +19,7 @@
 - `run [--duration SECONDS]`: foreground motion-triggered capture using privately configured feeder regions.
 - `status`: last saved local health report. This is a snapshot, not a live IPC endpoint; a crashed process may leave a stale report.
 - `events --limit N`: inspect local event manifests without starting the camera.
+- `report --packet FILE --output-dir DIR`: read-only offline gallery/activity report from a completed packet, optionally with a matching prepared receipt. See [DAILY_REPORT.md](DAILY_REPORT.md).
 - `analyze --model FILE`: optional separate-process shadow analysis of completed events; records provisional bird candidates without changing or filtering photographs. See [SHADOW_ANALYSIS.md](SHADOW_ANALYSIS.md).
 
 Put global `--config FILE` before the subcommand. Read-only inspection does not create an absent data directory. The core CLI does not provide a species classifier, correction/reanalysis command, web server, messaging integration, or startup-service installer. The approved deployment uses separate private daylight/review/Hermes helpers for scheduling and Telegram digests; these are not installed by cloning this repository. See [ARCHITECTURE.md](ARCHITECTURE.md) for the Mermaid diagrams and implementation boundary.
@@ -23,7 +36,7 @@ A bounded writer separates camera acquisition from disk writes. Missed saves and
 
 ## Private daylight and review automation
 
-Approved private schedules arm near-sunrise capture and periodically check evening readiness. The supervisor validates date/timezone/ephemeris, pause/storage identity, and an absolute conservative sunset cutoff. A missing/wrong volume must not fall back to internal storage. The deployed recorder includes a separately tested storage-pressure fix that still needs reconciliation into reviewed public source.
+Approved private schedules implement near-sunrise arming and periodic evening-readiness checks; they do not override the current manual pause. The supervisor validates date/timezone/ephemeris, pause/storage identity, and an absolute conservative sunset cutoff. A missing/wrong volume must not fall back to internal storage. The separately reviewed recorder storage-pressure fix is now reconciled into source. The source also reports writer queue depth, pending JPEG bytes and cached storage-full/last-error fields; these are last-observed state, not a fresh disk probe or liveness guarantee. Existing immutable runtime adoption must be verified separately.
 
 The core foreground run command does not implement those solar/volume guards. Do not bypass them for unattended operation or install a second competing recorder. A job marked enabled/scheduled and an old health file do not establish liveness; inspect the real process plus fresh increasing frame receipts at the configured live root.
 

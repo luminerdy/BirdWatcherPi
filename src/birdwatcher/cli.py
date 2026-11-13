@@ -44,6 +44,38 @@ def parser():
     analyze.add_argument(
         "--full-frame", action="store_true", help="Use full images instead of configured regions"
     )
+    report = commands.add_parser("report", help="Build a private offline photo/activity report")
+    report.add_argument(
+        "--packet", type=Path, required=True, help="Completed private review packet"
+    )
+    report.add_argument(
+        "--output-dir",
+        type=Path,
+        required=True,
+        help="Private report directory outside captures/Git",
+    )
+    report.add_argument(
+        "--source-root", type=Path, help="Expected capture root; defaults to private configuration"
+    )
+    report.add_argument(
+        "--receipt", type=Path, help="Optional packet-matched prepared visual-review receipt"
+    )
+    report.add_argument(
+        "--compare-with",
+        type=Path,
+        action="append",
+        default=[],
+        help="Another completed packet for sampled-activity comparison; repeatable",
+    )
+    report.add_argument(
+        "--visit-gap-seconds",
+        type=int,
+        default=60,
+        help="Heuristic photo-group gap, not an individual-bird count",
+    )
+    report.add_argument(
+        "--no-portable", action="store_true", help="Skip the bounded offline attachment"
+    )
     return root
 
 
@@ -62,6 +94,8 @@ def main(argv=None):
             root.error("duration must be a finite positive number")
     if args.command == "events" and not 1 <= args.limit <= 1000:
         root.error("limit must be between 1 and 1000")
+    if args.command == "report" and not 1 <= args.visit_gap_seconds <= 3600:
+        root.error("visit-gap-seconds must be between 1 and 3600")
     if args.command == "analyze":
         if not math.isfinite(args.threshold) or not 0 < args.threshold <= 1:
             root.error("threshold must be finite and in (0, 1]")
@@ -121,6 +155,20 @@ def main(argv=None):
                     json.loads(health.read_text()) if health.is_file() else {"state": "not_started"}
                 )
                 print(json.dumps(result, indent=2))
+        elif args.command == "report":
+            from .report_export import build_report
+
+            result = build_report(
+                args.packet,
+                args.output_dir,
+                source_root=args.source_root or config.storage.data_dir,
+                receipt_path=args.receipt,
+                comparison_packets=tuple(args.compare_with),
+                visit_gap_seconds=args.visit_gap_seconds,
+                portable=not args.no_portable,
+            )
+            print(json.dumps(result, indent=2))
+            return 0
         elif args.command == "analyze":
             result = run_shadow_analysis(args, config)
             print(json.dumps(result, indent=2))

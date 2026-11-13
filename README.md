@@ -2,7 +2,9 @@
 
 A local-first Python bird-feeder camera project for Raspberry Pi: collect good bird photographs without delaying capture. Prioritize sharp, well-exposed keepers and variety, not an exhaustive visitor census.
 
-> **Project status: experimental capture + shadow analysis, with approved private keeper automation.** This branch provides motion photography and optional separate-process local bird-candidate analysis. The deployed setup adds daylight scheduling, guarded USB storage, sampled evening visual review, a separate keeper archive, and a private Telegram digest through helpers outside this checkout. A fresh clone installs none of those private jobs. Recognition accuracy, validated species classification, automatic quality ranking/calibration, and a fully validated portable deployment remain incomplete.
+> **Recovery checkpoint — production capture is paused and not restored.** Actual recorder startup still fails with an I/O error replacing `health.json`. Persisted `capturing` health is stale, not proof of a live recorder. Isolated temporary-file and replay tests do not establish production recovery. Keep capture stopped until supervised real recorder startup, saved-JPEG readback, and restart checks pass within daylight safeguards. Gallery/report source is implemented locally but unactivated; automatic report generation and delivery must remain disabled pending security fixes and verification. See [current recovery status](docs/OPERATIONS.md#current-recovery-status) and the [non-deployable checkpoint handoff](docs/RECOVERY_CHECKPOINT.md).
+
+The experimental package provides motion photography, optional separate-process local bird-candidate analysis, and a read-only gallery/activity report command. Private helpers outside this checkout implement daylight scheduling, storage guards, sampled review, keeper archiving, and digest preparation; their existence does not establish current operation or delivery. A fresh clone installs none of those private jobs. Recognition accuracy, validated species classification, automatic quality ranking/calibration, and a fully validated portable deployment remain incomplete.
 
 ## Start here
 
@@ -60,6 +62,7 @@ The initial shadow-mode detector is a pinned OpenCV Zoo NanoDet model, exercised
 
 - [Architecture and how it works](docs/ARCHITECTURE.md) — Mermaid system/lifecycle diagrams, deployed-vs-packaged scope, privacy boundaries, and operating outline.
 - [Product and engineering specification](docs/SPECIFICATION.md) — stable requirement IDs, scope, behavior, reliability, and acceptance criteria.
+- [Private daily photo/activity report](docs/DAILY_REPORT.md) — browse beyond keeper selections, inspect supporting originals, and compare explicitly sampled activity without a public website.
 - [Requirement-to-feature traceability](docs/TRACEABILITY.md) — implementation/test/field status, exact source/test references, evidence, issue gaps, and reverse indexes; [machine-readable registry](docs/traceability.json).
 - [Implementation plan](docs/IMPLEMENTATION_PLAN.md) — ordered work packages, dependencies, tests, and release gates.
 - [Current status and prioritized to-do list](docs/TODO.md) — completed building blocks, merged source, and remaining work tracked in issues #3–#8.
@@ -77,12 +80,15 @@ Implemented building blocks are not the same as a fully validated release:
 - [x] **Capture baseline:** Python package/CLI, validated regions, persistent capture, buffered photo bursts, bounded writing, storage safeguards, recovery tests, and health.
 - [x] **Private setup workflow:** region review and reversible feeding-plane focus experiments; an integrated calibration UI remains pending.
 - [x] **Shadow analysis delivered through PR #2:** pinned local model, durable bounded analysis queue, uncertainty/provenance, and 139 capture/shadow baseline tests; now merged into main. A separate traceability test suite checks the requirement registry.
-- [x] **Private daylight/review automation:** owner-approved schedules, solar/storage guards, sampled candidate/control packets, verified keeper finalization, and change-gated digest preparation; 182 private review tests passed locally.
-- [x] **Private rolling storage:** verified USB migration with preserved backup; selected keeper archive stays outside raw cleanup.
+- [x] **Historical private daylight/review implementation:** owner-approved schedules, solar/storage guards, sampled candidate/control packets, verified keeper finalization, and change-gated digest preparation; 182 private review tests passed locally. This is not current capture or delivery proof.
+- [x] **Historical private rolling-storage migration:** verified USB copy with preserved backup; selected keeper archive stays outside raw cleanup. Production filesystem writes currently fail.
 - [x] **PR #2 merged into main** with owner approval. Merging source does not authorize filtering, change the running recorder, or replace private schedules.
 - [ ] **P1 / #4 and #6:** improve confirmation, keeper quality/variety, and optional non-destructive close-ups.
-- [ ] **P1 / #8:** reconcile the deployed storage-pressure fix into reviewed public source, package reusable guards/review integration, and complete physical recovery/soak/rollback evidence.
-- [ ] **P2 / #3 and #5:** optional comparison photos and a reusable photo-observation report, not an exhaustive census.
+- [x] **Storage source reconciliation:** the deployed, reviewed pruning-scan fix is now in source, with bounded writer queue/byte and cached storage-health fields. Physical reliability gates remain distinct.
+- [ ] **P0 / #8:** resolve production filesystem I/O failures and verify real recorder startup, saved-JPEG readback, and restart before resuming capture.
+- [ ] **P1 / #5 and #6:** fix private report-helper security findings before verifying the all-inventory gallery, bounded offline attachment, and sampled daily activity report. Automatic generation/delivery remains disabled; exporter performance edits are incomplete and unverified.
+- [ ] **P1 / #8:** package reusable guards/review integration and complete physical recovery/soak/rollback evidence.
+- [ ] **P2 / #3:** additional useful comparison/evaluation photographs, not an exhaustive census.
 - [ ] **P2 / #7:** select and validate a species classifier after detection/crop quality is established.
 
 See [TODO.md](docs/TODO.md) for acceptance boundaries and remaining technical gaps. **Do not record after dark**, including during reliability tests. Private schedules already exist; this roadmap and a fresh clone do not install, enable, or change them. Scheduled/enabled does not prove camera liveness or digest delivery.
@@ -91,7 +97,7 @@ A reliable motion-triggered photo recorder is the first useful milestone. Specie
 
 ## Installation and usage
 
-The current CLI provides `doctor`, `snapshot`, `run`, `status`, `events`, and optional `analyze`. Use an isolated virtual environment and the documented commands in [SETUP.md](docs/SETUP.md). Runtime and development version snapshots are supplied in `requirements.txt` and `requirements-dev.txt`. Analysis requires a separately obtained, hash-verified model; no model download happens at capture startup.
+The current CLI provides `doctor`, `snapshot`, `run`, `status`, `events`, optional `analyze`, and offline `report`. Use an isolated virtual environment and the documented commands in [SETUP.md](docs/SETUP.md). Runtime and development version snapshots are supplied in `requirements.txt` and `requirements-dev.txt`. Analysis requires a separately obtained, hash-verified model; no model download happens at capture startup.
 
 Automatic calibration/focus control, correction/reanalysis, validated species models, and a portable unattended installer remain future package work. The current camera adapter preserves existing focus/exposure controls and does not download models. Event folders currently use UTC dates; configurable local date partitioning remains pending.
 
