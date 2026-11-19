@@ -578,3 +578,44 @@ def test_directory_sync_failure_keeps_usage_accounting_truthful(tmp_path, monkey
     recovered = EventStore(config)
     assert len(recovered.events()[0]["frames"]) == 1
     assert not intent.exists()
+
+
+def test_prune_does_not_rescan_entire_tree_for_each_retained_event(tmp_path, monkeypatch):
+    config = StorageConfig(tmp_path / "data", min_free_bytes=0, retention_days=100000)
+    store = EventStore(config)
+    for i in range(20):
+        frame = Frame(i, "2026-11-13T12:00:00Z", float(i), b"x" * 1000)
+        store.apply(EventAction("start", f"event-{i}", frame))
+        store.apply(EventAction("frame", f"event-{i}", frame))
+        store.apply(EventAction("end", f"event-{i}", reason="quiet"))
+    usage = store._usage
+    calls = []
+
+    def counted():
+        calls.append(1)
+        return usage()
+
+    monkeypatch.setattr(store, "_usage", counted)
+    frame = Frame(21, "2026-11-13T12:00:00Z", 21.0, b"x")
+    store.apply(EventAction("start", "next", frame))
+    assert len(calls) <= 2
+    assert len(store.events(limit=100)) == 21
+
+
+def test_usage_tolerates_concurrent_atomic_health_replacement(tmp_path, monkeypatch):
+    from birdwatcher import storage
+
+    config = StorageConfig(tmp_path / "data", min_free_bytes=0, retention_days=100000)
+    store = EventStore(config)
+    transient = config.data_dir / ".health-transient"
+    transient.write_text("health")
+    walk = storage.os.walk
+
+    def racing_walk(*args, **kwargs):
+        for base, dirs, files in walk(*args, **kwargs):
+            if ".health-transient" in files:
+                transient.unlink()
+            yield base, dirs, files
+
+    monkeypatch.setattr(storage.os, "walk", racing_walk)
+    assert store._usage() == 0

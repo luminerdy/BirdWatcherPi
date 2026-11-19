@@ -17,6 +17,7 @@ class ActionWriter:
         self.errors = 0
         self.last_error = None
         self.bad_events = set()
+        self._storage_failed_events = set()
         self._reserved_endings = set()
         self._ignored_events = set()
         self._lock = threading.Lock()
@@ -76,19 +77,23 @@ class ActionWriter:
             action, size = item
             try:
                 with self._lock:
-                    if action.kind == "end" and action.event_id in self.bad_events:
-                        action = replace(action, reason="writer_overload")
+                    if action.kind == "end":
+                        if action.event_id in self._storage_failed_events:
+                            action = replace(action, reason="storage_error")
+                        elif action.event_id in self.bad_events:
+                            action = replace(action, reason="writer_overload")
                 self.store.apply(action)
             except (OSError, ValueError, RuntimeError):
                 with self._lock:
                     self.errors += 1
                     self.last_error = "storage_write_failed"
-                    self.bad_events.add(action.event_id)
+                    self._storage_failed_events.add(action.event_id)
             finally:
                 with self._lock:
                     self.pending_bytes -= size
                     if action.kind == "end":
                         self.bad_events.discard(action.event_id)
+                        self._storage_failed_events.discard(action.event_id)
                 self.queue.task_done()
 
     def __exit__(self, *args):

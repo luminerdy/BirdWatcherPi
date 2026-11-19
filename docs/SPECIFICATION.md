@@ -1,6 +1,22 @@
 # BirdWatcherPi — Product and Engineering Specification
 
-Status: Specification v0.4 — stable requirement IDs and checked feature traceability for keeper-focused photography with approved private daylight/review automation. This separates the public package, deployed operational helpers, and future work; it does not declare all release gates passed. See [TODO.md](TODO.md), [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md), and [ARCHITECTURE.md](ARCHITECTURE.md).
+Status: Specification v0.5 — stable requirement IDs and checked feature traceability for keeper-focused photography. This separates the public package, private Pi utilities, historical plans, and future work; it does not declare recovery or release gates passed. See [TODO.md](TODO.md), [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md), and [ARCHITECTURE.md](ARCHITECTURE.md).
+
+## Current recovery and private-review context
+
+The archived recovery handoff is a point-in-time snapshot, not a statement of the current local deployment's recording or schedule state. Unfinished gallery/report automation requires separate acceptance. A historical approval, installed helper, past test, schedule, health file, or prepared receipt is not evidence of a currently running recorder, completed review, or delivered report. Daylight capture, JPEG decode/readback, advancing health, storage safety, and recorder restart require coordinated acceptance; historical evidence does not establish that these gates have passed. Do not change the running application or configuration merely to bring this document up to date.
+
+The earlier AI-assisted nightly pipeline and Telegram digest described below are historical approved design and reported prior implementation, not a claim that automated review or reporting is currently operating or authorized for restart. Requirements and traceability preserve that historical target; their implementation and field statuses are not current operational status. Manual candidate scanning and review are separate, local Pi utilities outside the public package. They do not automatically ingest new captures or execute a nightly review.
+
+<a id="bw-local-001"></a> **BW-LOCAL-001** — The private one-shot scanner samples saved event frames with a local bird detector and copies candidate event directories into a separate review area. A stricter score filter reduces review volume but can miss birds; retained boxes are candidates, not confirmations, and excluded source events remain available. Errors or interruptions can leave an incomplete output. This is not a species classifier or an automated visual review.
+
+<a id="bw-local-002"></a> **BW-LOCAL-002** — The private review interface records reversible per-photo Good, Bird, and No bird marks separately from capture originals. Its filtered queue retains configured baseline and candidate groups, previously marked or finished groups, and additional groups; direct links can open filtered groups. With no explicit group link it opens the first unfinished visible group, or the first visible group when all are finished.
+
+<a id="bw-local-003"></a> **BW-LOCAL-003** — Finishing a review group marks previously unmarked photos Bird while preserving Good and No bird marks; reopening clears the finished flag but does not undo those Bird marks. The separate group No bird action preserves Good selections and changes other group photos to No bird. These are review annotations, not proof of bird identity or an instruction to delete photos.
+
+<a id="bw-local-004"></a> **BW-LOCAL-004** — The private slideshow is a manually run, local, copy-only derivative of selected Good photos: it creates new cropped/composed images and a private manifest without changing recorder originals, candidate photos, selections, or schedules. Detector misses can lead to skipped or badly cropped slides; review the output. The review interface offers no photo deletion; No bird marks and lists do not delete originals, candidate copies, exports, or backups. This does not disable the public recorder's separate configured raw-retention policy.
+
+<a id="bw-local-005"></a> **BW-LOCAL-005** — These private utilities are not installed by a fresh public checkout and are not a validated portable release. Their configuration, access details, source photos, review records, and deployment paths must remain private. Their existence or historical execution does not establish present service liveness or end-to-end acceptance.
 
 ## Requirement identity and traceability
 
@@ -64,6 +80,8 @@ Status: Specification v0.4 — stable requirement IDs and checked feature tracea
 
 ## 4. Operating pipeline
 
+The diagram describes the historical approved target, not the current recovery state; the private manual review workflow above is distinct.
+
     Approved daylight supervisor → USB camera — one persistent owner
         ├── downscaled frames → approved-region motion analysis
         ├── bounded full-resolution JPEG prebuffer and burst writer
@@ -103,7 +121,7 @@ The separate optional shadow CLI has its own durable analysis queue. It is not t
 
 - <a id="bw-motion-002"></a> **BW-MOTION-002** — Support configurable near_feeder and far_feeder regions, with coordinates normalized to [0,1]. Only approved regions need be enabled; the current private setup prioritizes one feeder. Config validation rejects invalid rectangles; the reviewed annotated preview is a private setup workflow, not a bundled calibration command.
 - <a id="bw-motion-003"></a> **BW-MOTION-003** — Initial analysis width: 640 pixels; target motion analysis: 8 frames/second.
-- <a id="bw-motion-004"></a> **BW-MOTION-004** — Initial trigger: foreground occupies at least 1% of a region in three consecutive analyzed frames. Thresholds are region-configurable and must be tuned with real footage.
+- <a id="bw-motion-004"></a> **BW-MOTION-004** — Initial trigger: foreground occupies at least 1% of a region in three consecutive analyzed frames. Threshold and persistence are globally configurable, not per-region, and must be tuned with real footage.
 - <a id="bw-motion-005"></a> **BW-MOTION-005** — Ignore motion outside the regions. Reset/warm up background after camera reconnection, focus changes, or major exposure changes.
 - <a id="bw-motion-006"></a> **BW-MOTION-006** — Suppress near-whole-frame lighting transients with configurable area/change checks. Log suppression decisions.
 - <a id="bw-motion-007"></a> **BW-MOTION-007** — A bird arriving before warm-up or remaining motionless can escape motion-only triggering. In the complete release, run a low-frequency presence scan, initially every two seconds, when detector capacity permits. Presence scans are best-effort, never block capture, and must report skipped scans.
@@ -184,6 +202,16 @@ The following is the broader target contract; calibrate, correct, reanalyze, spe
 - <a id="bw-cli-009"></a> **BW-CLI-009** — birdwatcher reanalyze: enqueue selected existing events with a selected model version.
 
 <a id="bw-config-001"></a> **BW-CONFIG-001** — TOML configuration groups: camera, motion, regions, capture, detection, classification, storage, logging, location, and runtime. Ship a documented example with calibration-required placeholders, not guessed ROI coordinates. Validate all bounds and writable paths before starting. Version the configuration schema. No GitHub token is needed by the capture service.
+
+### Local image review site specification
+
+These are requirements for an independently built local site, not a bundled implementation or evidence of a tested deployment. The existing private interface is separate; see [local review specification and AI prompt](LOCAL_REVIEW.md).
+
+<a id="bw-review-001"></a> **BW-REVIEW-001** — A local review site must accept configurable candidate and separate state paths, display groups and their photos, persist reversible Good, No bird and Bird decisions and Finished status, and resume at the first unfinished visible group; if all are finished, open the first visible group. Finishing marks previously unmarked photos Bird while preserving Good and No bird; reopening leaves marks intact.
+
+<a id="bw-review-002"></a> **BW-REVIEW-002** — Export Good selections as copies outside the candidate tree without overwriting files or changing originals. Preserve meaningful original names and available capture timestamps with their provenance; never invent missing times or treat file modification time as capture time. Report missing timestamps and partial export failures.
+
+<a id="bw-review-003"></a> **BW-REVIEW-003** — Default to loopback and local-only operation, protect state-changing requests against CSRF, validate host and filesystem paths, reject traversal and unsafe symlinks, and document access and race limitations. Do not expose to untrusted networks without separately designed authentication, transport security, and authorization; do not include secrets or private data in the repository.
 
 ## 8. Reliability, privacy, and deployment
 

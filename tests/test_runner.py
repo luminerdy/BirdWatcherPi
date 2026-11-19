@@ -108,3 +108,21 @@ def test_writer_reserves_space_for_event_end_under_frame_overload():
             release.set()
     assert store.actions[-1].kind == "end"
     assert store.actions[-1].reason == "writer_overload"
+
+
+def test_storage_failure_is_not_mislabeled_as_writer_overload():
+    from birdwatcher.runner import ActionWriter
+
+    class FailFrameStore(Store):
+        def apply(self, action):
+            if action.kind == "frame":
+                raise OSError("disk unavailable")
+            super().apply(action)
+
+    store = FailFrameStore()
+    with ActionWriter(store) as writer:
+        assert writer.put(Action("start"))
+        assert writer.put(Action("frame"))
+        assert writer.put(Action("end"))
+    assert writer.errors == 1
+    assert store.actions[-1].reason == "storage_error"

@@ -4,6 +4,8 @@ A local-first Python bird-feeder camera project for Raspberry Pi: collect good b
 
 > **Project status: experimental capture + shadow analysis, with approved private keeper automation.** This branch provides motion photography and optional separate-process local bird-candidate analysis. The deployed setup adds daylight scheduling, guarded USB storage, sampled evening visual review, a separate keeper archive, and a private Telegram digest through helpers outside this checkout. A fresh clone installs none of those private jobs. Recognition accuracy, validated species classification, automatic quality ranking/calibration, and a fully validated portable deployment remain incomplete.
 
+**Recovery and portability note:** Deployment descriptions and schedules in this document and the specification are historical, not evidence of current service operation. A storage failure prompted recovery work; a running schedule alone does not prove that photographs are being saved. The private deployment has additional review-web, daily-report, candidate-scanning, and slideshow utilities that are not included in this public checkout or validated as portable. Report automation and the archival recovery checkpoint are not a production release. Current deployment policy and acceptance must be verified privately; do not copy historical schedule or storage settings into a new installation.
+
 ## Start here
 
 See [SETUP.md](docs/SETUP.md) for the tested environment, installation, camera checks, and a supervised capture session. See [OPERATIONS.md](docs/OPERATIONS.md) for storage, shutdown, recovery, and current limitations.
@@ -58,6 +60,8 @@ The initial shadow-mode detector is a pinned OpenCV Zoo NanoDet model, exercised
 
 ## Project documents
 
+- [Motion box setup](docs/MOTION_BOXES.md) — normalized rectangle coordinates with a synthetic illustration.
+- [Example bird photographs](docs/BIRD_PHOTOS.md) — privacy-conscious crops supplied by the owner.
 - [Architecture and how it works](docs/ARCHITECTURE.md) — Mermaid system/lifecycle diagrams, deployed-vs-packaged scope, privacy boundaries, and operating outline.
 - [Product and engineering specification](docs/SPECIFICATION.md) — stable requirement IDs, scope, behavior, reliability, and acceptance criteria.
 - [Requirement-to-feature traceability](docs/TRACEABILITY.md) — implementation/test/field status, exact source/test references, evidence, issue gaps, and reverse indexes; [machine-readable registry](docs/traceability.json).
@@ -120,7 +124,11 @@ Numerical targets in the specification are proposed acceptance criteria, not est
 
 ## Initial non-goals
 
-Multiple cameras, audio identification, a web dashboard, live streaming, individual-bird recognition, public photo publication, and per-frame cloud inference remain out of scope. The approved private AI-assisted review and Telegram digest are deployed integrations, not bundled fresh-clone capabilities.
+Multiple cameras, audio identification, a live monitoring dashboard, live streaming, individual-bird recognition, public photo publication, and per-frame cloud inference remain out of scope. The approved private AI-assisted review and Telegram digest are deployed integrations, not bundled fresh-clone capabilities.
+
+## Local photo review
+
+The review website is not bundled in this checkout; the existing review interface is a separate private implementation. See the [local review specification and copyable AI build prompt](docs/LOCAL_REVIEW.md) to build your own.
 
 ## License
 

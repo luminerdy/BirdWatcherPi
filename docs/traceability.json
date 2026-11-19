@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "specification": "docs/SPECIFICATION.md",
-  "spec_sha256": "de771b4f1022288a87b1602e5eca11136611a53dcfbb1f33a4aa16823e882bfb",
+  "spec_sha256": "4f7620101eacb218e5c5d670908efcf6801b4ad68df9dcf41f94868aecbe715e",
   "private_evidence": [
     {
       "id": "PRIVATE-FOCUS",
@@ -42,6 +42,11 @@
       "id": "PRIVATE-DELIVERY",
       "summary": "Private preparation/Telegram integration; no new delivery verified here",
       "public_report": "docs/DEPLOYMENT_EVIDENCE.md#delivery"
+    },
+    {
+      "id": "PRIVATE-LOCAL-REVIEW",
+      "summary": "Private scanner, review interface and slideshow source inspected locally; not reproducible from public checkout",
+      "public_report": "docs/SPECIFICATION.md#current-recovery-and-private-review-context"
     }
   ],
   "requirements": [
@@ -2193,6 +2198,101 @@
       "gap": "Python 3.13 ARM64 and local detector feasibility have historical reports; guarded storage evidence is private. Broader supported Python/model combinations and a single complete reproducible private deployment compatibility report are not established by these tests."
     },
     {
+      "id": "BW-LOCAL-001",
+      "spec_hash": "f912c8f6403f9534e4ac88c3a48adfebe866c9d280cbf94fdccba080b5083c2d",
+      "feature": "Manual local candidate scanning and stricter filter",
+      "scope": "private",
+      "implementation_status": "partial",
+      "test_status": "unverified",
+      "field_status": "unvalidated",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/SPECIFICATION.md#current-recovery-and-private-review-context"
+      ],
+      "private_evidence": [
+        "PRIVATE-LOCAL-REVIEW"
+      ],
+      "issues": [],
+      "gap": "Private source inspection only; no independent field accuracy or complete-run validation here."
+    },
+    {
+      "id": "BW-LOCAL-002",
+      "spec_hash": "6dcb677d825adc705168a6808b3134fb3f80d919ae4fbc2dd923e33b2cbdcd02",
+      "feature": "Review marks, filtered queue and first unfinished group",
+      "scope": "private",
+      "implementation_status": "partial",
+      "test_status": "unverified",
+      "field_status": "unvalidated",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/SPECIFICATION.md#current-recovery-and-private-review-context"
+      ],
+      "private_evidence": [
+        "PRIVATE-LOCAL-REVIEW"
+      ],
+      "issues": [],
+      "gap": "Private source inspection only; no public implementation or independent live review verification here."
+    },
+    {
+      "id": "BW-LOCAL-003",
+      "spec_hash": "ff3f3f7292f872ed68052099c7605492e2c691a80b761e2e591c0adcfc53e7f3",
+      "feature": "Group finish and group no-bird semantics",
+      "scope": "private",
+      "implementation_status": "partial",
+      "test_status": "unverified",
+      "field_status": "unvalidated",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/SPECIFICATION.md#current-recovery-and-private-review-context"
+      ],
+      "private_evidence": [
+        "PRIVATE-LOCAL-REVIEW"
+      ],
+      "issues": [],
+      "gap": "Private source inspection only; group annotations do not establish bird identity or authorize deletion."
+    },
+    {
+      "id": "BW-LOCAL-004",
+      "spec_hash": "31a699f6badd90ea2f3ebba6e23c475a04cc549dcf3ec0c27283a060948a1d7e",
+      "feature": "Copy-only slideshow and no review deletion",
+      "scope": "private",
+      "implementation_status": "partial",
+      "test_status": "unverified",
+      "field_status": "unvalidated",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/SPECIFICATION.md#current-recovery-and-private-review-context"
+      ],
+      "private_evidence": [
+        "PRIVATE-LOCAL-REVIEW"
+      ],
+      "issues": [],
+      "gap": "Private source inspection only; no live slideshow or deletion-safety field test executed here; recorder retention is separate."
+    },
+    {
+      "id": "BW-LOCAL-005",
+      "spec_hash": "13f942912d82eee0be006a23cba4fed7e83a560452baf775fc2b9eb1605c3e2a",
+      "feature": "Private utility, privacy and operational-state boundary",
+      "scope": "private",
+      "implementation_status": "partial",
+      "test_status": "unverified",
+      "field_status": "unvalidated",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/SPECIFICATION.md#current-recovery-and-private-review-context"
+      ],
+      "private_evidence": [
+        "PRIVATE-LOCAL-REVIEW"
+      ],
+      "issues": [],
+      "gap": "Private source inspection and recovery handoff are not proof of current operation or portable release readiness."
+    },
+    {
       "id": "BW-MODEL-001",
       "spec_hash": "eb4062825d29fbea57b8b9380e9d00e1d9187a2c7afaa0875258bb8e45b32a6c",
       "feature": "On-device NanoDet CPU feasibility experiment",
@@ -2330,7 +2430,7 @@
     },
     {
       "id": "BW-MOTION-004",
-      "spec_hash": "5b265d8d1dd27792f40d6d1c2b6591a532ca5cf2795bae33169006b0188d75c4",
+      "spec_hash": "064ac023cc40ff64e1dbeda6851c5c6b6159e35b7498c266426258cfd88f89b1",
       "feature": "Persistent area trigger with region tuning",
       "scope": "public",
       "implementation_status": "partial",
@@ -3250,6 +3350,57 @@
       "private_evidence": [],
       "issues": [],
       "gap": "Mapping integrity is automated; semantic coverage, human review, permanent ID governance and private evidence truth are not independently proven by the checker."
+    },
+    {
+      "id": "BW-REVIEW-001",
+      "spec_hash": "d8fa33f811f4c1c4d72a4de9ba080ed19e499cbaa996bf63f3fe521e7a4ee0cb",
+      "feature": "Portable persisted local review",
+      "scope": "future",
+      "implementation_status": "planned",
+      "test_status": "unverified",
+      "field_status": "unvalidated",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/LOCAL_REVIEW.md"
+      ],
+      "private_evidence": [],
+      "issues": [],
+      "gap": "Specification only; no public site implementation or tests. A separate private interface is not validated here."
+    },
+    {
+      "id": "BW-REVIEW-002",
+      "spec_hash": "a2f6b4c627ecfc812c612b38075726696ab1acc8a061a19c3586fd18cf37ac6c",
+      "feature": "Non-destructive keeper export",
+      "scope": "future",
+      "implementation_status": "planned",
+      "test_status": "unverified",
+      "field_status": "unvalidated",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/LOCAL_REVIEW.md"
+      ],
+      "private_evidence": [],
+      "issues": [],
+      "gap": "Specification only; no public site implementation or tests. A separate private interface is not validated here."
+    },
+    {
+      "id": "BW-REVIEW-003",
+      "spec_hash": "5fcd014dbf9a525e5ac9514363ef895870cbf62c496d85e66e2011ee81079ff1",
+      "feature": "Local review security boundary",
+      "scope": "future",
+      "implementation_status": "planned",
+      "test_status": "unverified",
+      "field_status": "unvalidated",
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/LOCAL_REVIEW.md"
+      ],
+      "private_evidence": [],
+      "issues": [],
+      "gap": "Specification only; no public site implementation or tests. A separate private interface is not validated here."
     }
   ]
 }

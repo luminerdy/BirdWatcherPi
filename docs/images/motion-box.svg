@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" role="img" aria-labelledby="title desc">
+<title id="title">Illustrative motion box</title><desc id="desc">A synthetic feeder inside a green rectangle extending from 20 percent to 70 percent of image width and 25 percent to 75 percent of image height.</desc>
+<rect width="1000" height="600" fill="#e4ece8"/><rect y="420" width="1000" height="180" fill="#cadccb"/>
+<path d="M440 70 L440 225 M560 70 L560 225 M400 225 H600 L570 315 H430 Z" fill="#9e7552" stroke="#4d4139" stroke-width="8"/>
+<path d="M470 250 Q500 215 540 250 Q520 275 490 270 Z" fill="#8e5643"/><circle cx="535" cy="247" r="4" fill="#222"/>
+<rect x="200" y="150" width="500" height="300" fill="none" stroke="#087b43" stroke-width="8" stroke-dasharray="18 10"/>
+<circle cx="200" cy="150" r="9" fill="#087b43"/><circle cx="700" cy="450" r="9" fill="#087b43"/>
+<g font-family="sans-serif" font-size="27" fill="#173b2a"><text x="26" y="45">Synthetic frame: 1000 × 600</text><text x="210" y="135">(200, 150)</text><text x="710" y="460">(700, 450)</text><text x="220" y="495">x=.20, y=.25, width=.50, height=.50</text></g>
+</svg>
