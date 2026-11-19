@@ -41,7 +41,7 @@ cp config/config.example.toml "$HOME/.config/birdwatcher/config.toml"
 chmod 600 "$HOME/.config/birdwatcher/config.toml"
 ```
 
-Edit that private copy. Each region uses normalized `x`, `y`, `width`, and `height` values in the range zero to one. The full rectangle must fit inside the image. Replace the full-frame placeholders with feeder-specific rectangles and enable only the regions you have reviewed. The included example intentionally refuses capture because both regions are disabled.
+Edit that private copy. See [Motion boxes](MOTION_BOXES.md) for an illustrated coordinate example and tuning guidance. Each region uses normalized `x`, `y`, `width`, and `height` values in the range zero to one. The full rectangle must fit inside the image. Replace the full-frame placeholders with feeder-specific rectangles and enable only the regions you have reviewed. The included example intentionally refuses capture because both regions are disabled.
 
 `storage.data_dir` must be outside the repository and must not be a directory containing the repository. Keep it dedicated to application data. Do not use a shared photo collection. Default storage limits are configurable; review them before longer sessions.
 

@@ -121,7 +121,7 @@ The separate optional shadow CLI has its own durable analysis queue. It is not t
 
 - <a id="bw-motion-002"></a> **BW-MOTION-002** — Support configurable near_feeder and far_feeder regions, with coordinates normalized to [0,1]. Only approved regions need be enabled; the current private setup prioritizes one feeder. Config validation rejects invalid rectangles; the reviewed annotated preview is a private setup workflow, not a bundled calibration command.
 - <a id="bw-motion-003"></a> **BW-MOTION-003** — Initial analysis width: 640 pixels; target motion analysis: 8 frames/second.
-- <a id="bw-motion-004"></a> **BW-MOTION-004** — Initial trigger: foreground occupies at least 1% of a region in three consecutive analyzed frames. Thresholds are region-configurable and must be tuned with real footage.
+- <a id="bw-motion-004"></a> **BW-MOTION-004** — Initial trigger: foreground occupies at least 1% of a region in three consecutive analyzed frames. Threshold and persistence are globally configurable, not per-region, and must be tuned with real footage.
 - <a id="bw-motion-005"></a> **BW-MOTION-005** — Ignore motion outside the regions. Reset/warm up background after camera reconnection, focus changes, or major exposure changes.
 - <a id="bw-motion-006"></a> **BW-MOTION-006** — Suppress near-whole-frame lighting transients with configurable area/change checks. Log suppression decisions.
 - <a id="bw-motion-007"></a> **BW-MOTION-007** — A bird arriving before warm-up or remaining motionless can escape motion-only triggering. In the complete release, run a low-frequency presence scan, initially every two seconds, when detector capacity permits. Presence scans are best-effort, never block capture, and must report skipped scans.
@@ -202,6 +202,14 @@ The following is the broader target contract; calibrate, correct, reanalyze, spe
 - <a id="bw-cli-009"></a> **BW-CLI-009** — birdwatcher reanalyze: enqueue selected existing events with a selected model version.
 
 <a id="bw-config-001"></a> **BW-CONFIG-001** — TOML configuration groups: camera, motion, regions, capture, detection, classification, storage, logging, location, and runtime. Ship a documented example with calibration-required placeholders, not guessed ROI coordinates. Validate all bounds and writable paths before starting. Version the configuration schema. No GitHub token is needed by the capture service.
+
+### Portable local image review
+
+<a id="bw-review-001"></a> **BW-REVIEW-001** — Provide an optional local review server using explicit candidate and state paths; enumerate immediate image groups, classify images as good, no bird, or bird, persist decisions and finished status, and open the first unfinished group by default. This tool is distinct from private deployment workflows.
+
+<a id="bw-review-002"></a> **BW-REVIEW-002** — Export good selections as copies outside the candidate tree, preserving operator-provided group and filename; never overwrite existing files. Capture timestamps are not inferred from image metadata and may be preserved in names chosen by the operator.
+
+<a id="bw-review-003"></a> **BW-REVIEW-003** — Bind to loopback by default, warn when opting into another interface, validate the HTTP host, reject requests without a CSRF token, and reject path traversal and symlinked candidate files. This is not authentication or a defense against untrusted local filesystem races.
 
 ## 8. Reliability, privacy, and deployment
 

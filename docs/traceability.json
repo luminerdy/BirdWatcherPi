@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "specification": "docs/SPECIFICATION.md",
-  "spec_sha256": "455bdab0998c865a501a351d9a6c64802c6481adc58488db982bd256e3d17748",
+  "spec_sha256": "69abf76e0914f5a8066459bf4802da8d558d5ecf65f00a5c32b0fb667fc36f7c",
   "private_evidence": [
     {
       "id": "PRIVATE-FOCUS",
@@ -2430,7 +2430,7 @@
     },
     {
       "id": "BW-MOTION-004",
-      "spec_hash": "5b265d8d1dd27792f40d6d1c2b6591a532ca5cf2795bae33169006b0188d75c4",
+      "spec_hash": "064ac023cc40ff64e1dbeda6851c5c6b6159e35b7498c266426258cfd88f89b1",
       "feature": "Persistent area trigger with region tuning",
       "scope": "public",
       "implementation_status": "partial",
@@ -3350,6 +3350,69 @@
       "private_evidence": [],
       "issues": [],
       "gap": "Mapping integrity is automated; semantic coverage, human review, permanent ID governance and private evidence truth are not independently proven by the checker."
+    },
+    {
+      "id": "BW-REVIEW-001",
+      "spec_hash": "cb745de6c1b265c3f7b07fd34750d93074861481d396d27fe35bf77938b1b4b5",
+      "feature": "Portable persisted local review",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "unvalidated",
+      "code": [
+        "src/birdwatcher/local_review.py",
+        "src/birdwatcher/local_review_web.py"
+      ],
+      "tests": [
+        "tests/test_local_review.py::test_review_state_resume_and_export",
+        "tests/test_local_review.py::test_classification_validation",
+        "tests/test_local_review.py::test_http_review_csrf_navigation_and_persistence"
+      ],
+      "evidence": [],
+      "private_evidence": [],
+      "issues": [],
+      "gap": "Experimental; no private deployment or field validation."
+    },
+    {
+      "id": "BW-REVIEW-002",
+      "spec_hash": "8b3e057d4cf5d900e48d57a48a7d7fce7a60841394bc9e7f7168ba4040c8268d",
+      "feature": "Non-destructive keeper export",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "unvalidated",
+      "code": [
+        "src/birdwatcher/local_review.py"
+      ],
+      "tests": [
+        "tests/test_local_review.py::test_review_state_resume_and_export",
+        "tests/test_local_review.py::test_export_refuses_existing_files_and_candidate_subdirectory"
+      ],
+      "evidence": [],
+      "private_evidence": [],
+      "issues": [],
+      "gap": "Export may stop partway; capture timestamps depend on operator filenames."
+    },
+    {
+      "id": "BW-REVIEW-003",
+      "spec_hash": "6ff7a8b551bafaba7ce79f39b58cd97b056f9662ffd4b96bd956e6ec7f44dfcf",
+      "feature": "Local review security boundary",
+      "scope": "public",
+      "implementation_status": "implemented",
+      "test_status": "partial",
+      "field_status": "unvalidated",
+      "code": [
+        "src/birdwatcher/local_review.py",
+        "src/birdwatcher/local_review_web.py"
+      ],
+      "tests": [
+        "tests/test_local_review.py::test_rejects_traversal_and_symlinks",
+        "tests/test_local_review.py::test_http_review_csrf_navigation_and_persistence"
+      ],
+      "evidence": [],
+      "private_evidence": [],
+      "issues": [],
+      "gap": "No authentication, TLS, or protection from untrusted local filesystem races; independent security review pending."
     }
   ]
 }

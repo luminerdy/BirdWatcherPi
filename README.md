@@ -60,6 +60,8 @@ The initial shadow-mode detector is a pinned OpenCV Zoo NanoDet model, exercised
 
 ## Project documents
 
+- [Motion box setup](docs/MOTION_BOXES.md) — normalized rectangle coordinates with a synthetic illustration.
+- [Example bird photographs](docs/BIRD_PHOTOS.md) — privacy-conscious crops supplied by the owner.
 - [Architecture and how it works](docs/ARCHITECTURE.md) — Mermaid system/lifecycle diagrams, deployed-vs-packaged scope, privacy boundaries, and operating outline.
 - [Product and engineering specification](docs/SPECIFICATION.md) — stable requirement IDs, scope, behavior, reliability, and acceptance criteria.
 - [Requirement-to-feature traceability](docs/TRACEABILITY.md) — implementation/test/field status, exact source/test references, evidence, issue gaps, and reverse indexes; [machine-readable registry](docs/traceability.json).
@@ -122,8 +124,12 @@ Numerical targets in the specification are proposed acceptance criteria, not est
 
 ## Initial non-goals
 
-Multiple cameras, audio identification, a web dashboard, live streaming, individual-bird recognition, public photo publication, and per-frame cloud inference remain out of scope. The approved private AI-assisted review and Telegram digest are deployed integrations, not bundled fresh-clone capabilities.
+Multiple cameras, audio identification, a live monitoring dashboard, live streaming, individual-bird recognition, public photo publication, and per-frame cloud inference remain out of scope. The approved private AI-assisted review and Telegram digest are deployed integrations, not bundled fresh-clone capabilities.
 
 ## License
 
 Application code retains the [MIT license](LICENSE). The bundled NanoDet decoder is separately licensed under Apache-2.0, with its license and notices in `third_party/nanodet/`. Package metadata describes the combined distribution as `MIT AND Apache-2.0`; that does not replace the application's MIT license. Optional model weights have their own preserved license and are not bundled. Legal attribution notices are not deployment data and must remain intact.
+
+### Local photo review
+
+An experimental, portable review server is available for operator-provided candidate folders. See [local review setup, export, and security limitations](docs/LOCAL_REVIEW.md).
