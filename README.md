@@ -1,23 +1,28 @@
 # BirdWatcherPi
 
-A local-first Python bird-feeder camera project for Raspberry Pi: collect good bird photographs without delaying capture. Prioritize sharp, well-exposed keepers and variety, not an exhaustive visitor census.
+BirdWatcherPi turns a Raspberry Pi and USB camera into a local-first, motion-triggered bird-feeder photo recorder. It saves photo bursts around activity in configured feeder regions; optional local analysis can flag bird candidates without slowing or filtering capture. It's experimental, not a validated species identifier or an exhaustive bird census.
 
-> **Project status: experimental capture + shadow analysis, with approved private keeper automation.** This branch provides motion photography and optional separate-process local bird-candidate analysis. The deployed setup adds daylight scheduling, guarded USB storage, sampled evening visual review, a separate keeper archive, and a private Telegram digest through helpers outside this checkout. A fresh clone installs none of those private jobs. Recognition accuracy, validated species classification, automatic quality ranking/calibration, and a fully validated portable deployment remain incomplete.
+## Quick start
 
-**Recovery and portability note:** Deployment descriptions and schedules in this document and the specification are historical, not evidence of current service operation. A storage failure prompted recovery work; a running schedule alone does not prove that photographs are being saved. The private deployment has additional review-web, daily-report, candidate-scanning, and slideshow utilities that are not included in this public checkout or validated as portable. Report automation and the archival recovery checkpoint are not a production release. Current deployment policy and acceptance must be verified privately; do not copy historical schedule or storage settings into a new installation.
-
-## Start here
-
-See [SETUP.md](docs/SETUP.md) for the tested environment, installation, camera checks, and a supervised capture session. See [OPERATIONS.md](docs/OPERATIONS.md) for storage, shutdown, recovery, and current limitations.
+On a Linux Raspberry Pi with Python 3.11+ and an MJPEG-capable USB camera, install the camera prerequisites (`ffmpeg`, and optionally `v4l-utils`) and Python virtual environment support. On Debian-derived systems:
 
 ```sh
+sudo apt install ffmpeg v4l-utils python3-venv
+git clone https://github.com/luminerdy/BirdWatcherPi.git
+cd BirdWatcherPi
 python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements-dev.txt
 .venv/bin/python -m pip install -e . --no-deps
 .venv/bin/birdwatcher doctor
 ```
 
-The example configuration deliberately has no enabled feeder regions. Keep your calibrated settings and photographs outside this repository. Nothing installs or enables an unattended service.
+Next, follow [SETUP.md](docs/SETUP.md) to check the camera, configure feeder regions, and run a supervised daytime capture. The example regions are disabled until configured; keep your configuration and photos private and outside the repository. A fresh clone does not install unattended scheduling or the separate private review tools.
+
+> **Project status: experimental capture + shadow analysis, with approved private keeper automation.** This branch provides motion photography and optional separate-process local bird-candidate analysis. The deployed setup adds daylight scheduling, guarded USB storage, sampled evening visual review, a separate keeper archive, and a private Telegram digest through helpers outside this checkout. A fresh clone installs none of those private jobs. Recognition accuracy, validated species classification, automatic quality ranking/calibration, and a fully validated portable deployment remain incomplete.
+
+**Recovery and portability note:** Deployment descriptions and schedules in this document and the specification are historical, not evidence of current service operation. A storage failure prompted recovery work; a running schedule alone does not prove that photographs are being saved. The private deployment has additional review-web, daily-report, candidate-scanning, and slideshow utilities that are not included in this public checkout or validated as portable. Report automation and the archival recovery checkpoint are not a production release. Current deployment policy and acceptance must be verified privately; do not copy historical schedule or storage settings into a new installation.
+
+See [OPERATIONS.md](docs/OPERATIONS.md) for storage, shutdown, recovery, and current limitations.
 
 ## Product goals and release boundary
 
