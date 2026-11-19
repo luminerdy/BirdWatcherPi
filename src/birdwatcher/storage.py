@@ -223,8 +223,12 @@ class EventStore:
             dirs[:] = [d for d in dirs if not (Path(base) / d).is_symlink()]
             for name in files:
                 path = Path(base) / name
-                if not path.is_symlink():
-                    total += path.stat().st_size
+                try:
+                    if not path.is_symlink():
+                        total += path.stat().st_size
+                except FileNotFoundError:
+                    # Health snapshots and atomic temporaries can disappear mid-walk.
+                    continue
         return total
 
     def _delete_managed(self, path, data):
@@ -251,6 +255,7 @@ class EventStore:
 
     def _prune(self, additional, enforce=True, quota_credit=0):
         now = datetime.now(timezone.utc)
+        used = self._usage()
         for path, data in sorted(self._scan(), key=lambda pair: pair[1]["started_utc"]):
             try:
                 timestamp = datetime.fromisoformat(data["started_utc"].replace("Z", "+00:00"))
@@ -258,7 +263,7 @@ class EventStore:
             except (ValueError, TypeError):
                 expired = False
             over = (
-                self._usage() + additional > self.config.max_bytes + quota_credit
+                used + additional > self.config.max_bytes + quota_credit
                 or shutil.disk_usage(self.root).free - additional < self.config.min_free_bytes
             )
             if not expired and not over:
@@ -271,7 +276,8 @@ class EventStore:
                 or path.parent == getattr(self, "_writing", None)
             ):
                 continue
-            self._delete_managed(path, data)
+            if self._delete_managed(path, data):
+                used = self._usage()
         self._used = self._usage()
         self._storage_full = (
             self._used + additional > self.config.max_bytes + quota_credit

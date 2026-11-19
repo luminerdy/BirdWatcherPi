@@ -4,6 +4,8 @@ A local-first Python bird-feeder camera project for Raspberry Pi: collect good b
 
 > **Project status: experimental capture + shadow analysis, with approved private keeper automation.** This branch provides motion photography and optional separate-process local bird-candidate analysis. The deployed setup adds daylight scheduling, guarded USB storage, sampled evening visual review, a separate keeper archive, and a private Telegram digest through helpers outside this checkout. A fresh clone installs none of those private jobs. Recognition accuracy, validated species classification, automatic quality ranking/calibration, and a fully validated portable deployment remain incomplete.
 
+**Recovery and portability note:** Deployment descriptions and schedules in this document and the specification are historical, not evidence of current service operation. A storage failure prompted recovery work; a running schedule alone does not prove that photographs are being saved. The private deployment has additional review-web, daily-report, candidate-scanning, and slideshow utilities that are not included in this public checkout or validated as portable. Report automation and the archival recovery checkpoint are not a production release. Current deployment policy and acceptance must be verified privately; do not copy historical schedule or storage settings into a new installation.
+
 ## Start here
 
 See [SETUP.md](docs/SETUP.md) for the tested environment, installation, camera checks, and a supervised capture session. See [OPERATIONS.md](docs/OPERATIONS.md) for storage, shutdown, recovery, and current limitations.

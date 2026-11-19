@@ -1,6 +1,22 @@
 # BirdWatcherPi — Product and Engineering Specification
 
-Status: Specification v0.4 — stable requirement IDs and checked feature traceability for keeper-focused photography with approved private daylight/review automation. This separates the public package, deployed operational helpers, and future work; it does not declare all release gates passed. See [TODO.md](TODO.md), [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md), and [ARCHITECTURE.md](ARCHITECTURE.md).
+Status: Specification v0.5 — stable requirement IDs and checked feature traceability for keeper-focused photography. This separates the public package, private Pi utilities, historical plans, and future work; it does not declare recovery or release gates passed. See [TODO.md](TODO.md), [IMPLEMENTATION_PLAN.md](IMPLEMENTATION_PLAN.md), and [ARCHITECTURE.md](ARCHITECTURE.md).
+
+## Current recovery and private-review context
+
+The archived recovery handoff is a point-in-time snapshot, not a statement of the current local deployment's recording or schedule state. Unfinished gallery/report automation requires separate acceptance. A historical approval, installed helper, past test, schedule, health file, or prepared receipt is not evidence of a currently running recorder, completed review, or delivered report. Daylight capture, JPEG decode/readback, advancing health, storage safety, and recorder restart require coordinated acceptance; historical evidence does not establish that these gates have passed. Do not change the running application or configuration merely to bring this document up to date.
+
+The earlier AI-assisted nightly pipeline and Telegram digest described below are historical approved design and reported prior implementation, not a claim that automated review or reporting is currently operating or authorized for restart. Requirements and traceability preserve that historical target; their implementation and field statuses are not current operational status. Manual candidate scanning and review are separate, local Pi utilities outside the public package. They do not automatically ingest new captures or execute a nightly review.
+
+<a id="bw-local-001"></a> **BW-LOCAL-001** — The private one-shot scanner samples saved event frames with a local bird detector and copies candidate event directories into a separate review area. A stricter score filter reduces review volume but can miss birds; retained boxes are candidates, not confirmations, and excluded source events remain available. Errors or interruptions can leave an incomplete output. This is not a species classifier or an automated visual review.
+
+<a id="bw-local-002"></a> **BW-LOCAL-002** — The private review interface records reversible per-photo Good, Bird, and No bird marks separately from capture originals. Its filtered queue retains configured baseline and candidate groups, previously marked or finished groups, and additional groups; direct links can open filtered groups. With no explicit group link it opens the first unfinished visible group, or the first visible group when all are finished.
+
+<a id="bw-local-003"></a> **BW-LOCAL-003** — Finishing a review group marks previously unmarked photos Bird while preserving Good and No bird marks; reopening clears the finished flag but does not undo those Bird marks. The separate group No bird action preserves Good selections and changes other group photos to No bird. These are review annotations, not proof of bird identity or an instruction to delete photos.
+
+<a id="bw-local-004"></a> **BW-LOCAL-004** — The private slideshow is a manually run, local, copy-only derivative of selected Good photos: it creates new cropped/composed images and a private manifest without changing recorder originals, candidate photos, selections, or schedules. Detector misses can lead to skipped or badly cropped slides; review the output. The review interface offers no photo deletion; No bird marks and lists do not delete originals, candidate copies, exports, or backups. This does not disable the public recorder's separate configured raw-retention policy.
+
+<a id="bw-local-005"></a> **BW-LOCAL-005** — These private utilities are not installed by a fresh public checkout and are not a validated portable release. Their configuration, access details, source photos, review records, and deployment paths must remain private. Their existence or historical execution does not establish present service liveness or end-to-end acceptance.
 
 ## Requirement identity and traceability
 
@@ -63,6 +79,8 @@ Status: Specification v0.4 — stable requirement IDs and checked feature tracea
 <a id="bw-scope-004"></a> **BW-SCOPE-004** — Two-camera support, audio recognition, a web dashboard, live streaming, public remote access, individual-bird recognition, sex/age estimation, and model training remain excluded. The approved private AI-assisted review and Telegram digest are in deployed scope, but are not bundled integrations in a fresh clone. No public photo publication or per-frame cloud inference is authorized.
 
 ## 4. Operating pipeline
+
+The diagram describes the historical approved target, not the current recovery state; the private manual review workflow above is distinct.
 
     Approved daylight supervisor → USB camera — one persistent owner
         ├── downscaled frames → approved-region motion analysis
