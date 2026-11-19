@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "specification": "docs/SPECIFICATION.md",
-  "spec_sha256": "69abf76e0914f5a8066459bf4802da8d558d5ecf65f00a5c32b0fb667fc36f7c",
+  "spec_sha256": "4f7620101eacb218e5c5d670908efcf6801b4ad68df9dcf41f94868aecbe715e",
   "private_evidence": [
     {
       "id": "PRIVATE-FOCUS",
@@ -3353,66 +3353,54 @@
     },
     {
       "id": "BW-REVIEW-001",
-      "spec_hash": "cb745de6c1b265c3f7b07fd34750d93074861481d396d27fe35bf77938b1b4b5",
+      "spec_hash": "d8fa33f811f4c1c4d72a4de9ba080ed19e499cbaa996bf63f3fe521e7a4ee0cb",
       "feature": "Portable persisted local review",
-      "scope": "public",
-      "implementation_status": "implemented",
-      "test_status": "partial",
+      "scope": "future",
+      "implementation_status": "planned",
+      "test_status": "unverified",
       "field_status": "unvalidated",
-      "code": [
-        "src/birdwatcher/local_review.py",
-        "src/birdwatcher/local_review_web.py"
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/LOCAL_REVIEW.md"
       ],
-      "tests": [
-        "tests/test_local_review.py::test_review_state_resume_and_export",
-        "tests/test_local_review.py::test_classification_validation",
-        "tests/test_local_review.py::test_http_review_csrf_navigation_and_persistence"
-      ],
-      "evidence": [],
       "private_evidence": [],
       "issues": [],
-      "gap": "Experimental; no private deployment or field validation."
+      "gap": "Specification only; no public site implementation or tests. A separate private interface is not validated here."
     },
     {
       "id": "BW-REVIEW-002",
-      "spec_hash": "8b3e057d4cf5d900e48d57a48a7d7fce7a60841394bc9e7f7168ba4040c8268d",
+      "spec_hash": "a2f6b4c627ecfc812c612b38075726696ab1acc8a061a19c3586fd18cf37ac6c",
       "feature": "Non-destructive keeper export",
-      "scope": "public",
-      "implementation_status": "implemented",
-      "test_status": "partial",
+      "scope": "future",
+      "implementation_status": "planned",
+      "test_status": "unverified",
       "field_status": "unvalidated",
-      "code": [
-        "src/birdwatcher/local_review.py"
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/LOCAL_REVIEW.md"
       ],
-      "tests": [
-        "tests/test_local_review.py::test_review_state_resume_and_export",
-        "tests/test_local_review.py::test_export_refuses_existing_files_and_candidate_subdirectory"
-      ],
-      "evidence": [],
       "private_evidence": [],
       "issues": [],
-      "gap": "Export may stop partway; capture timestamps depend on operator filenames."
+      "gap": "Specification only; no public site implementation or tests. A separate private interface is not validated here."
     },
     {
       "id": "BW-REVIEW-003",
-      "spec_hash": "6ff7a8b551bafaba7ce79f39b58cd97b056f9662ffd4b96bd956e6ec7f44dfcf",
+      "spec_hash": "5fcd014dbf9a525e5ac9514363ef895870cbf62c496d85e66e2011ee81079ff1",
       "feature": "Local review security boundary",
-      "scope": "public",
-      "implementation_status": "implemented",
-      "test_status": "partial",
+      "scope": "future",
+      "implementation_status": "planned",
+      "test_status": "unverified",
       "field_status": "unvalidated",
-      "code": [
-        "src/birdwatcher/local_review.py",
-        "src/birdwatcher/local_review_web.py"
+      "code": [],
+      "tests": [],
+      "evidence": [
+        "docs/LOCAL_REVIEW.md"
       ],
-      "tests": [
-        "tests/test_local_review.py::test_rejects_traversal_and_symlinks",
-        "tests/test_local_review.py::test_http_review_csrf_navigation_and_persistence"
-      ],
-      "evidence": [],
       "private_evidence": [],
       "issues": [],
-      "gap": "No authentication, TLS, or protection from untrusted local filesystem races; independent security review pending."
+      "gap": "Specification only; no public site implementation or tests. A separate private interface is not validated here."
     }
   ]
 }

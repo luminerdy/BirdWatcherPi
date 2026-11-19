@@ -203,13 +203,15 @@ The following is the broader target contract; calibrate, correct, reanalyze, spe
 
 <a id="bw-config-001"></a> **BW-CONFIG-001** — TOML configuration groups: camera, motion, regions, capture, detection, classification, storage, logging, location, and runtime. Ship a documented example with calibration-required placeholders, not guessed ROI coordinates. Validate all bounds and writable paths before starting. Version the configuration schema. No GitHub token is needed by the capture service.
 
-### Portable local image review
+### Local image review site specification
 
-<a id="bw-review-001"></a> **BW-REVIEW-001** — Provide an optional local review server using explicit candidate and state paths; enumerate immediate image groups, classify images as good, no bird, or bird, persist decisions and finished status, and open the first unfinished group by default. This tool is distinct from private deployment workflows.
+These are requirements for an independently built local site, not a bundled implementation or evidence of a tested deployment. The existing private interface is separate; see [local review specification and AI prompt](LOCAL_REVIEW.md).
 
-<a id="bw-review-002"></a> **BW-REVIEW-002** — Export good selections as copies outside the candidate tree, preserving operator-provided group and filename; never overwrite existing files. Capture timestamps are not inferred from image metadata and may be preserved in names chosen by the operator.
+<a id="bw-review-001"></a> **BW-REVIEW-001** — A local review site must accept configurable candidate and separate state paths, display groups and their photos, persist reversible Good, No bird and Bird decisions and Finished status, and resume at the first unfinished visible group; if all are finished, open the first visible group. Finishing marks previously unmarked photos Bird while preserving Good and No bird; reopening leaves marks intact.
 
-<a id="bw-review-003"></a> **BW-REVIEW-003** — Bind to loopback by default, warn when opting into another interface, validate the HTTP host, reject requests without a CSRF token, and reject path traversal and symlinked candidate files. This is not authentication or a defense against untrusted local filesystem races.
+<a id="bw-review-002"></a> **BW-REVIEW-002** — Export Good selections as copies outside the candidate tree without overwriting files or changing originals. Preserve meaningful original names and available capture timestamps with their provenance; never invent missing times or treat file modification time as capture time. Report missing timestamps and partial export failures.
+
+<a id="bw-review-003"></a> **BW-REVIEW-003** — Default to loopback and local-only operation, protect state-changing requests against CSRF, validate host and filesystem paths, reject traversal and unsafe symlinks, and document access and race limitations. Do not expose to untrusted networks without separately designed authentication, transport security, and authorization; do not include secrets or private data in the repository.
 
 ## 8. Reliability, privacy, and deployment
 

@@ -18,8 +18,8 @@ Status values are declared claims, not independently established by this validat
 
 Requirements mapped: **131**
 
-- implementation: excluded=1, implemented=47, partial=61, planned=12, policy=10
-- test: not_applicable=11, partial=86, unverified=24, verified=10
+- implementation: excluded=1, implemented=44, partial=61, planned=15, policy=10
+- test: not_applicable=11, partial=83, unverified=27, verified=10
 - field: not_applicable=12, partial=85, unvalidated=30, validated=4
 
 Update the reviewed manifest, then run `python3 scripts/check_traceability.py --write` and `python3 scripts/check_traceability.py --check` from the repository root. Never refresh fingerprints just to silence a failure; review the changed contract and its evidence first.
@@ -241,9 +241,9 @@ Update the reviewed manifest, then run `python3 scripts/check_traceability.py --
 
 | Requirement | Scope | Implementation | Test | Field | Code | Tests / evidence / private / issues | Gap |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| [BW-REVIEW-001: Portable persisted local review](../docs/SPECIFICATION.md#bw-review-001) | public | implemented | partial | unvalidated | [`src/birdwatcher/local_review.py`](../src/birdwatcher/local_review.py)<br>[`src/birdwatcher/local_review_web.py`](../src/birdwatcher/local_review_web.py) | Test: [`tests/test_local_review.py::test_review_state_resume_and_export`](../tests/test_local_review.py)<br>Test: [`tests/test_local_review.py::test_classification_validation`](../tests/test_local_review.py)<br>Test: [`tests/test_local_review.py::test_http_review_csrf_navigation_and_persistence`](../tests/test_local_review.py) | Experimental; no private deployment or field validation. |
-| [BW-REVIEW-002: Non-destructive keeper export](../docs/SPECIFICATION.md#bw-review-002) | public | implemented | partial | unvalidated | [`src/birdwatcher/local_review.py`](../src/birdwatcher/local_review.py) | Test: [`tests/test_local_review.py::test_review_state_resume_and_export`](../tests/test_local_review.py)<br>Test: [`tests/test_local_review.py::test_export_refuses_existing_files_and_candidate_subdirectory`](../tests/test_local_review.py) | Export may stop partway; capture timestamps depend on operator filenames. |
-| [BW-REVIEW-003: Local review security boundary](../docs/SPECIFICATION.md#bw-review-003) | public | implemented | partial | unvalidated | [`src/birdwatcher/local_review.py`](../src/birdwatcher/local_review.py)<br>[`src/birdwatcher/local_review_web.py`](../src/birdwatcher/local_review_web.py) | Test: [`tests/test_local_review.py::test_rejects_traversal_and_symlinks`](../tests/test_local_review.py)<br>Test: [`tests/test_local_review.py::test_http_review_csrf_navigation_and_persistence`](../tests/test_local_review.py) | No authentication, TLS, or protection from untrusted local filesystem races; independent security review pending. |
+| [BW-REVIEW-001: Portable persisted local review](../docs/SPECIFICATION.md#bw-review-001) | future | planned | unverified | unvalidated | — | Evidence: [docs/LOCAL_REVIEW.md](../docs/LOCAL_REVIEW.md) | Specification only; no public site implementation or tests. A separate private interface is not validated here. |
+| [BW-REVIEW-002: Non-destructive keeper export](../docs/SPECIFICATION.md#bw-review-002) | future | planned | unverified | unvalidated | — | Evidence: [docs/LOCAL_REVIEW.md](../docs/LOCAL_REVIEW.md) | Specification only; no public site implementation or tests. A separate private interface is not validated here. |
+| [BW-REVIEW-003: Local review security boundary](../docs/SPECIFICATION.md#bw-review-003) | future | planned | unverified | unvalidated | — | Evidence: [docs/LOCAL_REVIEW.md](../docs/LOCAL_REVIEW.md) | Specification only; no public site implementation or tests. A separate private interface is not validated here. |
 ## SCOPE
 
 | Requirement | Scope | Implementation | Test | Field | Code | Tests / evidence / private / issues | Gap |
@@ -297,8 +297,6 @@ Update the reviewed manifest, then run `python3 scripts/check_traceability.py --
 - `src/birdwatcher/events.py` → BW-ACAP-003, BW-ARELIAB-001, BW-DATA-002, BW-GOAL-001, BW-OPS-006, BW-OWNER-002, BW-QUALITY-001, BW-SCOPE-001, BW-SCOPE-002
 - `src/birdwatcher/events.py::EventMachine` → BW-EVENT-001, BW-EVENT-003
 - `src/birdwatcher/events.py::EventMachine.update` → BW-EVENT-002, BW-EVENT-004, BW-EVENT-005, BW-EVENT-006, BW-EVENT-008, BW-EVENT-009
-- `src/birdwatcher/local_review.py` → BW-REVIEW-001, BW-REVIEW-002, BW-REVIEW-003
-- `src/birdwatcher/local_review_web.py` → BW-REVIEW-001, BW-REVIEW-003
 - `src/birdwatcher/motion.py` → BW-ACAP-004, BW-MOTION-002, BW-OPS-006
 - `src/birdwatcher/motion.py::MotionDetector` → BW-EVENT-001
 - `src/birdwatcher/motion.py::MotionDetector.reset` → BW-MOTION-005
@@ -352,11 +350,6 @@ Update the reviewed manifest, then run `python3 scripts/check_traceability.py --
 - `tests/test_events.py::test_prebuffer_shared_regions_unique_frames_and_shutdown` → BW-ACAP-003, BW-DATA-002, BW-EVENT-001, BW-EVENT-002, BW-EVENT-003, BW-EVENT-004, BW-EVENT-005, BW-QUALITY-001
 - `tests/test_events.py::test_timing_bounds_burst_cap_cooldown_and_segments` → BW-DATA-002, BW-EVENT-001, BW-EVENT-002, BW-EVENT-003, BW-EVENT-004, BW-EVENT-005, BW-EVENT-006, BW-EVENT-008, BW-EVENT-009, BW-QUALITY-001
 - `tests/test_integration.py::test_replay_capture_writes_originals_and_health` → BW-ACAP-003, BW-CAM-002, BW-CAM-004, BW-CAM-007, BW-CLI-005, BW-CLI-006, BW-EVENT-001, BW-EVENT-003, BW-GOAL-001, BW-OPS-006, BW-OPS-007, BW-OWNER-002, BW-PIPE-001, BW-QUALITY-001, BW-SCOPE-001, BW-SCOPE-002
-- `tests/test_local_review.py::test_classification_validation` → BW-REVIEW-001
-- `tests/test_local_review.py::test_export_refuses_existing_files_and_candidate_subdirectory` → BW-REVIEW-002
-- `tests/test_local_review.py::test_http_review_csrf_navigation_and_persistence` → BW-REVIEW-001, BW-REVIEW-003
-- `tests/test_local_review.py::test_rejects_traversal_and_symlinks` → BW-REVIEW-003
-- `tests/test_local_review.py::test_review_state_resume_and_export` → BW-REVIEW-001, BW-REVIEW-002
 - `tests/test_motion.py::test_motion_persistence_regions_lighting_and_reset` → BW-ACAP-004, BW-MOTION-001, BW-MOTION-002, BW-MOTION-004, BW-MOTION-005, BW-MOTION-006
 - `tests/test_regressions.py::test_manual_focus_is_rejected_rather_than_silently_ignored` → BW-CAM-005
 - `tests/test_regressions.py::test_private_config_cannot_put_capture_data_in_another_git_checkout` → BW-CAL-004, BW-CONFIG-001, BW-DATA-001, BW-DATA-011

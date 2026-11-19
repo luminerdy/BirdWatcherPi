@@ -126,10 +126,10 @@ Numerical targets in the specification are proposed acceptance criteria, not est
 
 Multiple cameras, audio identification, a live monitoring dashboard, live streaming, individual-bird recognition, public photo publication, and per-frame cloud inference remain out of scope. The approved private AI-assisted review and Telegram digest are deployed integrations, not bundled fresh-clone capabilities.
 
+## Local photo review
+
+The review website is not bundled in this checkout; the existing review interface is a separate private implementation. See the [local review specification and copyable AI build prompt](docs/LOCAL_REVIEW.md) to build your own.
+
 ## License
 
 Application code retains the [MIT license](LICENSE). The bundled NanoDet decoder is separately licensed under Apache-2.0, with its license and notices in `third_party/nanodet/`. Package metadata describes the combined distribution as `MIT AND Apache-2.0`; that does not replace the application's MIT license. Optional model weights have their own preserved license and are not bundled. Legal attribution notices are not deployment data and must remain intact.
-
-### Local photo review
-
-An experimental, portable review server is available for operator-provided candidate folders. See [local review setup, export, and security limitations](docs/LOCAL_REVIEW.md).
