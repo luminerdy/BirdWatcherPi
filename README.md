@@ -1,10 +1,10 @@
 # BirdWatcherPi
 
-BirdWatcherPi turns a Raspberry Pi and USB camera into a local-first, motion-triggered bird-feeder photo recorder. It saves photo bursts around activity in configured feeder regions; optional local analysis can flag bird candidates without slowing or filtering capture. It's experimental, not a validated species identifier or an exhaustive bird census.
+BirdWatcherPi turns a Raspberry Pi and USB camera into a local-first, motion-triggered bird-feeder photo recorder. It saves photo bursts around activity in configured feeder regions; optional separate-process local analysis can flag bird candidates without filtering capture, though it can compete for system resources. It's experimental, not a validated species identifier or an exhaustive bird census.
 
 ## Quick start
 
-On a Linux Raspberry Pi with Python 3.11+ and an MJPEG-capable USB camera, install the camera prerequisites (`ffmpeg`, and optionally `v4l-utils`) and Python virtual environment support. On Debian-derived systems:
+On a Linux Raspberry Pi with Python 3.13 and an MJPEG-capable USB camera, install the camera prerequisites (`ffmpeg`, and optionally `v4l-utils`) and Python virtual environment support. On Debian-derived systems:
 
 ```sh
 sudo apt install ffmpeg v4l-utils python3-venv
@@ -70,6 +70,8 @@ The initial shadow-mode detector is a pinned OpenCV Zoo NanoDet model, exercised
 - [Architecture and how it works](docs/ARCHITECTURE.md) — Mermaid system/lifecycle diagrams, deployed-vs-packaged scope, privacy boundaries, and operating outline.
 - [Product and engineering specification](docs/SPECIFICATION.md) — stable requirement IDs, scope, behavior, reliability, and acceptance criteria.
 - [Requirement-to-feature traceability](docs/TRACEABILITY.md) — implementation/test/field status, exact source/test references, evidence, issue gaps, and reverse indexes; [machine-readable registry](docs/traceability.json).
+- [Critical reliability review](docs/RELIABILITY_REVIEW.md) — prioritized findings and evidence boundaries.
+- [Reliability implementation plan](docs/RELIABILITY_IMPLEMENTATION_PLAN.md) — proposed fixes, tests, and gated rollout.
 - [Implementation plan](docs/IMPLEMENTATION_PLAN.md) — ordered work packages, dependencies, tests, and release gates.
 - [Current status and prioritized to-do list](docs/TODO.md) — completed building blocks, merged source, and remaining work tracked in issues #3–#8.
 - [Capture validation report](docs/VALIDATION_REPORT.md) — sanitized live-test evidence and remaining acceptance gaps.
