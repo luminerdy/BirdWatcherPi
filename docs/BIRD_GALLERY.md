@@ -19,9 +19,9 @@ The photographs are re-encoded without source metadata. They are examples, not e
 ![Northern Cardinal (male) at a bird feeder](images/gallery/northern-cardinal-male.jpg)
 
 
-## Probably House Finch
+## House Finch
 
-![Probably House Finch at a bird feeder](images/gallery/house-finch.jpg)
+![House Finch at a bird feeder](images/gallery/house-finch.jpg)
 
 
 ## Carolina Wren
@@ -34,9 +34,9 @@ The photographs are re-encoded without source metadata. They are examples, not e
 ![Northern Cardinal (female) at a bird feeder](images/gallery/northern-cardinal-female.jpg)
 
 
-## Probably Carolina Chickadee
+## Carolina Chickadee
 
-![Probably Carolina Chickadee at a bird feeder](images/gallery/carolina-chickadee.jpg)
+![Carolina Chickadee at a bird feeder](images/gallery/carolina-chickadee.jpg)
 
 
 ## Tufted Titmouse
