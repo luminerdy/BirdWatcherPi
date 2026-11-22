@@ -2,6 +2,8 @@
 
 BirdWatcherPi turns a Raspberry Pi and USB camera into a local-first, motion-triggered bird-feeder photo recorder. It saves photo bursts around activity in configured feeder regions; optional separate-process local analysis can flag bird candidates without filtering capture, though it can compete for system resources. It's experimental, not a validated species identifier or an exhaustive bird census.
 
+Explore the [bird photo gallery](docs/BIRD_GALLERY.md) for eight owner-supplied photographs with tentative IDs.
+
 ## Quick start
 
 On a Linux Raspberry Pi with Python 3.13 and an MJPEG-capable USB camera, install the camera prerequisites (`ffmpeg`, and optionally `v4l-utils`) and Python virtual environment support. On Debian-derived systems:
