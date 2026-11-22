@@ -6,40 +6,40 @@ The photographs are re-encoded without source metadata. They are examples, not e
 
 ## White-winged Dove
 
-![White-winged Dove at a bird feeder](images/gallery/white-winged-dove-display.jpg)
+![White-winged Dove at a bird feeder](images/gallery/white-winged-dove.jpg)
 
 
 ## Blue Jay
 
-![Blue Jay at a bird feeder](images/gallery/blue-jay-display.jpg)
+![Blue Jay at a bird feeder](images/gallery/blue-jay.jpg)
 
 
 ## Northern Cardinal (male)
 
-![Northern Cardinal (male) at a bird feeder](images/gallery/northern-cardinal-male-display.jpg)
+![Northern Cardinal (male) at a bird feeder](images/gallery/northern-cardinal-male.jpg)
 
 
 ## House Finch
 
-![House Finch at a bird feeder](images/gallery/house-finch-display.jpg)
+![House Finch at a bird feeder](images/gallery/house-finch.jpg)
 
 
 ## Carolina Wren
 
-![Carolina Wren at a bird feeder](images/gallery/carolina-wren-display.jpg)
+![Carolina Wren at a bird feeder](images/gallery/carolina-wren.jpg)
 
 
 ## Northern Cardinal (female)
 
-![Northern Cardinal (female) at a bird feeder](images/gallery/northern-cardinal-female-display.jpg)
+![Northern Cardinal (female) at a bird feeder](images/gallery/northern-cardinal-female.jpg)
 
 
 ## Carolina Chickadee
 
-![Carolina Chickadee at a bird feeder](images/gallery/carolina-chickadee-display.jpg)
+![Carolina Chickadee at a bird feeder](images/gallery/carolina-chickadee.jpg)
 
 
 ## Tufted Titmouse
 
-![Tufted Titmouse at a bird feeder](images/gallery/tufted-titmouse-display.jpg)
+![Tufted Titmouse at a bird feeder](images/gallery/tufted-titmouse.jpg)
 
