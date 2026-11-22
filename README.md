@@ -2,7 +2,7 @@
 
 BirdWatcherPi turns a Raspberry Pi and USB camera into a local-first, motion-triggered bird-feeder photo recorder. It saves photo bursts around activity in configured feeder regions; optional separate-process local analysis can flag bird candidates without filtering capture, though it can compete for system resources. It's experimental, not a validated species identifier or an exhaustive bird census.
 
-Explore the [bird photo gallery](docs/BIRD_GALLERY.md) for eight owner-supplied photographs with tentative IDs.
+Explore the [bird photo gallery](docs/BIRD_GALLERY.md) for eight owner-supplied photographs.
 
 ## Quick start
 
@@ -68,7 +68,6 @@ The initial shadow-mode detector is a pinned OpenCV Zoo NanoDet model, exercised
 ## Project documents
 
 - [Motion box setup](docs/MOTION_BOXES.md) — normalized rectangle coordinates with a synthetic illustration.
-- [Example bird photographs](docs/BIRD_PHOTOS.md) — privacy-conscious crops supplied by the owner.
 - [Architecture and how it works](docs/ARCHITECTURE.md) — Mermaid system/lifecycle diagrams, deployed-vs-packaged scope, privacy boundaries, and operating outline.
 - [Product and engineering specification](docs/SPECIFICATION.md) — stable requirement IDs, scope, behavior, reliability, and acceptance criteria.
 - [Requirement-to-feature traceability](docs/TRACEABILITY.md) — implementation/test/field status, exact source/test references, evidence, issue gaps, and reverse indexes; [machine-readable registry](docs/traceability.json).
