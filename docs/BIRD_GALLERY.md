@@ -1,6 +1,6 @@
 # Bird photo gallery
 
-Eight photographs supplied by the owner. These bird IDs are tentative visual identifications, not results from a validated species classifier. The finch and chickadee identifications are especially uncertain.
+Eight photographs supplied by the owner. The bird IDs are visual identifications, not results from a validated species classifier.
 
 The photographs are re-encoded without source metadata. They are examples, not evidence of identification accuracy.
 
