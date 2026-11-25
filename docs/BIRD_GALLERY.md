@@ -41,5 +41,5 @@ The photographs are re-encoded without source metadata. They are examples, not e
 
 ## Tufted Titmouse
 
-![Tufted Titmouse at a bird feeder](images/gallery/tufted-titmouse.jpg)
+![Two Tufted Titmice at a bird feeder](images/gallery/tufted-titmouse.jpg)
 
