@@ -6,7 +6,7 @@ The photographs are re-encoded without source metadata. They are examples, not e
 
 ## White-winged Dove
 
-![White-winged Dove at a bird feeder](images/gallery/white-winged-dove.jpg)
+![Three White-winged Doves at a bird feeder](images/gallery/white-winged-dove.jpg)
 
 
 ## Blue Jay
