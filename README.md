@@ -4,6 +4,8 @@ BirdWatcherPi turns a Raspberry Pi and USB camera into a local-first, motion-tri
 
 Explore the [bird photo gallery](docs/BIRD_GALLERY.md) for eight owner-supplied photographs.
 
+Read [bird feeder lessons](docs/FEEDER_LESSONS.md) for the progression from a ground pole to a hanging tray and the planned fixed-pole setup.
+
 ## Quick start
 
 On a Linux Raspberry Pi with Python 3.13 and an MJPEG-capable USB camera, install the camera prerequisites (`ffmpeg`, and optionally `v4l-utils`) and Python virtual environment support. On Debian-derived systems:
